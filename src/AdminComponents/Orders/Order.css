@@ -1,0 +1,43 @@
+.tooltips {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltips .tooltipdata {
+    visibility: hidden;
+    width: 400px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+  
+    /* Position the tooltip */
+    position: absolute;
+    bottom: -120px;
+    z-index: 1;
+  }
+  
+  .tooltips:hover .tooltipdata {
+    visibility: visible;
+  }
+
+
+  li {
+    list-style: none;
+  }
+
+  .hover-pointer{
+    cursor: pointer;
+    color: rgb(255, 0, 76);
+  }
+
+  .table-product-images{
+    height: 100px;
+    width: 100px;
+  }
+
+  .edit-delete{
+    cursor: pointer;
+  }

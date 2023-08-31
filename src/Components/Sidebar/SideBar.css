@@ -1,0 +1,65 @@
+ul {
+  transition: all 0.3s ease-in-out;
+  list-style: none;
+  padding: 5px;
+}
+
+li {
+  cursor: pointer;
+}
+
+.AdminSideBarLink {
+  cursor: pointer;
+  width: 95%;
+  list-style-type: none;
+  font-weight: 600;
+  border-radius: 5px;
+  text-decoration: none;
+  color: black;
+  /* background-color: aquamarine; */
+}
+
+.AdminSideBarLink:hover {
+  color: white;
+  background-color: deepskyblue;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-menu {
+  animation: fadein 0.2s ease-in-out;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(10);
+  }
+}
+
+.AdminSidebarSubHead {
+  height: 30px;
+  cursor: pointer;
+  width: 98%;
+  list-style-type: none;
+  font-size: 12px;
+  padding: 5px;
+  font-weight: 400;
+  margin-top: 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: black;
+  /* background-color: aquamarine; */
+}
+
+.AdminSidebarSubHead:hover {
+  color: deepskyblue;
+}

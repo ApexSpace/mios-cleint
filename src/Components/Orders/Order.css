@@ -1,0 +1,20 @@
+.formtag {
+  width: 95%;
+  text-align: left;
+  background-color:#f1f1f1;
+  padding: 30px;
+  border-radius: 10px;
+}
+.form-check-input {
+  width: 20px;
+  height: 20px;
+}
+
+.sameship {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-weight: 600;
+}
