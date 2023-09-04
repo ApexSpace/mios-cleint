@@ -107,55 +107,57 @@ const ProductDetail = () => {
                       </span>
                     </div>
 
-                    <div className="product-description">
+                    <div className="product-count">
+                      <label htmlFor="size">Quantity</label>
+                      <form action="#" className="display-flex">
+                        <div
+                          className="qtyminus"
+                          onClick={() => {
+                            if (quantity > 1) {
+                              setQuantity(quantity - 1);
+                            }
+                          }}
+                        >
+                          -
+                        </div>
+                        <input
+                          type="text"
+                          name="quantity"
+                          value={quantity}
+                          onChange={handleChange}
+                          className="qty"
+                        />
+                        <div
+                          className="qtyplus"
+                          onClick={() => {
+                            if (quantity < product.stock) {
+                              setQuantity(quantity + 1);
+                            }
+                          }}
+                        >
+                          +
+                        </div>
+                      </form>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <button
+                            type="button"
+                            className="round-black-btn"
+                            onClick={() => addAndRefresh(product)}
+                          >
+                            Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="product-description mt-3">
                       <h6>Description:</h6>
                       <p>{product.description}</p>
                     </div>
 
                   </div>
-                  <div className="product-count">
-                    <label htmlFor="size">Quantity</label>
-                    <form action="#" className="display-flex">
-                      <div
-                        className="qtyminus"
-                        onClick={() => {
-                          if (quantity > 1) {
-                            setQuantity(quantity - 1);
-                          }
-                        }}
-                      >
-                        -
-                      </div>
-                      <input
-                        type="text"
-                        name="quantity"
-                        value={quantity}
-                        onChange={handleChange}
-                        className="qty"
-                      />
-                      <div
-                        className="qtyplus"
-                        onClick={() => {
-                          if (quantity < product.stock) {
-                            setQuantity(quantity + 1);
-                          }
-                        }}
-                      >
-                        +
-                      </div>
-                    </form>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <button
-                          type="button"
-                          className="round-black-btn"
-                          onClick={() => addAndRefresh(product)}
-                        >
-                          Add to Cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>

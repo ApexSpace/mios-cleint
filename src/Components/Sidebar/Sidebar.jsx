@@ -73,7 +73,7 @@ export default function Sidebar() {
       userOrders.length !==
       numbers.pending + numbers.delivered + numbers.returned
     ) {
-      // getMyOrders();
+      getMyOrders();
       Cart();
       setPending(
         userOrders.filter((order) => order.orderStatus === "Pending").length
@@ -361,7 +361,8 @@ export default function Sidebar() {
                                 : null
                             }
                           >
-                            {capitalizeFirstWord(item.name)} ({count[item._id]})
+                            {capitalizeFirstWord(item.name)}
+                            {/* ({count[item._id]}) */}
                           </p>
                         </Link>
                       </Typography>
@@ -612,6 +613,7 @@ export default function Sidebar() {
                     !location.pathname.includes("/user/") &&
                     !location.pathname.includes("/myOrders") &&
                     !location.pathname.includes("/orders/") &&
+                    !location.pathname.includes("/checkout") &&
                     (
                       <div>
                         <h6 style={{ paddingTop: "10px", paddingLeft: "6px" }}>
@@ -632,8 +634,8 @@ export default function Sidebar() {
                                     : null
                                 }
                               >
-                                {capitalizeFirstWord(item?.name)} (
-                                {count[item._id]})
+                                {capitalizeFirstWord(item?.name)}
+                                {/* ({count[item._id]}) */}
                               </p>
                             </Link>
                           );
