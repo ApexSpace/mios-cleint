@@ -2,6 +2,7 @@ body {
   scroll-behavior: smooth;
   padding-top: 70px;
 }
+
 /* @media screen and (min-width: 750px) {
   body {
     padding-left: 220px;
@@ -56,7 +57,7 @@ input[type=number] {
 } */
 
 
-.no_data img{
+.no_data img {
   height: 500px;
 }
 
@@ -65,6 +66,10 @@ input[type=number] {
   justify-content: center;
 }
 
-table{
+table {
   font-size: 12px;
+}
+
+.ql-editor {
+  min-height: 30em;
 }

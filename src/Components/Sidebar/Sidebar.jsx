@@ -52,6 +52,13 @@ export default function Sidebar() {
   const [pending, setPending] = useState(0);
   const [delivered, setDelivered] = useState(0);
   const [returned, setReturned] = useState(0);
+  const { CartItems, categories, Cart } = useContext(ProductContext);
+  const { user, loading } = useContext(UserContext);
+  const [categoryState, setCategoryState] = useState(categories);
+
+  useEffect(() => {
+    setCategoryState(categories);
+  }, [categories])
 
   //capitalize first letter of a word and also after space in a string
   const capitalizeFirstWord = (str) => {
@@ -94,8 +101,7 @@ export default function Sidebar() {
 
     // eslint-disable-next-line
   }, [userOrders]);
-  const { CartItems, categories, Cart } = useContext(ProductContext);
-  const { user, loading } = useContext(UserContext);
+
 
   const logout = async () => {
     await axios.get(`${host}/api/auth/logout`, {
@@ -104,6 +110,18 @@ export default function Sidebar() {
     Navigate("/login");
     window.location.reload();
   };
+
+  const search = (e) => {
+    setCategoryState([]);
+    categories.forEach((i) => {
+      if (i?.name?.toLowerCase().includes(e.target.value.toLowerCase())) {
+        setCategoryState((prevVal) => [
+          ...prevVal,
+          i
+        ])
+      }
+    })
+  }
 
   const bodyStyles =
     user.isAdmin === false && user.name && window.innerWidth >= 750
@@ -421,6 +439,21 @@ export default function Sidebar() {
                       Out of Stock
                     </Link>
                   </span>
+                  <span className="mx-2">
+                    <Link className="nav__name" to="/contact">
+                      Contact
+                    </Link>
+                  </span>
+                  <span className="mx-2">
+                    <Link className="nav__name" to="/about">
+                      About
+                    </Link>
+                  </span>
+                  <span className="mx-2">
+                    <Link className="nav__name" to="/dropship-policy">
+                      Dropship Policy
+                    </Link>
+                  </span>
                 </div>
 
                 <div className="header__cart">
@@ -614,12 +647,16 @@ export default function Sidebar() {
                     !location.pathname.includes("/myOrders") &&
                     !location.pathname.includes("/orders/") &&
                     !location.pathname.includes("/checkout") &&
+                    !location.pathname.includes("/about") &&
+                    !location.pathname.includes("/contact") &&
+                    !location.pathname.includes("/dropship-policy") &&
                     (
                       <div>
                         <h6 style={{ paddingTop: "10px", paddingLeft: "6px" }}>
                           Categories
                         </h6>
-                        {categories.map((item, ind) => {
+                        <input type="text" onChange={search} className="form-control" placeholder="Search categories" />
+                        {categoryState && categoryState.map((item, ind) => {
                           return (
                             <Link key={ind} to={`/category/${item._id}`}>
                               <p

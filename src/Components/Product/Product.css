@@ -641,11 +641,8 @@ input::-webkit-inner-spin-button {
   display: -webkit-box;
   font-size: 12px;
   line-height: 18px;
-  /* fallback */
-  max-height: 28px;
-  /* fallback */
+  height: 28px;
   -webkit-line-clamp: 1;
-  /* number of lines to show */
   -webkit-box-orient: vertical;
 }
 

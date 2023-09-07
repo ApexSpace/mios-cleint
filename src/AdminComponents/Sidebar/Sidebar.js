@@ -167,6 +167,30 @@ const Sidebar = () => {
                                     <i className='bx bx-dollar nav__icon' ></i>
                                     <span className="nav__name">Company Profit</span>
                                 </Link>
+                                <div div className={
+                                    subMenuIndex === 5 ? 'nav__dropdown dropdown_active' : 'nav__dropdown'
+                                } ref={(el) => (arrow.current[5] = el)}
+                                    onClick={() => handleMenuClick(5)}>
+                                    <div className="nav__link">
+                                        <i className='bx bx-menu nav__icon' ></i>
+                                        <span className="nav__name">Blank Pages</span>
+                                        <i className='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                                    </div>
+
+                                    <div className="nav__dropdown-collapse">
+                                        <div className="nav__dropdown-content">
+                                            <Link to="/admin/about" className="nav__dropdown-item">
+                                                About
+                                            </Link>
+                                            <Link to="/admin/contact" className="nav__dropdown-item">
+                                                Contact
+                                            </Link>
+                                            <Link to="/admin/dropship-policy" className="nav__dropdown-item">
+                                                Dropship Policy
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
 
 
                             </div>
@@ -175,9 +199,9 @@ const Sidebar = () => {
                                 <h3 className="nav__subtitle">Orders</h3>
 
                                 <div div className={
-                                    subMenuIndex === 5 ? 'nav__dropdown dropdown_active' : 'nav__dropdown'
-                                } ref={(el) => (arrow.current[5] = el)}
-                                    onClick={() => handleMenuClick(5)}>
+                                    subMenuIndex === 6 ? 'nav__dropdown dropdown_active' : 'nav__dropdown'
+                                } ref={(el) => (arrow.current[6] = el)}
+                                    onClick={() => handleMenuClick(6)}>
                                     <div className="nav__link">
                                         <i className='bx bx-task nav__icon' ></i>
                                         <span className="nav__name">Wholesale</span>
@@ -194,9 +218,9 @@ const Sidebar = () => {
 
                                 </div>
                                 <div div className={
-                                    subMenuIndex === 6 ? 'nav__dropdown dropdown_active' : 'nav__dropdown'
-                                } ref={(el) => (arrow.current[6] = el)}
-                                    onClick={() => handleMenuClick(6)}>
+                                    subMenuIndex === 7 ? 'nav__dropdown dropdown_active' : 'nav__dropdown'
+                                } ref={(el) => (arrow.current[7] = el)}
+                                    onClick={() => handleMenuClick(7)}>
                                     <div className="nav__link">
                                         <i className='bx bx-task nav__icon' ></i>
                                         <span className="nav__name">Dropship</span>

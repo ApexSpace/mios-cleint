@@ -19,13 +19,18 @@ const Instock = () => {
     const Refresh = context.Cart;
     const { addToCart } = context;
     useEffect(() => {
-        const getFeatured = async () => {
-            const { data } = await axios.get(`${host}/api/product/instock`);
-            setProductState(data.products);
-        }
-        getFeatured();
+        // const getFeatured = async () => {
+        //     const { data } = await axios.get(`${host}/api/product/instock`);
+        //     setProductState(data.products);
+        // }
+        // getFeatured();
+        getProducts();
         // eslint-disable-next-line
     }, [])
+
+    useEffect(() => {
+        setProductState(products)
+    }, [products]);
 
     const modalRef = useRef(null);
     const closeRef = useRef(null);
@@ -70,7 +75,7 @@ const Instock = () => {
                         <div className="grid-container">
                             {currentPro && currentPro.map((product, index) => {
                                 return (
-                                    product.deActivated === false &&
+                                    (product.deActivated === false && product.stock > 0) &&
                                     <Product product={product} modalRef={modelFunction} key={index + 1} />
                                 )
                             })}

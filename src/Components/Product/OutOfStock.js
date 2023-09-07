@@ -20,14 +20,20 @@ const OutOfStock = () => {
     const Refresh = context.Cart;
     const { addToCart } = context;
     useEffect(() => {
-        const getFeatured = async () => {
-            const { data } = await axios.get(`${host}/api/product/outofstock`);
-            setProductState(data.products);
-        }
-        getFeatured();
+        // const getFeatured = async () => {
+        //     const { data } = await axios.get(`${host}/api/product/outofstock`);
+        //     setProductState(data.products);
+        // }
+        // getFeatured();
+        getProducts();
+        getCategories();
 
         // eslint-disable-next-line
     }, [])
+
+    useEffect(() => {
+        setProductState(products)
+    }, [products]);
 
     const modalRef = useRef(null);
     const closeRef = useRef(null);
@@ -71,7 +77,7 @@ const OutOfStock = () => {
                         <div className="grid-container">
                             {currentPro && currentPro.map((product, index) => {
                                 return (
-                                    product.deActivated === false &&
+                                    (product.deActivated === false && product.stock < 1) &&
                                     <Product product={product} modalRef={modelFunction} key={index + 1} />
                                 )
                             })}
