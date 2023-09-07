@@ -340,7 +340,7 @@ const WholesaleOrder = () => {
                 </thead>
                 <tbody>
                   {filteredRecords.map((order, k) => {
-                    let date = new Date(order.date);
+                    // let date = new Date(order.date);
                     return (
                       <tr className="text-center align-middle" key={order._id}>
                         <td>{k + 1}</td>

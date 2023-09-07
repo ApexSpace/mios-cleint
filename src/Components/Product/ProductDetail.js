@@ -32,6 +32,8 @@ const ProductDetail = () => {
 
   useEffect(() => {
     getProduct();
+
+    // eslint-disable-next-line
   }, [id]);
 
   useEffect(() => {
@@ -39,6 +41,7 @@ const ProductDetail = () => {
       updateCartProductQty(id, quantity);
     }
 
+    // eslint-disable-next-line
   }, [quantity]);
 
   const handleChange = (e) => {

@@ -29,7 +29,7 @@ const MyOrderDetails = () => {
           <h3 className="text-center">  Ordered By: {orderProduct?.user?.name}({orderProduct?.user?.role})</h3>
           <h6 className="text-center">  ID: {orderProduct?.user?._id}</h6><br />
           <h3 className="text-center">  Ordered At: {new Date(orderProduct?.date).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' })}</h3><br />
-          {orderProduct?.user?.role == "dropshipper" && <h3 className="text-center">  Profit Amount: {orderProduct?.profitAmount}</h3>}
+          {orderProduct?.user?.role === "dropshipper" && <h3 className="text-center">  Profit Amount: {orderProduct?.profitAmount}</h3>}
 
 
           <table className="table table-striped table-bordered">

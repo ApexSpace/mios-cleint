@@ -6,7 +6,7 @@ import { CartProduct } from "./CartProduct";
 import { EmptyImage } from "./cartStyles";
 import UserContext from "../../context/User/UserContext";
 import Loader from "../../Loader/Loader";
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 
 const Cart = () => {
   const context = useContext(ProductContext);

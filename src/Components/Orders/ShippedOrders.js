@@ -10,6 +10,8 @@ const ShippedOrders = () => {
             setOrders(data);
         }
         getOrders();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     console.log("Wow", orders);

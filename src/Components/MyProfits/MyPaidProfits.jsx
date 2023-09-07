@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ReactNotifications } from "react-notifications-component";
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Notification from "../../Notifications/Notifications";
 import mioslogo from '../assets/images/mioslogo.png';
 import Loader from "../../Loader/Loader";
@@ -35,7 +35,7 @@ const MyPaidProfits = () => {
         try {
             setLoading(true);
             const ids = e.target.id.split('_***_')
-            const userid = ids[0];
+            // const userid = ids[0];
             const id = ids[1];
             // Create a new PDF document
             const pdfDoc = await PDFDocument.create();
@@ -149,7 +149,7 @@ const MyPaidProfits = () => {
 
             const tableWidth = 500;
             const cellPadding = 50;
-            const lineHeight = 40;
+            // const lineHeight = 40;
             const tableX = 50;
             const tableY = 350;
 

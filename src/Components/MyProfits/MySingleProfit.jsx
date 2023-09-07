@@ -10,6 +10,8 @@ const MySingleProfit = () => {
     const [user, setUser] = useState({});
     useEffect(() => {
         getProfitDetails();
+
+        // eslint-disable-next-line
     }, [])
 
     const { id } = useParams();

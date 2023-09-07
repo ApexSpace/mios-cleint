@@ -5,11 +5,11 @@ import ProductContext from "../../context/Product/ProductContext";
 import UserContext from "../../context/User/UserContext";
 import Notification from "../../Notifications/Notifications";
 import { ReactNotifications } from "react-notifications-component";
-import axios from "axios";
+// import axios from "axios";
 import Loader from '../../Loader/Loader'
 
 const Instock = () => {
-    const host = process.env.REACT_APP_API_URL;
+    // const host = process.env.REACT_APP_API_URL;
     const { products, getProducts, getCategories, loading } = useContext(ProductContext);
     const [currentPro, setProductState] = useState([]);
     const [singleProduct, setSingleProduct] = useState({})

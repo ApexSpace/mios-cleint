@@ -29,6 +29,8 @@ const User = (props) => {
             }
         }
         userDetails();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const getAllUsers = async () => {

@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ReactNotifications } from "react-notifications-component";
-import { Link, useParams } from "react-router-dom";
-import Notification from "../../Notifications/Notifications";
+import { Link } from "react-router-dom";
+// import Notification from "../../Notifications/Notifications";
 import Loader from "../../Loader/Loader";
 const image = window.location.origin + "/Assets/no-data.svg";
 const MyPendingProfits = () => {

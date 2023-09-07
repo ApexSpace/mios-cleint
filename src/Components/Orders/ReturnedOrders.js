@@ -22,6 +22,8 @@ const ReturnedOrders = () => {
             setFilteredRecords(data);
         }
         getOrders();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 

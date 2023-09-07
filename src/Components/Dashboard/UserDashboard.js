@@ -16,6 +16,8 @@ const UserDashboard = () => {
     setPending(userOrders.filter(order => order.orderStatus === 'Pending').length);
     setDelivered(userOrders.filter(order => order.orderStatus === 'Delivered').length);
     setReturned(userOrders.filter(order => order.orderStatus === 'Returned').length);
+
+    //eslint-disable-next-line
   }, [])
 
   return (

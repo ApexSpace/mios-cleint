@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import UserContext from '../../context/User/UserContext';
 import Loader from '../../Loader/Loader';
 
 
 const PendingOrders = () => {
     const host = process.env.REACT_APP_API_URL;
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [orderLoading, setloading] = useState(false);
     const { loading } = useContext(UserContext);

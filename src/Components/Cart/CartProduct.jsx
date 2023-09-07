@@ -77,7 +77,7 @@ export const CartProduct = ({ Data, Index }) => {
     <>
       <tr>
         <td>{Index}</td>
-        <td scope="row" style={{ width: "10%" }}>
+        <td style={{ width: "10%" }}>
           <img
             src={Data.product.photo?.url || "https://i.imgur.com/xdbHo4E.png"}
             style={{ maxHeight: "50px", maxWidth: "50px" }}

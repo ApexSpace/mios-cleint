@@ -154,6 +154,7 @@ const PlaceOrder = () => {
         }
     }
 
+    // eslint-disable-next-line
     const differentShipping = (e) => {
         if (diff) {
             setShippingDetails((prevVal) => ({
