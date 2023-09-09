@@ -19,7 +19,7 @@ const DropshipOrder = () => {
   // eslint-disable-next-line
   const [allOrders, setAllOrders] = useState([])
   const [loading, setLoading] = useState(false)
-  const [checked, setChecked] = useState(false)
+  // const [checked, setChecked] = useState(false)
   const [details, setDetails] = useState([])
   const paymentRef = useRef(null);
   const [payment, setPayment] = useState([])
@@ -54,7 +54,7 @@ const DropshipOrder = () => {
     setLoading(true)
     const { data } = await axios.get(`${host}/api/order/dropshiporder`);
     setOrders(data)
-    setAllOrders(data)
+    // setAllOrders(data)
     setFilteredRecords(data)
     setLoading(false)
   }
@@ -149,11 +149,38 @@ const DropshipOrder = () => {
     }
   };
 
+  const handleNameNumberSearch = (e) => {
+    const search = e.target.value;
+    if (search) {
+      const filtered = orders?.filter((record) => {
+        return (
+          record?.billingDetails?.name?.toLowerCase().includes(search.toLowerCase()) ||
+          record?.billingDetails?.phone?.toLowerCase().includes(search.toLowerCase())
+        );
+      });
+      setFilteredRecords(filtered);
+    } else {
+      setFilteredRecords(orders);
+    }
+  };
+
   return (
     <>
       {loading ? <Loader /> :
         <>
           <div className="d-flex w-80 align-items-center justify-content-evenly mb-3 mt-3">
+            <div>
+              <label for="" className="form-label">
+                Search: &nbsp;&nbsp;&nbsp;
+              </label>
+              <input
+                type="text"
+                className="p-1"
+                name="search"
+                placeholder="By Name or Phone Number"
+                onChange={handleNameNumberSearch}
+              />
+            </div>
             <div>
               <label for="" className="form-label">
                 Starting From: &nbsp;&nbsp;&nbsp;

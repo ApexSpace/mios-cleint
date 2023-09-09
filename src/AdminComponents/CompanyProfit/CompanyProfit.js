@@ -85,6 +85,14 @@ const CompanyProfit = () => {
         element.click();
     }
 
+    const totalProfit = orders.reduce((accumulator, order) => {
+        const profit = order.companyProfit;
+        if (typeof profit === 'number' && !isNaN(profit)) {
+            return accumulator + profit;
+        }
+        return accumulator;
+    }, 0);
+
     return (
         <>
             {loading ? <Loader /> :
@@ -128,10 +136,13 @@ const CompanyProfit = () => {
                         <button className="btn btn-sm btn-info text-light" onClick={download}>Export CSV</button>
                     </div>
                     <div className="main">
-                        <div className="container-fluid">
-                            <h3 className='text-center my-4'>
-                                Company Profits
-                            </h3>
+                        <div className="container">
+                            <div className="d-flex justify-content-between  my-4">
+                                <h5 className=''>
+                                    Company Profits
+                                </h5>
+                                <h5 className="text-center">Total Profit: {totalProfit}</h5>
+                            </div>
                             <table className="table">
                                 <thead>
                                     <tr>
