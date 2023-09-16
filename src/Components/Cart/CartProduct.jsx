@@ -8,7 +8,8 @@ export const CartProduct = ({ Data, Index }) => {
   const { removeCartProduct, updateCartProductQty, cartLoading, updateDropshipPrice } = context;
   const [Qty, setQty] = useState(Data.quantity);
   const [dropshipPrice, setDropshipPrice] = useState(Data.product.dropshipperPrice)
-  const [dropPriceButton, setDropPriceButton] = useState(true)
+  const [dropPriceButton, setDropPriceButton] = useState(true);
+  const [cartQtyDisable, setCartQtyDisable] = useState(true);
   const [currPrice, setCurrPrice] = useState(
     user.role === "wholeseller"
       ? Data?.product?.wholesalePrice
@@ -32,14 +33,18 @@ export const CartProduct = ({ Data, Index }) => {
 
 
   const addOne = () => {
-    updateCartProductQty(Data.product._id, Qty + 1);
+
+    if (Qty >= Data.product.stock) return alert("You can't add more than available stock")
+    setCartQtyDisable(false);
+    // updateCartProductQty(Data.product._id, Qty + 1);
     setQty(Qty + 1);
   };
 
   const minusOne = () => {
     if (Qty >= 2) {
+      setCartQtyDisable(false);
       setQty(Qty - 1);
-      updateCartProductQty(Data.product._id, Qty - 1);
+      // updateCartProductQty(Data.product._id, Qty - 1);
     }
   };
 
@@ -50,10 +55,11 @@ export const CartProduct = ({ Data, Index }) => {
   const handleChange = (e) => {
     const newQty = parseInt(e.target.value);
     if (!isNaN(newQty)) {
+      setCartQtyDisable(false);
       setQty(newQty);
       // updateCartProductQty(Data.product._id, newQty)
     } else {
-      setQty(0);
+      setQty("");
     }
   };
 
@@ -71,6 +77,11 @@ export const CartProduct = ({ Data, Index }) => {
       alert("Dropship price must be greater than wholesale price")
     }
   }
+
+  const updateCart = () => {
+    updateCartProductQty(Data.product._id, Qty);
+    setCartQtyDisable(true);
+  };
 
 
   return (
@@ -136,7 +147,6 @@ export const CartProduct = ({ Data, Index }) => {
               -
             </button>
             <input
-              disabled
               style={{
                 border: "1px solid lightgrey",
                 width: "40px",
@@ -146,7 +156,7 @@ export const CartProduct = ({ Data, Index }) => {
               type="number"
               onChange={handleChange}
               name="quantity"
-              min="1"
+              min={1}
             />
 
             <button style={{ border: "1px solid lightgrey" }} onClick={addOne}>
@@ -155,10 +165,11 @@ export const CartProduct = ({ Data, Index }) => {
           </div>
           <div>
             <button
+              disabled={cartQtyDisable}
               style={{ border: "1px solid lightgrey" }}
-              onClick={() => handleRemove(Data.product._id)}
+              onClick={updateCart}
             >
-              X
+              ✓
             </button>
           </div>
         </td>
@@ -170,6 +181,16 @@ export const CartProduct = ({ Data, Index }) => {
             ) : (<p style={{ fontSize: "13px" }}>Rs. {currPrice * Qty}</p>)
           }
 
+        </td>
+        <td>
+          <div>
+            <button
+              style={{ border: "1px solid lightgrey" }}
+              onClick={() => handleRemove(Data.product._id)}
+            >
+              X
+            </button>
+          </div>
         </td>
       </tr>
     </>

@@ -15,7 +15,7 @@ const AdminProducts = () => {
     try {
       setLoading(true);
       await axios.delete(`${host}/api/product/deleteProduct/${e.currentTarget.id}`);
-      await getProducts();
+      GetAllProducts();
       setLoading(false);
     }
     catch (error) {
@@ -30,6 +30,7 @@ const AdminProducts = () => {
     featured: false,
     onSale: false
   });
+  const [filter, setFilter] = useState(allproducts)
 
   const setChecked = (e) => {
     setfeatured({ ...checkFilter, [e.target.name]: e.target.checked });
@@ -42,7 +43,6 @@ const AdminProducts = () => {
     }
   }
 
-  const [filter, setFilter] = useState([])
 
   const handleChange = (e) => {
     setQuery(e.target.value);

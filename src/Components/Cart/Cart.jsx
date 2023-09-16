@@ -105,6 +105,7 @@ const Cart = () => {
                       }
                       <th scope="col">Quantity</th>
                       <th scope="col">Total</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -121,7 +122,7 @@ const Cart = () => {
                       <td colSpan={user.role === "dropshipper" ? 6 : 5} className="text-end">
                         <h6>Subtotal</h6>
                       </td>
-                      <td>
+                      <td colSpan={2}>
                         <h6>Rs.{subTotl}</h6>
                       </td>
                     </tr>

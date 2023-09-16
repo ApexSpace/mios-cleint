@@ -84,6 +84,11 @@ import DropshipProfitReport from './AdminComponents/Reports/DropshipProfitReport
 import AboutPage from './AdminComponents/BlankPages/AboutPage';
 import ContactPage from './AdminComponents/BlankPages/ContactPage';
 import DropshipPolicyPage from './AdminComponents/BlankPages/DropshipPolicyPage';
+import PendingDropship from './AdminComponents/Orders/PendingDropship';
+import PendingWholesale from './AdminComponents/Orders/PendingWholesale';
+import ShippedDropship from './AdminComponents/Orders/ShippedDropship';
+import ShippedWholesale from './AdminComponents/Orders/ShippedWholesale';
+
 
 
 axios.defaults.withCredentials = true;
@@ -296,6 +301,14 @@ function App() {
                     <Route path="/admin/contact" element={admin ? <ContactPage /> : nouser ? <Navigate to='/admin/login' /> : null} />
 
                     <Route path="/admin/dropship-policy" element={admin ? <DropshipPolicyPage /> : nouser ? <Navigate to='/admin/login' /> : null} />
+
+                    <Route path="/admin/dropshiporders/pending" element={admin ? <PendingDropship /> : nouser ? <Navigate to='/admin/login' /> : null} />
+
+                    <Route path="/admin/wholesaleorders/pending" element={admin ? <PendingWholesale /> : nouser ? <Navigate to='/admin/login' /> : null} />
+
+                    <Route path="/admin/dropshiporders/shipped" element={admin ? <ShippedDropship /> : nouser ? <Navigate to='/admin/login' /> : null} />
+
+                    <Route path="/admin/wholesaleorders/shipped" element={admin ? <ShippedWholesale /> : nouser ? <Navigate to='/admin/login' /> : null} />
 
                     <Route path='*' element={NotFound} />
                   </Routes>

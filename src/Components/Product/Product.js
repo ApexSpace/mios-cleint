@@ -78,7 +78,7 @@ const Product = ({ product, modalRef }) => {
               <span className="ribbon ribbon--blue">Feature</span>
             </div>
           )}
-          {product.stock === 0 && (
+          {product.stock < 1 && (
             <div className="outstock-overlay">
               <span className="">OUT OF STOCK</span>
             </div>

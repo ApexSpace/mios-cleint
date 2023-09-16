@@ -128,14 +128,14 @@ const ProductState = (props) => {
   };
 
   const updateCartProductQty = async (id, qty) => {
-    setCartLoading(true)
+    // setCartLoading(true)
     await axios.put(`${host}/api/cart/updatecart/${id}`, { qty })
       .then(function (response) {
-        setCartLoading(false)
+        // setCartLoading(false)
         setCartItems(response.data.result);
       })
       .catch(function (error) {
-        setCartLoading(false)
+        // setCartLoading(false)
       });
   };
 

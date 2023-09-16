@@ -38,18 +38,17 @@ const ImportProducts = () => {
       }
       let data = {
         title: item[0],
-        description: item[1],
+        category: item[1],
         skuNumber: item[2],
-        category: item[3],
-        stock: item[4],
+        stock: item[3],
+        purchasePrice: item[4],
         wholesalePrice: item[5],
-        dropshipperPrice: item[6],
-        discountedPriceW: item[7],
-        discountedPriceD: item[8],
-        weight: item[9],
-        featured: item[10],
-        onSale: item[11],
-        photo: item[12],
+        discountedPriceW: item[6],
+        weight: item[7],
+        featured: item[8],
+        onSale: item[9],
+        photo: item[10],
+        description: item[11],
       }
       parseData.push(data);
 

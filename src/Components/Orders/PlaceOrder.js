@@ -143,10 +143,10 @@ const PlaceOrder = () => {
             ...prevValue,
             [e.target.name]: e.target.value
         }))
-        setorderDetails((prevVal) => ({
-            ...prevVal,
-            paymentOption: ""
-        }))
+        // setorderDetails((prevVal) => ({
+        //     ...prevVal,
+        //     paymentOption: ""
+        // }))
 
 
         if (e.target.name === "city") {
@@ -161,19 +161,19 @@ const PlaceOrder = () => {
                 ...prevVal,
                 ...emptyDetails,
             }));
-            setorderDetails((prevVal) => ({
-                ...prevVal,
-                paymentOption: ""
-            }))
+            // setorderDetails((prevVal) => ({
+            //     ...prevVal,
+            //     paymentOption: ""
+            // }))
         } else if (!diff) {
             setShippingDetails((prevVal) => ({
                 ...prevVal,
                 ...billingDetails,
             }));
-            setorderDetails((prevVal) => ({
-                ...prevVal,
-                paymentOption: ""
-            }))
+            // setorderDetails((prevVal) => ({
+            //     ...prevVal,
+            //     paymentOption: ""
+            // }))
 
             calculateShippingcost(user && user.city);
         }
@@ -520,14 +520,19 @@ const PlaceOrder = () => {
                         {/* {!diff ? <> */}
                         <form className='formtag'>
                             <h1>Shipping Details</h1><br />
+
                             <label className="form-label">Name</label>
-                            <input type="text" onChange={changeShippingDetails} name="name" value={name} className="form-control" placeholder="Enter name." />
+                            <input type="text" onChange={changeShippingDetails} name="name" value={name} className="form-control" placeholder="Enter name." autoComplete='off' />
+
                             <label className="form-label">Phone Number</label>
-                            <input type="text" onChange={changeShippingDetails} name="phone" value={phone} className="form-control" placeholder="Enter phone." />
+                            <input type="text" onChange={changeShippingDetails} name="phone" value={phone} className="form-control" placeholder="Enter phone." autoComplete='off' />
+
                             <label className="form-label">Email</label>
-                            <input type="text" onChange={changeShippingDetails} name="email" value={email} className="form-control" placeholder="Enter email." />
+                            <input type="email" onChange={changeShippingDetails} name="email" value={email} className="form-control" placeholder="Enter email." autoComplete='off' />
+
                             <label className="form-label">Enter Your Shipping Address</label>
-                            <input onChange={changeShippingDetails} type="text" name="address" value={address} className="form-control" placeholder="Enter address." />
+                            <input onChange={changeShippingDetails} type="text" name="address" value={address} className="form-control" placeholder="Enter address." autoComplete='off' />
+
                             <label className="form-label">City</label>
                             <select name="city" style={{ height: "35px", fontSize: "20px" }} className='input-group' onChange={changeShippingDetails} value={city} id="Location" required>
                                 <option value="" disabled selected>Select The City</option>
@@ -849,11 +854,15 @@ const PlaceOrder = () => {
                             <p>
                                 ----------------------------
                             </p>
-                            <br /><center><h5 style={{ backgroundColor: "aquamarine", color: "black", width: "50%", padding: "10px" }}>Select Payment Method</h5></center>
+                            <br />
+
+                            <center><h5 style={{ backgroundColor: "aquamarine", color: "black", width: "50%", padding: "10px" }}>Select Payment Method</h5></center>
+
                             <div className="form-check form-check-inline">
                                 <input className="form-check-input" type="radio" checked={paymentOption === "COD"} onChange={choosePayment} name="paymentOption" value="COD" />
                                 <label className="form-check-label">Cash On Delivery</label>
                             </div>
+
                             <div className="form-check form-check-inline">
                                 <input className="form-check-input" type="radio" checked={paymentOption === "Receipt"} onChange={choosePayment} name="paymentOption" value="Receipt" />
                                 <label className="form-check-label">Receipt</label>

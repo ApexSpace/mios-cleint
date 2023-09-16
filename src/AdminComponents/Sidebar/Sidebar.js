@@ -211,8 +211,8 @@ const Sidebar = () => {
                                     <div className="nav__dropdown-collapse">
                                         <div className="nav__dropdown-content">
                                             <Link to="/admin/wholesaleorders" className="nav__dropdown-item">All Orders</Link>
-                                            {/* <Link to="/admin/return" className="nav__dropdown-item">Return Orders</Link>
-                                            <Link to="/admin/pending-orders" className="nav__dropdown-item">Pending Orders</Link> */}
+                                            <Link to="admin/wholesaleorders/shipped" className="nav__dropdown-item">Shipped Orders</Link>
+                                            <Link to="/admin/wholesaleorders/pending" className="nav__dropdown-item">Pending Orders</Link>
                                         </div>
                                     </div>
 
@@ -230,8 +230,8 @@ const Sidebar = () => {
                                     <div className="nav__dropdown-collapse">
                                         <div className="nav__dropdown-content">
                                             <Link to="/admin/dropshiporders" className="nav__dropdown-item">All Orders</Link>
-                                            {/* <Link to="/" className="nav__dropdown-item">Return Orders</Link>
-                                            <Link to="/" className="nav__dropdown-item">Pending Orders</Link> */}
+                                            <Link to="/admin/dropshiporders/shipped" className="nav__dropdown-item">Shipped Orders</Link>
+                                            <Link to="/admin/dropshiporders/pending" className="nav__dropdown-item">Pending Orders</Link>
 
                                         </div>
                                     </div>
