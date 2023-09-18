@@ -121,11 +121,10 @@ const Requests = () => {
     setLoading(true)
     await axios.put(`${host}/api/auth/approve/${e.currentTarget.id}`);
     await getUsers();
+    await getAndSetUsers();
     setLoading(false)
   }
 
-
-  console.log("filterUsers", filterUsers);
 
   return (
     <center>

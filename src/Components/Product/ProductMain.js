@@ -89,7 +89,6 @@ const ProductMain = () => {
             </div>
             <div className="grid-container ">
               {currentPro && currentPro.map((product, index) => {
-                console.log(product)
                 return (
                   product.deActivated === false &&
                   <Product product={product} modalRef={modelFunction} key={index + 1} />

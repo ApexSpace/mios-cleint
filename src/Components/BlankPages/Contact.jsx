@@ -10,7 +10,7 @@ const Contact = () => {
         await axios.get(`${host}/page/contact`).then((res) => {
             setPageContent(res.data[0].content)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
     };
 

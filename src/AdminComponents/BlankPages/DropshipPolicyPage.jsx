@@ -10,7 +10,7 @@ const DropshipPolicyPage = () => {
         await axios.get(`${host}/page/dropshippolicy`).then((res) => {
             setQuillValue(res.data[0].content)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
     }
 
@@ -28,7 +28,7 @@ const DropshipPolicyPage = () => {
         axios.put(`${host}/page/dropshippolicy`, data).then((res) => {
             setQuillValue(res.data.content)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
     }
 

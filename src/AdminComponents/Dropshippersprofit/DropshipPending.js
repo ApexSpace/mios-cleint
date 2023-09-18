@@ -22,7 +22,7 @@ const DropshipPending = () => {
       setLoading(false)
     } catch (error) {
       setLoading(false)
-      console.log(error);
+      // console.log(error);
     }
   }
   const payAllProfits = async (user, amount) => {

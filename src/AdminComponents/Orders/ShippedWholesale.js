@@ -65,7 +65,6 @@ const ShippedWholesale = () => {
     const handleShipping = (id) => {
         modalRef.current.click();
         let order = orders.find((order) => order._id === id);
-        console.log(order);
         setDetails(order.shippingDetails)
     };
 

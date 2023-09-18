@@ -14,8 +14,6 @@ const ShippedOrders = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    console.log("Wow", orders);
-
     return (
         <div>
             <h1 style={{ textAlign: 'center' }}>My Orders</h1>

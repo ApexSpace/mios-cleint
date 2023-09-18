@@ -24,9 +24,8 @@ const ProductDetail = () => {
     try {
       const { data } = await axios.get(`${host}/api/product/product/${id}`);
       setProduct(data);
-      console.log(data)
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

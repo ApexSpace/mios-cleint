@@ -10,7 +10,7 @@ const ContactPage = () => {
         await axios.get(`${host}/page/contact`).then((res) => {
             setQuillValue(res.data[0].content)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
     }
 
@@ -28,7 +28,7 @@ const ContactPage = () => {
         axios.put(`${host}/page/contact`, data).then((res) => {
             setQuillValue(res.data.content)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
     }
 

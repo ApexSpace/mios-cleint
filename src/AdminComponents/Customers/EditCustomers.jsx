@@ -124,7 +124,6 @@ const EditCustomers = () => {
     }
   };
 
-  console.log(user);
 
   return (
     <div>

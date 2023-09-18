@@ -46,7 +46,7 @@ const UpdateShippingStatus = () => {
           Navigate("/admin/reports/order-report");
         });
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
   return (

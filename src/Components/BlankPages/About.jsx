@@ -9,7 +9,7 @@ const About = () => {
         await axios.get(`${host}/page/about`).then((res) => {
             setPageContent(res.data[0].content)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
     };
 

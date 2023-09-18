@@ -211,8 +211,6 @@ const WholesaleOrder = () => {
     }
   };
 
-  console.log("filteredRecords", filteredRecords);
-  console.log("orders", orders);
 
   return (
     <>

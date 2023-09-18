@@ -27,7 +27,6 @@ const Payments = () => {
 
   }
 
-  console.log("order", order);
 
   // return (
   //   <>
@@ -122,8 +121,8 @@ const Payments = () => {
                           item.paymentStatus !== true ? (
                             <button className='btn btn-primary btn-sm' onClick={() => { handleClick(item._id) }}>Click to verify</button>
                           ) : (
-                            // <button className='btn btn-danger btn-sm' onClick={() => { handleClick(item._id) }}>Click to Unverify</button>
-                            <button className='btn btn-info btn-sm' disabled={item.paymentStatus === true} onClick={() => { handleClick(item._id) }}>Already Verified</button>
+                            <button className='btn btn-danger btn-sm' onClick={() => { handleClick(item._id) }}>Click to Unverify</button>
+                            // <button className='btn btn-info btn-sm' disabled={item.paymentStatus === true} onClick={() => { handleClick(item._id) }}>Already Verified</button>
                           )
                         }
                       </td>

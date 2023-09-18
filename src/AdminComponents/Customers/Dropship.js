@@ -124,7 +124,6 @@ const DropShip = () => {
     }
   }
 
-  console.log("filterUsers", filterUsers);
 
 
   return (

@@ -46,7 +46,7 @@ const UpdateShippingStatusD = () => {
           Navigate("/admin/dropshiporders");
         });
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
   return (

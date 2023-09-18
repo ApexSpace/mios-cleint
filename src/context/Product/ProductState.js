@@ -110,7 +110,7 @@ const ProductState = (props) => {
       .catch(function (error) {
         setCartLoading(false)
         setLoading(false)
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -123,7 +123,7 @@ const ProductState = (props) => {
       })
       .catch(function (error) {
         setCartLoading(false)
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -158,7 +158,7 @@ const ProductState = (props) => {
       })
       .catch(function (error) {
         setLoading(false)
-        console.log(error);
+        // console.log(error);
       });
   };
 
@@ -171,7 +171,7 @@ const ProductState = (props) => {
       })
       .catch(function (error) {
         setLoading(false)
-        console.log(error);
+        // console.log(error);
       });
   };
 

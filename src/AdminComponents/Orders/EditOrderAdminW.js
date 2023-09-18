@@ -67,7 +67,7 @@ const EditOrderAdminW = () => {
         Navigate(`/admin/wholesaleorders`);
         
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
   return (

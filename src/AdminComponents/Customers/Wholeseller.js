@@ -118,9 +118,6 @@ const WholeSeller = () => {
   }
 
 
-
-  console.log("filterUsers", filterUsers)
-
   return (
     <center>
       <ReactNotifications />

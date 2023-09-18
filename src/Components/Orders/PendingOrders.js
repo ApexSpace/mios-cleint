@@ -32,13 +32,11 @@ const PendingOrders = () => {
         if (window.confirm('Are you sure you want to edit this order? If you click "Ok" than this order is deleted and your cart is also deleted and send this order to the cart for editing and than you can place order again. ')) {
             axios.put(`${host}/api/order/edituserorder/${id}`, order)
                 .then(res => {
-                    console.log(res.data);
                     window.location.reload();
                     // navigate('/cart')
                 }
                 )
-                .catch(err => console.log(err))
-
+                .catch(err =>{})
         }
 
     }

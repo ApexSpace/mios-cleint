@@ -9,7 +9,7 @@ const DropshipPolicy = () => {
         await axios.get(`${host}/page/dropshippolicy`).then((res) => {
             setPageContent(res.data[0].content)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
     };
 

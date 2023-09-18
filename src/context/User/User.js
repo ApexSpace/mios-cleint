@@ -46,13 +46,6 @@ const User = (props) => {
         setLoading(false)
     }
 
-    useEffect(() => {
-        if (user.isAdmin === true) {
-            getAllUsers();
-        }
-    }, [user, allUsers, wholesellers, dropShippers, requests])// eslint-disable-line react-hooks/exhaustive-deps
-
-
     const getAndSetUsers = async () => {
         setLoading(true)
         const { data } = await axios.get(`${host}/api/auth/allUsers`);
@@ -65,6 +58,16 @@ const User = (props) => {
         setRequests(Requests.data.length);
         setLoading(false)
     }
+
+    useEffect(() => {
+        if (user.isAdmin === true) {
+            getAllUsers();
+            getAndSetUsers();
+        }
+    }, [user, allUsers, wholesellers, dropShippers, requests])// eslint-disable-line react-hooks/exhaustive-deps
+
+
+
 
     const getUserDetails = async () => {
         try {

@@ -83,14 +83,15 @@ const Sidebar = () => {
                                 } ref={(el) => (arrow.current[1] = el)}
                                     onClick={() => handleMenuClick(1)}>
 
-                                    <Link to='/admin/customer'>    <div className="nav__link">
+                                    <div className="nav__link">
                                         <i className='bx bx-user nav__icon' ></i>
                                         <span className="nav__name">Customers({allUsers})</span>
                                         <i className='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                                    </div></Link>
+                                    </div>
 
                                     <div className="nav__dropdown-collapse">
                                         <div className="nav__dropdown-content">
+                                            <Link to="/admin/customer" className="nav__dropdown-item">All Customers({allUsers})</Link>
                                             <Link to="/admin/customer/wholeseller" className="nav__dropdown-item">Wholesellers({wholesellers})</Link>
                                             <Link to="/admin/customer/dropshipper" className="nav__dropdown-item">Dropshippers({dropShippers})</Link>
                                             <Link to="/admin/customer/requests" className="nav__dropdown-item">Requests({requests})</Link>
