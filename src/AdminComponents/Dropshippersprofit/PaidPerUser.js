@@ -309,6 +309,20 @@ const PaidPerUser = () => {
     }
   }
 
+  const unPayAllProfits = async (user, profitId) => {
+    try {
+      setLoading(true)
+      const { data } = await axios.post(`${host}/api/profitrecords/unpayAllProfits`, { userId: user, profitId });
+      Notification('Success', data.message, 'success')
+      await getAllProfits();
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      Notification('Error', error.message, 'danger')
+    }
+  }
+
+
   return (
     <><ReactNotifications />
       {loading ? <Loader /> : <div className="main">
@@ -334,6 +348,7 @@ const PaidPerUser = () => {
                 <th colSpan="1" className="text-center">Orders No.</th>
                 <th colSpan="1" className="text-center">Profit Amount</th>
                 <th colSpan="1" className="text-center">Payment Date</th>
+                <th colSpan="1" className="text-center">Reverse Payment</th>
                 <th colSpan="1" className="text-center">PDF</th>
               </tr>
             </thead>
@@ -345,6 +360,7 @@ const PaidPerUser = () => {
                   <td colSpan="1" className="text-center"><Link to={`/admin/singleprofit/${profits?.user?._id}/${item._id}`} style={{ fontSize: "20px" }}>{item?.orders?.length}</Link></td >
                   <td colSpan="1" className="text-center">{item?.amount} Rs.</td>
                   <td colSpan="1" className="text-center">{new Date(item?.datePaid).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' })}</td>
+                  <td colSpan="1" className="text-center"><button className="btn btn-sm btn-info text-light" id={`${profits?.user?._id}_***_${item._id}`} onClick={() => unPayAllProfits(profits?.user?._id, item?._id)}>Reverse Payment</button></td>
                   <td colSpan="1" className="text-center"><button className="btn btn-sm btn-info text-light" id={`${profits?.user?._id}_***_${item._id}`} onClick={download}>
                     Receipt <Download />
                   </button>

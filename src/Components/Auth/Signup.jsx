@@ -1,12 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
-import "./Login.css";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import image from "../assets/images/logo_sml 1.png";
-import Notification from "../../Notifications/Notifications";
+import React, { useContext, useEffect, useState } from "react";
 import { ReactNotifications } from "react-notifications-component";
-import UserContext from "../../context/User/UserContext";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
+import Notification from "../../Notifications/Notifications";
+import UserContext from "../../context/User/UserContext";
+import image from "../assets/images/logo_sml 1.png";
+import "./Login.css";
 
 const Signup = ({ setuser }) => {
   const host = process.env.REACT_APP_API_URL;
@@ -25,9 +25,8 @@ const Signup = ({ setuser }) => {
   const { loading, setLoading } = userDetail;
   const userDetails = userDetail.user;
   const getUserDetails = userDetail.getUserDetails;
-  const Navigate = useNavigate();
   const { role, name, email, password, address, phone, city, company } = user;
-
+  const Navigate = useNavigate()
   useEffect(() => {
     if (
       userDetails._id &&
@@ -35,7 +34,6 @@ const Signup = ({ setuser }) => {
       !(user.role === "dropshipper" && user.dropShipperStatus === false)
     ) {
       setuser(userDetails);
-      Navigate("/");
     }
   }, [userDetails]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -61,14 +59,7 @@ const Signup = ({ setuser }) => {
     e.preventDefault();
     try {
       if (
-        !role ||
-        !name ||
-        !email ||
-        !city ||
-        !password ||
-        !address ||
-        !phone ||
-        !company
+        !role || !name || !email || !city || !password || !address || !phone || !company
       ) {
         window.alert("Enter Complete Details");
       } else {
@@ -93,12 +84,14 @@ const Signup = ({ setuser }) => {
               withCredentials: true,
             }
           );
+          Navigate('/login')
           await getUserDetails();
           setLoading(false);
         }
       }
     } catch (e) {
       setLoading(false);
+      console.log(e)
       if (e.response?.data?.errors[0]?.msg) {
         Notification("Error", e.response.data.errors[0].msg, "danger");
       } else if (e.response?.data?.errors?.msg) {

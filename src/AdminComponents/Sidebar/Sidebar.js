@@ -142,6 +142,7 @@ const Sidebar = () => {
                                     <div className="nav__dropdown-collapse">
                                         <div className="nav__dropdown-content">
                                             <Link to="/admin/reports/order-report" className="nav__dropdown-item">Order Report</Link>
+                                            <Link to="/admin/reports/sales-report" className="nav__dropdown-item">Sales Report</Link>
                                             <Link to="/admin/customer" className="nav__dropdown-item">Customer Details </Link>
                                             <Link to="/admin/dropship-profit-report" className="nav__dropdown-item">Dropship Profits Report</Link>
                                         </div>

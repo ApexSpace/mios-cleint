@@ -88,6 +88,15 @@ import PendingDropship from './AdminComponents/Orders/PendingDropship';
 import PendingWholesale from './AdminComponents/Orders/PendingWholesale';
 import ShippedDropship from './AdminComponents/Orders/ShippedDropship';
 import ShippedWholesale from './AdminComponents/Orders/ShippedWholesale';
+import ProductWithoutPrices from './Components/Product/ProductWithoutPrices';
+import FeaturedView from './Components/Product/FeaturedView';
+import CategoryProductsView from './Components/Product/CategoryProductsView';
+import InstockView from './Components/Product/InstockView';
+import OutOfStockView from './Components/Product/OutOfStockView';
+import DropshipPolicyView from './Components/BlankPages/DropshipPolicyView';
+import ContactView from './Components/BlankPages/ContactView';
+import AboutView from './Components/BlankPages/AboutView';
+import SalesReport from './AdminComponents/Reports/SalesReport';
 
 
 
@@ -106,7 +115,6 @@ function App() {
   useEffect(() => {
     const getUserDetails = async () => {
       try {
-
         //eslint-disable-next-line
         request = false;
         setLoading(true)
@@ -151,8 +159,9 @@ function App() {
                   <Routes>
                     {/* <Login/> */}
 
-                    <Route path="/" element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <ProductMain data="fetchallproducts" /> : admin ? <Dashboard /> : <Navigate to="/login" />} />
-
+                    <Route path="/" element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <ProductMain data="fetchallproducts" /> : admin ? <Dashboard /> : <ProductWithoutPrices />} />
+                    <Route path="/FeaturedView" element={<FeaturedView />} />
+                    {/* <Route path='/productsWithoutPrices' element={<ProductWithoutPrices />} /> */}
                     <Route path="/login" element={DSrequest ? <Navigate to="/" /> : (user._id && user.isAdmin === false) ? <Navigate to="/" /> : admin ? <Navigate to="/" /> : <Login />} />
 
                     <Route path="/signup" element={DSrequest ? <Navigate to="/" /> : (user._id && user.isAdmin === false) ? <Navigate to="/" /> : admin ? <Navigate to="/" /> : <Signup setuser={setUser} />} />
@@ -168,8 +177,10 @@ function App() {
                     <Route path='/onsale' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <OnSaleProducts /> : null} />
 
                     <Route path='/instock' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <Instock /> : null} />
+                    <Route path='/instockView' element={<InstockView />} />
 
                     <Route path='/outOfStock' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <OutOfStock /> : null} />
+                    <Route path='/outOfStockView' element={<OutOfStockView />} />
 
                     <Route path='/cart' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <Cart /> : null} />
 
@@ -194,6 +205,7 @@ function App() {
                     <Route path='/orders/returned' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <ReturnedOrders /> : null} />
 
                     <Route path='/category/:id' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <CategoryProducts /> : null} />
+                    <Route path='/categoryview/:id' element={<CategoryProductsView />} />
 
                     <Route path='/checkout' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <PlaceOrder /> : null} />
 
@@ -210,10 +222,13 @@ function App() {
                     <Route path='/user/order/:id' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <MyOrderDetails /> : null} />
 
                     <Route path='/about' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <About /> : null} />
+                    <Route path='/aboutView' element={<AboutView />} />
 
                     <Route path='/contact' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <Contact /> : null} />
+                    <Route path='/contactView' element={<ContactView />} />
 
                     <Route path='/dropship-policy' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin === false) ? <DropshipPolicy /> : null} />
+                    <Route path='/dropship-policyView' element={<DropshipPolicyView />} />
 
                     {/* <Route path='/checkout' element={DSrequest ? <RequestedDS setUser={setUser} /> : (user._id && user.isAdmin == false) ? <Checkout /> : null} /> */}
 
@@ -293,6 +308,7 @@ function App() {
                     <Route path="/admin/product/edit/:id" element={admin ? <EditProduct /> : nouser ? <Navigate to='/admin/login' /> : null} />
 
                     <Route path="/admin/reports/order-report" element={admin ? <OrderReport /> : nouser ? <Navigate to='/admin/login' /> : null} />
+                    <Route path="/admin/reports/sales-report" element={admin ? <SalesReport /> : nouser ? <Navigate to='/admin/login' /> : null} />
 
                     <Route path="/admin/addshippingcost" element={admin ? <Addshippingcost /> : nouser ? <Navigate to='/admin/login' /> : null} />
 

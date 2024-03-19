@@ -1,26 +1,28 @@
-import React, { useContext, useRef, useState } from "react";
-import Product from "./Product";
-import { useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { ReactNotifications } from "react-notifications-component";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Loader from '../../Loader/Loader';
+import Notification from "../../Notifications/Notifications";
 import ProductContext from "../../context/Product/ProductContext";
 import UserContext from "../../context/User/UserContext";
-import Notification from "../../Notifications/Notifications";
-import { ReactNotifications } from "react-notifications-component";
-import Loader from '../../Loader/Loader'
+import SidebarForLoggedOut from "../Sidebar/SidebarForLoggedOut";
+import ProductView from "./ProductView";
 // import { useNavigate } from "react-router-dom";
 
-const ProductMain = () => {
+const ProductWithoutPrices = () => {
   const { products, getProducts, getCategories, cartLoading } = useContext(ProductContext);
   const [currentPro, setProductState] = useState(products);
   const [loading, setLoading] = useState(false);
+
   const [singleProduct, setSingleProduct] = useState({})
   const { user } = useContext(UserContext);
   const userload = useContext(UserContext);
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
   const { addToCart } = context;
+  const Navigate = useNavigate()
   const modalRef = useRef(null);
   const closeRef = useRef(null);
-
   useEffect(() => {
     getProducts();
     getCategories();
@@ -29,7 +31,6 @@ const ProductMain = () => {
   useEffect(() => {
     setProductState(products)
   }, [products]);
-
   const [quantity, setQuantity] = useState(1);
 
   const modelFunction = (id) => {
@@ -73,15 +74,16 @@ const ProductMain = () => {
       Notification("Success", "Added to Cart", "success")
     }, 10);
   };
-
+  const location = useLocation()
   return (
     <>
+      {!["login", "signup"].includes(location.pathname) && <SidebarForLoggedOut />}
       <ReactNotifications />
       {currentPro.length < products.length && <ReactNotifications />}
 
       {/* {loading ? <Loader /> : <> */}
       {loading || cartLoading || userload?.loading ? <Loader /> : <>
-        <div className={`container-fluid ${user?.name && 'mt-5'} home-sidebar`}>
+        <div className="container-fluid home-sidebar">
           <div className="row">
             <div className="input-group mb-3">
               <input onChange={searchFun} type="text" className="form-control" placeholder="Search Products" />
@@ -91,7 +93,7 @@ const ProductMain = () => {
               {currentPro && currentPro.map((product, index) => {
                 return (
                   product.deActivated === false &&
-                  <Product product={product} modalRef={modelFunction} key={index + 1} />
+                  <ProductView product={product} modalRef={modelFunction} key={index + 1} />
                 );
               })}
             </div>
@@ -117,42 +119,23 @@ const ProductMain = () => {
                   <div className="col-sm-6">
                     <h5>{singleProduct.title}</h5>
                     <p>{singleProduct.description}</p>
-                    <h6 className=" ">
-                      {user.role === "wholeseller" ? (
-                        singleProduct.discountedPriceW > 0 ? (
-                          <>
-                            Rs. {singleProduct.discountedPriceW}{" "}
-                            <del>{singleProduct.wholesalePrice}</del>
-                          </>
-                        ) : (
-                          <>Rs. {singleProduct.wholesalePrice}</>
-                        )
-                      ) : singleProduct.discountedPriceD > 0 ? (
-                        <>
-                          Rs. {singleProduct.discountedPriceD}{" "}
-                          <del>{singleProduct.dropshipperPrice}</del>
-                        </>
-                      ) : (
-                        <>Rs. {singleProduct.dropshipperPrice}</>
-                      )}
-                    </h6>
-
+                    <button data-bs-dismiss="modal"
+                      ref={closeRef}
+                      onClick={() => Navigate('/login')} className="btn btn-primary mb-2">Show Price</button>
                     <div className="d-flex ">
                       <label htmlFor="" className="mt-2">
                         Qty
                       </label>
-
                       <input className="form-control mx-1" style={{ width: "70px" }} min="1" type="number" name="qty" value={quantity} onChange={handleChange} />
-
-                      <button className="cartbtn"
+                      <Link to='/login'> <button className="cartbtn"
                         data-bs-dismiss="modal"
                         aria-label="Close"
-                        type="button" name="add_cart" id="button" onClick={() => addAndRefresh(singleProduct)}    >
+                        type="button" name="add_cart" id="button">
                         <i
                           className="bx bx-cart cart-button mt-1 pl-5"
                           style={{ marginRight: "8px" }}
                         ></i>
-                      </button>
+                      </button></Link>
                     </div>
 
 
@@ -177,4 +160,4 @@ const ProductMain = () => {
   );
 };
 
-export default ProductMain;
+export default ProductWithoutPrices;

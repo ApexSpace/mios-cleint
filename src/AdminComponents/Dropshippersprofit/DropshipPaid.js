@@ -11,6 +11,8 @@ const DropshipPending = () => {
   useEffect(() => {
     getAllProfits()
   }, [])
+
+
   const getAllProfits = async () => {
     try {
       setLoading(true)
@@ -49,6 +51,7 @@ const DropshipPending = () => {
                     <td colSpan="1" className="text-center">{item?.city}</td>
                     <td colSpan="1" className="text-center">{item?.totalProfit}</td>
                     <td colSpan="1" className="text-center">{new Date(item?.latestDatePaid).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' })}</td>
+                    {/* <td colSpan="1" className="text-center"><button onClick={() => unPayAllProfits(item?._id, item)} className="btn btn-primary">Reverse Payment</button></td> */}
                     <td colSpan="1" className="text-center"><Link to={`/admin/PaidPerUser/${item?.id}`}><button className="btn btn-primary">Detail</button></Link></td>
                   </tr>)
                 })}
