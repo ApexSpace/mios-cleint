@@ -254,7 +254,7 @@ const PendingWholesale = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredRecords.slice().reverse().map((order) => {
+                                    {filteredRecords.slice().map((order) => {
                                         let date = new Date(order.date);
                                         return (
                                             order.orderStatus === "Pending" &&

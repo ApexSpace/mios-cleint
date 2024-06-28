@@ -70,9 +70,10 @@ const ShippedDropship = () => {
     //   setChecked(!checked)
     // };
 
-    const handleShipping = (id) => {
+    const handleShipping = (id, method) => {
         modalRef.current.click();
         let order = orders.find((order) => order._id === id);
+        order.shippingDetails.paymentOption = method
         setDetails(order.shippingDetails)
     };
 
@@ -258,7 +259,7 @@ const ShippedDropship = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredRecords.slice().reverse().map((order) => {
+                                    {filteredRecords.slice().map((order) => {
                                         let date = new Date(order.date);
 
                                         return (
@@ -274,7 +275,7 @@ const ShippedDropship = () => {
                                                 <td className="text-center align-middle hover-pointer">
                                                     <span
                                                         className="btn btn-primary btn-sm"
-                                                        onClick={() => handleShipping(order._id)}
+                                                        onClick={() => handleShipping(order._id, order.paymentOption)}
                                                         title="Shipping Details"
                                                     >
                                                         Details
@@ -449,7 +450,7 @@ const ShippedDropship = () => {
                                             </tr>
                                             <tr>
                                                 <th scope="row">Payment Method</th>
-                                                <td>{details.phone}</td>
+                                                <td>{details.paymentOption}</td>
                                             </tr>
 
                                         </tbody>

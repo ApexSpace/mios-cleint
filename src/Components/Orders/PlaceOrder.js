@@ -185,14 +185,13 @@ const PlaceOrder = () => {
             ...prevVal,
             shippingDetails
         }))
-        if (!name || !email || !total || !phone || !city || !address || !paymentOption || !shipping || !products || (paymentOption === "Receipt" && (!transactionId || !photo))) {
-            if (!products) {
-                Notification("Error", "Cart is Empty", "danger");
-            }
-            else {
-                Notification("Error", "Enter Complete Details", "danger");
-            }
-        } else {
+        if (!products) {
+            Notification("Error", "Cart is Empty.", "danger");
+        }
+        else if (!name || !email || !city || !address || !phone ||!paymentOption || !total || !shipping || (paymentOption === "Receipt" && (!transactionId || !photo))) {
+            Notification("Error", `Enter your ${!name ? 'name' : ''}${!email ? ' email' : ''}${!city ? ' city' : ''}${!address ? ' address' : ''}${!phone ? ' phone' : ''}${!paymentOption ? ' Payment Option,' : ''}${(paymentOption === "Receipt" && (!photo)) ? ' receipt' : ''}${(paymentOption === "Receipt" && (!transactionId)) ? ' Transaction Id' : ''}   `, "danger");
+        }
+        else {
             if (phone.length <= 10) {
                 Notification("Error", "Phone Number Should be at least 11 digits long.", "danger");
             } else {

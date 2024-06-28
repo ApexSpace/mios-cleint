@@ -254,7 +254,7 @@ const ShippedWholesale = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredRecords.slice().reverse().map((order) => {
+                                    {filteredRecords.slice().map((order) => {
                                         let date = new Date(order.date);
                                         return (
                                             order.shippingStatus === true &&

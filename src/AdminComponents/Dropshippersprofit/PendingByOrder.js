@@ -27,9 +27,10 @@ const PendingByOrder = () => {
                 `${host}/api/profitrecords/pendingprofitsbyuser/${id}`
             );
             setAllProfits(data);
+            setFilteredProfits(data);
             setLoading(false);
             // Filter the profits based on the initial date range (if provided)
-            filterProfitsByDate();
+            // filterProfitsByDate();
         } catch (error) {
             setLoading(false);
         }

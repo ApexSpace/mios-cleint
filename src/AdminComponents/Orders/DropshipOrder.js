@@ -70,12 +70,12 @@ const DropshipOrder = () => {
   //   setChecked(!checked)
   // };
 
-  const handleShipping = (id) => {
+  const handleShipping = (id, method) => {
     modalRef.current.click();
     let order = orders.find((order) => order._id === id);
+    order.shippingDetails.paymentOption = method
     setDetails(order.shippingDetails)
   };
-
   const handleOrderStatues = async (id, orderStatus) => {
     let url = `${host}/api/order/changeorderstatus/${id}`;
     await fetch(url, {
@@ -264,7 +264,7 @@ const DropshipOrder = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredRecords.slice().reverse().map((order) => {
+                  {filteredRecords.slice().map((order) => {
                     let date = new Date(order.date);
                     return (
                       <tr className="text-center align-middle" key={order._id}>
@@ -278,7 +278,7 @@ const DropshipOrder = () => {
                         <td className="text-center align-middle hover-pointer">
                           <span
                             className="btn btn-primary btn-sm"
-                            onClick={() => handleShipping(order._id)}
+                            onClick={() => handleShipping(order._id, order.paymentOption)}
                             title="Shipping Details"
                           >
                             Details
@@ -460,7 +460,7 @@ const DropshipOrder = () => {
                       </tr>
                       <tr>
                         <th scope="row">Payment Method</th>
-                        <td>{details.phone}</td>
+                        <td>{details.paymentOption}</td>
                       </tr>
 
                     </tbody>

@@ -58,15 +58,14 @@ const Signup = ({ setuser }) => {
   const signedUp = async (e) => {
     e.preventDefault();
     try {
-      if (
-        !role || !name || !email || !city || !password || !address || !phone || !company
-      ) {
-        window.alert("Enter Complete Details");
+
+      if (!name || !email || !city || !password || !address || !phone || !company) {
+        Notification("Error", `Enter your ${!name ? 'name' : ''}${!email ? ' email' : ''}${!city ? ' city' : ''}${!password ? ' password' : ''}${!address ? ' address' : ''}${!phone ? ' phone' : ''}${!company ? ' company name' : ''}  `, "danger");
       } else {
         if (password.length <= 6) {
-          window.alert("Password must be greater than 6 characters");
+          Notification("Error", "Password must be greater than 6 characters.", "danger");
         } else {
-          setLoading(true);
+          // setLoading(true);
           // eslint-disable-next-line
           await axios.post(
             `${host}/api/auth/signup`,
@@ -87,17 +86,21 @@ const Signup = ({ setuser }) => {
           Navigate('/login')
           await getUserDetails();
           setLoading(false);
+          Notification("Success", "Successfully Logged In.", "success");
         }
       }
     } catch (e) {
-      setLoading(false);
-      console.log(e)
-      if (e.response?.data?.errors[0]?.msg) {
-        Notification("Error", e.response.data.errors[0].msg, "danger");
-      } else if (e.response?.data?.errors?.msg) {
-        Notification("Error", e.response.data.errors.msg, "danger");
-      } else {
-        Notification("Error", e.message, "danger");
+      // setLoading(false);
+      console.log(e.response.data)
+      if (e?.response?.data?.errors?.msg) {
+        Notification("Error", e?.response.data.errors.msg, "danger");
+      } else if (e?.response?.data?.errors) {
+        Notification("Error", e?.response?.data?.errors[0]?.msg, "danger");
+      } else if (e?.response?.data) {
+        Notification("Error", e.response.data, "danger");
+      }
+      else {
+        Notification("Error", e?.message, "danger");
       }
     }
   };
