@@ -2,8 +2,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-
-
 const EditOrderAdminD = () => {
   const host = process.env.REACT_APP_API_URL;
   const [trackingId, setTrackingId] = useState("");
@@ -27,15 +25,13 @@ const EditOrderAdminD = () => {
   };
 
   useEffect(() => {
-
     getDetails();
     getTracking();
-
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onChangeShip = (e) => {
-    setShippingDetails({ ...shippingDetails, [e.target.name]: e.target.value })
-  }
+    setShippingDetails({ ...shippingDetails, [e.target.name]: e.target.value });
+  };
 
   const onChange = (e) => {
     setTrackingId(e.target.value);
@@ -52,7 +48,6 @@ const EditOrderAdminD = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
       await axios.put(`${host}/api/order/updateshippingdetails/${id}`, {
         name: shippingDetails.name,
         address: shippingDetails.address,
@@ -60,14 +55,12 @@ const EditOrderAdminD = () => {
         phone: shippingDetails.phone,
       });
 
-      await axios
-        .put(`${host}/api/order/updatetrackingdetails/${id}`, {
-          trackingId,
-          courierServiceName,
-        })
+      await axios.put(`${host}/api/order/updatetrackingdetails/${id}`, {
+        trackingId,
+        courierServiceName,
+      });
 
       Navigate(`/admin/dropshiporders`);
-
     } catch (e) {
       // console.log(e);
     }
@@ -159,7 +152,9 @@ const EditOrderAdminD = () => {
                     name="courierServiceName"
                     onChange={onSelectChange}
                   >
-                    <option value={courierServiceName}>{courierServiceName}</option>
+                    <option value={courierServiceName}>
+                      {courierServiceName}
+                    </option>
                     <option value="https://www.tcsexpress.com/Tracking">
                       TCS
                     </option>
@@ -174,6 +169,11 @@ const EditOrderAdminD = () => {
                       FedEx Express
                     </option>
                     <option value="https://www.mulphilog.com/">M&P</option>
+                    <option value="https://fastex.pk/">Daewoo</option>
+                    <option value="https://track.withrider.com/#/">
+                      Rider Courier
+                    </option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div className="col-sm-8 ">
@@ -188,6 +188,6 @@ const EditOrderAdminD = () => {
       </div>
     </>
   );
-}
+};
 
-export default EditOrderAdminD
+export default EditOrderAdminD;

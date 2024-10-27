@@ -1,4 +1,4 @@
-import { React, useContext, useState, } from "react";
+import { React, useContext, useState } from "react";
 import "./Product.css";
 import ProductContext from "../../context/Product/ProductContext";
 import { Link } from "react-router-dom";
@@ -12,7 +12,6 @@ const ProductView = ({ product, modalRef }) => {
   const { addToCart, addToMyShop } = context;
   const Refresh = context.Cart;
   const [quantity, setQuantity] = useState(1);
-
 
   const handleChange = (e) => {
     const newQty = parseInt(e.target.value);
@@ -61,13 +60,13 @@ const ProductView = ({ product, modalRef }) => {
               <span
                 className=" text-white"
                 id="quick_btn"
-                onClick={() => { modalRef(product._id) }}
+                onClick={() => {
+                  modalRef(product._id);
+                }}
               >
                 Quick view
               </span>
             </div>
-
-
           </div>
           {product.featured === true && (
             <div className="feature-overlay">
@@ -76,10 +75,9 @@ const ProductView = ({ product, modalRef }) => {
           )}
           {product.stock < 1 && (
             <div className="outstock-overlay">
-              <span className="">OUT OF STOCK</span>
+              <span className="">Out of Stock</span>
             </div>
           )}
-
 
           <div className="card-body">
             <Link to={`/product/${product._id}`}>
@@ -94,7 +92,7 @@ const ProductView = ({ product, modalRef }) => {
 
                 <input
                   className="form-control mx-1"
-                  style={{ width: "70px" }}
+                  style={{ width: "60px" }}
                   min="0"
                   type="number"
                   name="qty"
@@ -105,7 +103,7 @@ const ProductView = ({ product, modalRef }) => {
                 <div className="cartbtn d-none">
                   <i
                     className="bx bx-cart cart-button mt-1"
-                  // style={{fontSize: '25px'}}
+                    // style={{fontSize: '25px'}}
                   ></i>
                 </div>
               </div>
@@ -117,14 +115,14 @@ const ProductView = ({ product, modalRef }) => {
 
                 <input
                   className="form-control mx-1"
-                  style={{ width: "70px" }}
+                  style={{ width: "50px" }}
                   min="1"
                   type="number"
                   name="qty"
                   value={quantity}
                   onChange={handleChange}
                 />
-                <Link to={'/login'}>
+                <Link to={"/login"}>
                   <button
                     className="cartbtn"
                     type="button"
@@ -142,7 +140,6 @@ const ProductView = ({ product, modalRef }) => {
           </div>
         </div>
       </div>
-
     </>
   );
 };

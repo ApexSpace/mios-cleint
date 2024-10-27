@@ -26,7 +26,7 @@ const Signup = ({ setuser }) => {
   const userDetails = userDetail.user;
   const getUserDetails = userDetail.getUserDetails;
   const { role, name, email, password, address, phone, city, company } = user;
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
   useEffect(() => {
     if (
       userDetails._id &&
@@ -49,8 +49,8 @@ const Signup = ({ setuser }) => {
         role: e.target.checked
           ? "dropshipper"
           : !e.target.checked
-            ? "wholeseller"
-            : "wholeseller",
+          ? "wholeseller"
+          : "wholeseller",
       }));
     }
   };
@@ -58,12 +58,31 @@ const Signup = ({ setuser }) => {
   const signedUp = async (e) => {
     e.preventDefault();
     try {
-
-      if (!name || !email || !city || !password || !address || !phone || !company) {
-        Notification("Error", `Enter your ${!name ? 'name' : ''}${!email ? ' email' : ''}${!city ? ' city' : ''}${!password ? ' password' : ''}${!address ? ' address' : ''}${!phone ? ' phone' : ''}${!company ? ' company name' : ''}  `, "danger");
+      if (
+        !name ||
+        !email ||
+        !city ||
+        !password ||
+        !address ||
+        !phone ||
+        !company
+      ) {
+        Notification(
+          "Error",
+          `Enter your ${!name ? "name" : ""}${!email ? " email" : ""}${
+            !city ? " city" : ""
+          }${!password ? " password" : ""}${!address ? " address" : ""}${
+            !phone ? " phone" : ""
+          }${!company ? " company name" : ""}  `,
+          "danger"
+        );
       } else {
         if (password.length <= 6) {
-          Notification("Error", "Password must be greater than 6 characters.", "danger");
+          Notification(
+            "Error",
+            "Password must be greater than 6 characters.",
+            "danger"
+          );
         } else {
           // setLoading(true);
           // eslint-disable-next-line
@@ -83,7 +102,7 @@ const Signup = ({ setuser }) => {
               withCredentials: true,
             }
           );
-          Navigate('/login')
+          Navigate("/login");
           await getUserDetails();
           setLoading(false);
           Notification("Success", "Successfully Logged In.", "success");
@@ -91,15 +110,14 @@ const Signup = ({ setuser }) => {
       }
     } catch (e) {
       // setLoading(false);
-      console.log(e.response.data)
+      console.log(e.response.data);
       if (e?.response?.data?.errors?.msg) {
         Notification("Error", e?.response.data.errors.msg, "danger");
       } else if (e?.response?.data?.errors) {
         Notification("Error", e?.response?.data?.errors[0]?.msg, "danger");
       } else if (e?.response?.data) {
         Notification("Error", e.response.data, "danger");
-      }
-      else {
+      } else {
         Notification("Error", e?.message, "danger");
       }
     }
@@ -111,8 +129,8 @@ const Signup = ({ setuser }) => {
       {loading ? (
         <Loader />
       ) : (
-        <section className="area-login">
-          <div className="login">
+        <section className="login-signup">
+          <div className="login signup">
             <div>
               <img className="logo_mios" src={image} alt="logo" />
             </div>
@@ -137,7 +155,7 @@ const Signup = ({ setuser }) => {
                 required
               />
               <input
-                className="mb-3"
+                className=""
                 type="password"
                 name="password"
                 id="password"
@@ -440,7 +458,7 @@ const Signup = ({ setuser }) => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "flex-start",
                   height: "50px",
                   margin: "0px",
                 }}
@@ -453,7 +471,7 @@ const Signup = ({ setuser }) => {
                   autoFocus
                   onChange={onChange}
                 />
-                <p>Apply for Dropsipper</p>
+                <p className="dropshipperApply">Apply for Dropsipper Account</p>
               </div>
               <input type="submit" value="create account" onClick={signedUp} />
             </form>

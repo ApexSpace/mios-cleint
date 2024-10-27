@@ -12,55 +12,67 @@ const ProductState = (props) => {
   const [subTotal, setSubTotal] = useState(0);
   const [shippCat, setShippingCat] = useState(0);
   const [MyShopItems, setMyShopItems] = useState([]);
-  const [allproducts, setAllProducts] = useState([])
-  const [featured, setFeatured] = useState([])
-  const [onSale, setOnSale] = useState([])
+  const [allproducts, setAllProducts] = useState([]);
+  const [featured, setFeatured] = useState([]);
+  const [onSale, setOnSale] = useState([]);
 
   const getFeatured = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/product/featured`);
     setFeatured(data?.featuredProducts);
-    setLoading(false)
+    setLoading(false);
   };
 
   const getOnSale = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/product/allonsale`);
     setOnSale(data?.onSaleProducts);
-    setLoading(false)
+    setLoading(false);
   };
-
-
 
   // This Api
   const getCategories = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/category/allcategories`);
     setCategories(data?.categories);
-    setLoading(false)
+    setLoading(false);
   };
 
   // New Api
   const GetAllProducts = async () => {
-
     const { data } = await axios.get(`${host}/api/product/allactiveproducts`);
     setAllProducts(data?.products);
-    setLoading(false)
-
-  }
+    setLoading(false);
+  };
 
   // This Api
   const getProducts = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/product/allProducts`);
     setProducts(data?.products);
-    setLoading(false)
+    setLoading(false);
+  };
+  const getPaginateProduct = async (page = 1, limit = 10) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        `${host}/api/product/allproductspaginate`,
+        {
+          params: { page, limit },
+        }
+      );
+      setProducts(data?.products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
   };
   const getShipCat = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/shipping/shippingcalc`);
     setShippingCat(data);
-    setLoading(false)
+    setLoading(false);
   };
   useEffect(() => {
     getShipCat();
@@ -80,15 +92,15 @@ const ProductState = (props) => {
   };
 
   const getMyshop = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/myshop/allmyshopitems`);
     setMyShopItems(data?.product);
-    setLoading(false)
+    setLoading(false);
   };
 
   useEffect(() => {
     getCategories();
-    getProducts();
+    //getProducts();
     // Cart();
     getMyshop();
 
@@ -100,36 +112,39 @@ const ProductState = (props) => {
       product,
       quantity,
     };
-    setLoading(true)
-    setCartLoading(true)
-    await axios.post(`${host}/api/cart/addtocart`, { cart })
+    setLoading(true);
+    setCartLoading(true);
+    await axios
+      .post(`${host}/api/cart/addtocart`, { cart })
       .then(function () {
-        setCartLoading(false)
-        setLoading(false)
+        setCartLoading(false);
+        setLoading(false);
       })
       .catch(function (error) {
-        setCartLoading(false)
-        setLoading(false)
+        setCartLoading(false);
+        setLoading(false);
         // console.log(error);
       });
   };
 
   const removeCartProduct = async (id) => {
-    setCartLoading(true)
-    await axios.delete(`${host}/api/cart/deletecartitem/${id}`)
+    setCartLoading(true);
+    await axios
+      .delete(`${host}/api/cart/deletecartitem/${id}`)
       .then(function (response) {
-        setCartLoading(false)
+        setCartLoading(false);
         setCartItems(response.data.result);
       })
       .catch(function (error) {
-        setCartLoading(false)
+        setCartLoading(false);
         // console.log(error);
       });
   };
 
   const updateCartProductQty = async (id, qty) => {
     // setCartLoading(true)
-    await axios.put(`${host}/api/cart/updatecart/${id}`, { qty })
+    await axios
+      .put(`${host}/api/cart/updatecart/${id}`, { qty })
       .then(function (response) {
         // setCartLoading(false)
         setCartItems(response.data.result);
@@ -140,37 +155,40 @@ const ProductState = (props) => {
   };
 
   const updateDropshipPrice = async (id, price) => {
-    await axios.put(`${host}/api/cart/updatedropshipprice/${id}`, { price })
+    await axios
+      .put(`${host}/api/cart/updatedropshipprice/${id}`, { price })
       .then(function (response) {
         setCartItems(response.data.result);
       })
       .catch(function (error) {
-        setCartLoading(false)
+        setCartLoading(false);
       });
   };
 
   const addToMyShop = async (productid) => {
-    const productId = { product: productid }
-    setLoading(true)
-    await axios.post(`${host}/api/myshop/addtomyshop`, productId)
+    const productId = { product: productid };
+    setLoading(true);
+    await axios
+      .post(`${host}/api/myshop/addtomyshop`, productId)
       .then(function (res) {
-        setLoading(false)
+        setLoading(false);
       })
       .catch(function (error) {
-        setLoading(false)
+        setLoading(false);
         // console.log(error);
       });
   };
 
   const removeMyShop = async (id) => {
-    setLoading(true)
-    await axios.put(`${host}/api/myshop/deletemyshopitem/${id}`)
+    setLoading(true);
+    await axios
+      .put(`${host}/api/myshop/deletemyshopitem/${id}`)
       .then(function (response) {
-        setLoading(false)
+        setLoading(false);
         getMyshop();
       })
       .catch(function (error) {
-        setLoading(false)
+        setLoading(false);
         // console.log(error);
       });
   };
@@ -178,7 +196,8 @@ const ProductState = (props) => {
   return (
     <ProductContext.Provider
       value={{
-        loading, setLoading,
+        loading,
+        setLoading,
         categories,
         getCategories,
         products,
@@ -196,8 +215,14 @@ const ProductState = (props) => {
         updateDropshipPrice,
         addToMyShop,
         removeMyShop,
-        getMyshop, getFeatured, getOnSale, featured, onSale,
-        MyShopItems, cartLoading
+        getMyshop,
+        getFeatured,
+        getOnSale,
+        featured,
+        onSale,
+        MyShopItems,
+        cartLoading,
+        getPaginateProduct,
       }}
     >
       {props.children}

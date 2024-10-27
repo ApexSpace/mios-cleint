@@ -29,9 +29,9 @@ const WholesaleOrder = () => {
   const [checkFilter, setfeatured] = useState({
     shippingStatus: false,
     unshippingStatus: false,
-    orderStatus: false
+    orderStatus: false,
+    returnOrder: false,
   });
-
 
   // const [startDate, setStartDate] = useState(new Date());
   // const [endDate, setEndDate] = useState(new Date());
@@ -59,20 +59,30 @@ const WholesaleOrder = () => {
     setfeatured({ ...checkFilter, [e.target.name]: e.target.checked });
     if (e.target.checked) {
       if (e.target.name === "unshippingStatus") {
-        setFilteredRecords(orders.filter((pro) => {
-          return pro.shippingStatus === false;
-        }));
-
+        setFilteredRecords(
+          orders.filter((pro) => {
+            return pro.shippingStatus === false;
+          })
+        );
       } else if (e.target.name === "shippingStatus") {
-        setFilteredRecords(orders.filter((pro) => {
-          return pro.shippingStatus === true;
-        }));
-      } else {
-        setFilteredRecords(orders.filter((pro) => {
-          return pro.orderStatus === "Pending";
-        }));
+        setFilteredRecords(
+          orders.filter((pro) => {
+            return pro.shippingStatus === true;
+          })
+        );
+      } else if (e.target.name === "orderStatus") {
+        setFilteredRecords(
+          orders.filter((pro) => {
+            return pro.orderStatus === "Pending";
+          })
+        );
+      } else if (e.target.name === "returnOrder") {
+        setFilteredRecords(
+          orders.filter((pro) => {
+            return pro.orderStatus === "Returned";
+          })
+        );
       }
-
     } else {
       setFilteredRecords(orders);
     }
@@ -121,14 +131,15 @@ const WholesaleOrder = () => {
   // };
 
   const handleReverse = async (id) => {
-    axios.put(`${host}/api/order/reverseorder/${id}`)
-      .then(res => {
-        getOrders()
+    axios
+      .put(`${host}/api/order/reverseorder/${id}`)
+      .then((res) => {
+        getOrders();
       })
-      .catch(err => {
-        window.alert("Something went wrong")
-      })
-  }
+      .catch((err) => {
+        window.alert("Something went wrong");
+      });
+  };
 
   // const handleSelect = (date) => {
   //     let filteredOrders = allOrders.filter((order) => {
@@ -211,7 +222,6 @@ const WholesaleOrder = () => {
     }
   };
 
-
   return (
     <>
       <ReactNotifications />
@@ -276,21 +286,55 @@ const WholesaleOrder = () => {
               <div className="d-flex flex-row mt-2">
                 <div className="ms-auto me-5">
                   <div className="form-check">
-                    <input className="form-check-input" name="shippingStatus" value={checkFilter.shippingStatus} onChange={setFilters} type="checkbox" id="flexCheckDefault" />
+                    <input
+                      className="form-check-input"
+                      name="shippingStatus"
+                      value={checkFilter.shippingStatus}
+                      onChange={setFilters}
+                      type="checkbox"
+                      id="flexCheckDefault"
+                    />
                     <small className="form-check-label" for="flexCheckDefault">
-                      Delivered
+                      Delivered Orders
                     </small>
                   </div>
                   <div className="form-check">
-                    <input className="form-check-input" name="unshippingStatus" value={checkFilter.unshippingStatus} onChange={setFilters} type="checkbox" id="flexCheckChecked" />
+                    <input
+                      className="form-check-input"
+                      name="unshippingStatus"
+                      value={checkFilter.unshippingStatus}
+                      onChange={setFilters}
+                      type="checkbox"
+                      id="flexCheckChecked"
+                    />
                     <small className="form-check-label" for="flexCheckChecked">
-                      Not Delivered
+                      Not Delivered Orders
                     </small>
                   </div>
                   <div className="form-check">
-                    <input className="form-check-input" name="orderStatus" value={checkFilter.orderStatus} onChange={setFilters} type="checkbox" id="flexCheckChecked" />
+                    <input
+                      className="form-check-input"
+                      name="orderStatus"
+                      value={checkFilter.orderStatus}
+                      onChange={setFilters}
+                      type="checkbox"
+                      id="flexCheckChecked"
+                    />
                     <small className="form-check-label" for="flexCheckChecked">
-                      Pending
+                      Pending Orders
+                    </small>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      name="returnOrder"
+                      value={checkFilter.returnOrder}
+                      onChange={setFilters}
+                      type="checkbox"
+                      id="flexCheckChecked"
+                    />
+                    <small className="form-check-label" for="flexCheckChecked">
+                      Return Orders
                     </small>
                   </div>
                 </div>

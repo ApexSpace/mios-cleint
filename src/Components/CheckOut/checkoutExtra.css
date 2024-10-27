@@ -1,36 +1,34 @@
-.saveAddressBtn{
-    width:40%;
-    height:30px;
-    background-color: rgb(0,57,83);
-    color: white;
-    
+.saveAddressBtn {
+  width: 40%;
+  height: 30px;
+  background-color: #1a4d84 !important;
+  color: white;
 }
-.saveAddressBtn:hover{
-    background-color: rgb(1,118,188);
+.saveAddressBtn:hover {
+  background-color: #1a4d84 !important;
 }
-.placeOrderBtn{
-    /* margin: 10px; */
-    margin-top: 15px;
-    background-color: rgb(0,57,83);
-    color: white;
-    width: 100%;
-    height:30px;
-    font-size: large;
+.placeOrderBtn {
+  /* margin: 10px; */
+  margin-top: 15px;
+  background-color: #1a4d84 !important;
+  color: white;
+  width: 100%;
+  height: 30px;
+  font-size: large;
 }
-.placeOrderBtn:hover{
-    background-color: rgb(1,118,188);
+.placeOrderBtn:hover {
+  background-color: #1a4d84 !important;
 }
-.applyBtn{
-    width : 25%;
-    color : white;
-    background-color: rgb(0,57,83);
+.applyBtn {
+  width: 25%;
+  color: white;
+  background-color: #1a4d84 !important;
 }
-.applyBtn:hover{
-    background-color: rgb(1,118,188); 
+.applyBtn:hover {
+  background-color: #1a4d84 !important;
 }
-.promobox{
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    padding: 30px;
-    margin-top: 5px;
-    
+.promobox {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 30px;
+  margin-top: 5px;
 }

@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
+import image from "../assets/images/logo_sml 1.png";
 import {
   AppBar,
   Divider,
@@ -30,10 +31,11 @@ export default function Sidebar() {
     setOpen(false);
   };
   const Navbar = styled(AppBar)`
-    background-color: transparent;
-    backdrop-filter: blur(10px);
+    background-color: white;
+
     color: black;
   `;
+  // backdrop-filter: blur(10px);
   const location = useLocation();
   const Navigate = useNavigate();
   const Navigation = (e) => {
@@ -59,7 +61,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     setCategoryState(categories);
-  }, [categories])
+  }, [categories]);
 
   //capitalize first letter of a word and also after space in a string
   const capitalizeFirstWord = (str) => {
@@ -75,24 +77,24 @@ export default function Sidebar() {
   // }
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    //window.scrollTo(0, 0);
     if (
       location.pathname === "/" ||
       userOrders.length !==
-      numbers.pending + numbers.delivered + numbers.returned
+        numbers.pending + numbers.delivered + numbers.returned
     ) {
-      getMyOrders();
+      // getMyOrders();
       Cart();
-      setPending(
-        userOrders.filter((order) => order.orderStatus === "Pending").length
-      );
-      setDelivered(
-        userOrders.filter((order) => order.orderStatus === "Delivered").length
-      );
-      setReturned(
-        userOrders.filter((order) => order.orderStatus === "Returned").length
-      );
-      setNumbers({ pending, delivered, returned });
+      // setPending(
+      //   userOrders.filter((order) => order.orderStatus === "Pending").length
+      // );
+      // setDelivered(
+      //   userOrders.filter((order) => order.orderStatus === "Delivered").length
+      // );
+      // setReturned(
+      //   userOrders.filter((order) => order.orderStatus === "Returned").length
+      // );
+      // setNumbers({ pending, delivered, returned });
     }
     const getNumbers = async () => {
       const { data } = await axios.get(`${host}/api/product/catcount`);
@@ -101,8 +103,7 @@ export default function Sidebar() {
     getNumbers();
 
     // eslint-disable-next-line
-  }, [userOrders]);
-
+  }, []);
 
   const logout = async () => {
     await axios.get(`${host}/api/auth/logout`, {
@@ -116,20 +117,17 @@ export default function Sidebar() {
     setCategoryState([]);
     categories.forEach((i) => {
       if (i?.name?.toLowerCase().includes(e.target.value.toLowerCase())) {
-        setCategoryState((prevVal) => [
-          ...prevVal,
-          i
-        ])
+        setCategoryState((prevVal) => [...prevVal, i]);
       }
-    })
-  }
+    });
+  };
 
   const bodyStyles =
     user.isAdmin === false && user.name && window.innerWidth >= 750
       ? {
-        paddingLeft: "220px",
-        width: "95%",
-      }
+          paddingLeft: "220px",
+          width: "95%",
+        }
       : {};
   document.body.style.paddingLeft = bodyStyles.paddingLeft;
   document.body.style.width = bodyStyles.width;
@@ -162,7 +160,7 @@ export default function Sidebar() {
                       width="14"
                       height="1.5"
                       rx="1"
-                      fill="#007FFF"
+                      fill="#ffffff"
                     ></rect>
                     <rect
                       x="1"
@@ -170,13 +168,13 @@ export default function Sidebar() {
                       width="14"
                       height="1.5"
                       rx="1"
-                      fill="#007FFF"
+                      fill="#ffffff"
                     ></rect>
                   </svg>{" "}
                 </IconButton>
                 <center style={{ flexGrow: 1 }}>
                   <Link to="/" className="header__logo">
-                    MIOS
+                    <img className="logo_mios" src={image} alt="logo" />
                   </Link>
                 </center>
                 <div
@@ -192,7 +190,10 @@ export default function Sidebar() {
                   >
                     <AccountCircleIcon fontSize="large" />
                   </div>
-                  <div className="dropdown-menu" aria-labelledby="triggerId">
+                  <div
+                    className="dropdown-menu loggedin"
+                    aria-labelledby="triggerId"
+                  >
                     <Link style={{ textDecoration: "none" }} to="/user/Profile">
                       <div className="dropdown-item">Profile</div>
                     </Link>
@@ -220,7 +221,7 @@ export default function Sidebar() {
             }}
             BackdropProps={{
               invisible: false,
-              style: { opacity: 1, backgroundColor: "transparent" },
+              style: { opacity: 1, backgroundColor: "white !important" },
             }}
             open={open}
             onClose={handleDrawerClose}
@@ -228,7 +229,7 @@ export default function Sidebar() {
             <div style={{ alignSelf: "flex-end", cursor: "pointer" }}>
               <CloseIcon
                 sx={{
-                  color: "white",
+                  color: "white !important",
                   height: "40px",
                   width: "40px",
                   backgroundColor: "#1976d2",
@@ -256,8 +257,11 @@ export default function Sidebar() {
                       className="AdminSideBarLink py-1"
                       style={
                         location.pathname.toLowerCase() ===
-                          item.path.toLowerCase()
-                          ? { backgroundColor: "deepskyblue", color: "white" }
+                        item.path.toLowerCase()
+                          ? {
+                              // backgroundColor: "#1a4d84 !important",
+                              color: "white !important",
+                            }
                           : null
                       }
                       onClick={Navigation}
@@ -280,14 +284,16 @@ export default function Sidebar() {
                         className="AdminSidebarSubHead m-0 py-1"
                         style={
                           location.pathname.toLowerCase() ===
-                            item.path.toLowerCase()
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          item.path.toLowerCase()
+                            ? {
+                                backgroundColor: "#1a4d84 !important",
+                                color: "white !important",
+                              }
                             : null
                         }
                         onClick={Navigation}
                       >
-                        &nbsp;&nbsp;{item.title}(
-                        {numbers[item.title.toLowerCase()]})
+                        &nbsp;&nbsp;{item.title}
                       </p>
                     );
                   })}
@@ -304,8 +310,11 @@ export default function Sidebar() {
                         className="AdminSidebarSubHead"
                         style={
                           location.pathname.toLowerCase() ===
-                            "/user/mypaidprofits"
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          "/user/mypaidprofits"
+                            ? {
+                                backgroundColor: "#1a4d84 !important",
+                                color: "white !important",
+                              }
                             : null
                         }
                       >
@@ -318,8 +327,11 @@ export default function Sidebar() {
                         className="AdminSidebarSubHead"
                         style={
                           location.pathname.toLowerCase() ===
-                            "/user/mypendingprofits"
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          "/user/mypendingprofits"
+                            ? {
+                                backgroundColor: "#1a4d84 !important",
+                                color: "white !important",
+                              }
                             : null
                         }
                       >
@@ -342,8 +354,11 @@ export default function Sidebar() {
                         className="AdminSidebarSubHead m-0 py-1"
                         style={
                           location.pathname.toLowerCase() ===
-                            item.path.toLowerCase()
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          item.path.toLowerCase()
+                            ? {
+                                backgroundColor: "#1a4d84 !important",
+                                color: "white !important",
+                              }
                             : null
                         }
                         onClick={Navigation}
@@ -372,11 +387,11 @@ export default function Sidebar() {
                             className="AdminSidebarSubHead m-0 py-1 px-2"
                             style={
                               location.pathname.toLowerCase() ===
-                                `/category/${item._id}`
+                              `/category/${item._id}`
                                 ? {
-                                  backgroundColor: "deepskyblue",
-                                  color: "white",
-                                }
+                                    backgroundColor: "#1a4d84 !important",
+                                    color: "white !important",
+                                  }
                                 : null
                             }
                           >
@@ -478,7 +493,10 @@ export default function Sidebar() {
                   >
                     <AccountCircleIcon fontSize="large" />
                   </div>
-                  <div className="dropdown-menu" aria-labelledby="triggerId">
+                  <div
+                    className="dropdown-menu loggedin"
+                    aria-labelledby="triggerId"
+                  >
                     <Link style={{ textDecoration: "none" }} to="/user/Profile">
                       <div className="dropdown-item">Profile</div>
                     </Link>
@@ -511,7 +529,7 @@ export default function Sidebar() {
             >
               <center style={{ fontSize: "30px" }}>
                 <Link to="/" className="header__logo">
-                  MIOS
+                  <img className="logo_mios" src={image} alt="logo" />
                 </Link>
               </center>
               <ul>
@@ -533,8 +551,11 @@ export default function Sidebar() {
                         className="AdminSideBarLink my-0 py-1"
                         style={
                           location.pathname.toLowerCase() ===
-                            item.path.toLowerCase()
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          item.path.toLowerCase()
+                            ? {
+                                // backgroundColor: "#1a4d84 !important",
+                                color: "white !important",
+                              }
                             : null
                         }
                         onClick={Navigation}
@@ -567,17 +588,16 @@ export default function Sidebar() {
                             className="AdminSidebarSubHead my-0 py-0"
                             style={
                               location.pathname.toLowerCase() ===
-                                item.path.toLowerCase()
+                              item.path.toLowerCase()
                                 ? {
-                                  backgroundColor: "deepskyblue",
-                                  color: "white",
-                                }
+                                    backgroundColor: "#1a4d84",
+                                    color: "white !important",
+                                  }
                                 : null
                             }
                             onClick={Navigation}
                           >
-                            &nbsp;&nbsp;{item.title}(
-                            {numbers[item.title.toLowerCase()]})
+                            &nbsp;&nbsp;{item.title}
                           </p>
                         );
                       })}
@@ -604,11 +624,11 @@ export default function Sidebar() {
                           className="AdminSidebarSubHead"
                           style={
                             location.pathname.toLowerCase() ===
-                              "/user/mypaidprofits"
+                            "/user/mypaidprofits"
                               ? {
-                                backgroundColor: "deepskyblue",
-                                color: "white",
-                              }
+                                  backgroundColor: "#1a4d84",
+                                  color: "white !important",
+                                }
                               : null
                           }
                         >
@@ -621,11 +641,11 @@ export default function Sidebar() {
                           className="AdminSidebarSubHead"
                           style={
                             location.pathname.toLowerCase() ===
-                              "/user/mypendingprofits"
+                            "/user/mypendingprofits"
                               ? {
-                                backgroundColor: "deepskyblue",
-                                color: "white",
-                              }
+                                  backgroundColor: "#1a4d84",
+                                  color: "white !important",
+                                }
                               : null
                           }
                         >
@@ -650,34 +670,36 @@ export default function Sidebar() {
                     !location.pathname.includes("/checkout") &&
                     !location.pathname.includes("/about") &&
                     !location.pathname.includes("/contact") &&
-                    !location.pathname.includes("/dropship-policy") &&
-                    (
+                    !location.pathname.includes("/dropship-policy") && (
                       <div>
                         <h6 style={{ paddingTop: "10px", paddingLeft: "6px" }}>
                           Categories
                         </h6>
-                        <input type="text" onChange={search} className="form-control" placeholder="Search categories" />
-                        {categoryState && categoryState.map((item, ind) => {
-                          return (
-                            <Link key={ind} to={`/category/${item._id}`}>
-                              <p
-                                className="AdminSidebarSubHead mt-0 mb-0 px-2"
-                                style={
-                                  location.pathname.toLowerCase() ===
+                        <input
+                          type="text"
+                          onChange={search}
+                          className="form-control"
+                          placeholder="Search categories"
+                        />
+                        {categoryState &&
+                          categoryState.map((item, ind) => {
+                            return (
+                              <Link key={ind} to={`/category/${item._id}`}>
+                                <p
+                                  className="AdminSidebarSubHead mt-0 mb-0 px-2"
+                                  style={
+                                    location.pathname.toLowerCase() ===
                                     `/category/${item._id}`
-                                    ? {
-                                      backgroundColor: "deepskyblue",
-                                      color: "white",
-                                    }
-                                    : null
-                                }
-                              >
-                                {capitalizeFirstWord(item?.name)}
-                                {/* ({count[item._id]}) */}
-                              </p>
-                            </Link>
-                          );
-                        })}
+                                      ? {}
+                                      : null
+                                  }
+                                >
+                                  {capitalizeFirstWord(item?.name)}
+                                  {/* ({count[item._id]}) */}
+                                </p>
+                              </Link>
+                            );
+                          })}
                       </div>
                     )}
                 </div>

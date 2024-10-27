@@ -7,7 +7,6 @@ import Notification from "../../Notifications/Notifications";
 import { ReactNotifications } from "react-notifications-component";
 import UserContext from "../../context/User/UserContext";
 
-
 const ProductDetail = () => {
   const host = process.env.REACT_APP_API_URL;
   const [product, setProduct] = useState(null);
@@ -53,7 +52,6 @@ const ProductDetail = () => {
   };
 
   const addAndRefresh = async (product) => {
-
     if (quantity >= 1 && quantity <= product?.stock) {
       await addToCart({ product }, quantity);
       Notification("Success", "Added to Cart", "success");
@@ -61,28 +59,25 @@ const ProductDetail = () => {
     } else {
       Notification("Danger", "You enter more than stock quantity", "danger");
     }
-
   };
 
   return (
     <>
       <ReactNotifications />
-      <div className="container-fluid mt-5">
+      <div className="container ">
         {product ? (
-          <div className="card p-4" style={{ margin: "5.5rem 0 0 0" }}>
+          <div className="card p-4">
             <div className="row">
-              <div className="col-md-6">
-                <div className="image-product p-3">
+              <div className="col-md-7">
+                <div className="image-product">
                   <img src={product.photo?.url} alt={product.title} />
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className="product-dtl">
+              <div className="col-md-5">
+                <div className="product-dtl px-1">
                   <div className="product-info">
                     <div className="product-name">{product.title}</div>
-                    <div className="reviews-counter">
-                      {/* <span>{byIdProduc.review}</span> */}
-                    </div>
+                    <div className="reviews-counter"></div>
                     <div className="product-price-discount">
                       {user.role === "wholeseller" ? (
                         product.discountedPriceW > 0 ? (
@@ -111,40 +106,42 @@ const ProductDetail = () => {
 
                     <div className="product-count">
                       <label htmlFor="size">Quantity</label>
-                      <form action="#" className="display-flex">
-                        <div
-                          className="qtyminus"
-                          onClick={() => {
-                            if (quantity > 1) {
-                              setQuantity(quantity - 1);
-                            }
-                          }}
-                        >
-                          -
-                        </div>
-                        <input
-                          type="text"
-                          name="quantity"
-                          value={quantity}
-                          onChange={handleChange}
-                          className="qty"
-                        />
-                        <div
-                          className="qtyplus"
-                          onClick={() => {
-                            if (quantity < product.stock) {
-                              setQuantity(quantity + 1);
-                            }
-                          }}
-                        >
-                          +
-                        </div>
-                      </form>
+                      <div className="quantity">
+                        <form action="#" className="display-flex qty-form">
+                          <div
+                            className="qtyminus"
+                            onClick={() => {
+                              if (quantity > 1) {
+                                setQuantity(quantity - 1);
+                              }
+                            }}
+                          >
+                            -
+                          </div>
+                          <input
+                            type="text"
+                            name="quantity"
+                            value={quantity}
+                            onChange={handleChange}
+                            className="qty"
+                          />
+                          <div
+                            className="qtyplus"
+                            onClick={() => {
+                              if (quantity < product.stock) {
+                                setQuantity(quantity + 1);
+                              }
+                            }}
+                          >
+                            +
+                          </div>
+                        </form>
+                      </div>
                       <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-12">
                           <button
                             type="button"
-                            className="round-black-btn"
+                            className="round-black-btn add-cart"
                             onClick={() => addAndRefresh(product)}
                           >
                             Add to Cart
@@ -157,9 +154,7 @@ const ProductDetail = () => {
                       <h6>Description:</h6>
                       <p>{product.description}</p>
                     </div>
-
                   </div>
-
                 </div>
               </div>
             </div>

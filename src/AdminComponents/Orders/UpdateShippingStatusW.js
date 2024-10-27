@@ -100,6 +100,11 @@ const UpdateShippingStatusW = () => {
                       FedEx Express
                     </option>
                     <option value="https://www.mulphilog.com/">M&P</option>
+                    <option value="https://fastex.pk/">Daewoo Express</option>
+                    <option value="https://track.withrider.com/#/">
+                      Rider Courier
+                    </option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div className="col-sm-8 ">

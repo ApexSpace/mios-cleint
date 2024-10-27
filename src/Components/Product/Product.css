@@ -6,7 +6,22 @@
   background: #fafafa;
   height: 350px;
 }
+.col {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.shop {
+  padding-left: 5px !important;
+}
+.container {
+  padding-left: 5px;
+}
 
+.input-group {
+  margin-left: 0px !important;
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
 .badge {
   position: absolute;
   left: 10px;
@@ -259,12 +274,12 @@
   padding: 0 10px 0 0;
 }
 
-.rate:not(:checked)>input {
+.rate:not(:checked) > input {
   position: absolute;
   top: -9999px;
 }
 
-.rate:not(:checked)>label {
+.rate:not(:checked) > label {
   float: right;
   width: 15px;
   white-space: nowrap;
@@ -275,24 +290,24 @@
   line-height: 21px;
 }
 
-.rate:not(:checked)>label:before {
+.rate:not(:checked) > label:before {
   content: "\2605";
 }
 
-.rate>input:checked~label {
+.rate > input:checked ~ label {
   color: #ffc700;
 }
 
-.rate:not(:checked)>label:hover,
-.rate:not(:checked)>label:hover~label {
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
   color: #deb217;
 }
 
-.rate>input:checked+label:hover,
-.rate>input:checked+label:hover~label,
-.rate>input:checked~label:hover,
-.rate>input:checked~label:hover~label,
-.rate>label:hover~input:checked~label {
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
   color: #c59b08;
 }
 
@@ -504,7 +519,10 @@
   /* left: -20px; */
   /* padding: 1.25rem; */
   width: 100%;
-  background: linear-gradient(90deg, #8bc34a 4%, #99d653 78%);
+  /* background: linear-gradient(90deg, #8bc34a 4%, #99d653 78%);
+   */
+  background: #1a4d84 !important;
+  color: white !important;
   text-align: center;
   /* font-size: 11px; */
 }
@@ -625,7 +643,7 @@ padding-right: 1em; */
 
 .card {
   background-color: white !important;
-  width: 100%;
+  /* width: 25%; */
 }
 
 input::-webkit-outer-spin-button,

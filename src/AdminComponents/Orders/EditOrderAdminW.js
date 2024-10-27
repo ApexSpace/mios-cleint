@@ -25,16 +25,14 @@ const EditOrderAdminW = () => {
   };
 
   useEffect(() => {
-    
     getDetails();
     getTracking();
-
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const onChangeShip = (e)=>{
-    setShippingDetails({...shippingDetails, [e.target.name]: e.target.value})
-  }
-  
+  const onChangeShip = (e) => {
+    setShippingDetails({ ...shippingDetails, [e.target.name]: e.target.value });
+  };
+
   const onChange = (e) => {
     setTrackingId(e.target.value);
   };
@@ -57,15 +55,12 @@ const EditOrderAdminW = () => {
         phone: shippingDetails.phone,
       });
 
+      await axios.put(`${host}/api/order/updatetrackingdetails/${id}`, {
+        trackingId,
+        courierServiceName,
+      });
 
-      await axios
-        .put(`${host}/api/order/updatetrackingdetails/${id}`, {
-          trackingId,
-          courierServiceName,
-        })
-
-        Navigate(`/admin/wholesaleorders`);
-        
+      Navigate(`/admin/wholesaleorders`);
     } catch (e) {
       // console.log(e);
     }
@@ -81,7 +76,7 @@ const EditOrderAdminW = () => {
               className="py-2 px-4 rounded"
             >
               <div className="row mb-2   justify-content-center">
-            <h3 className="text-center my-2">Edit Shipping Details</h3>
+                <h3 className="text-center my-2">Edit Shipping Details</h3>
                 <div className="form-group col-sm-8 mt-3">
                   <label htmlFor="name">Name</label>
                   <input
@@ -157,7 +152,9 @@ const EditOrderAdminW = () => {
                     name="courierServiceName"
                     onChange={onSelectChange}
                   >
-                    <option value={courierServiceName}>{courierServiceName}</option>
+                    <option value={courierServiceName}>
+                      {courierServiceName}
+                    </option>
                     <option value="https://www.tcsexpress.com/Tracking">
                       TCS
                     </option>
@@ -172,6 +169,11 @@ const EditOrderAdminW = () => {
                       FedEx Express
                     </option>
                     <option value="https://www.mulphilog.com/">M&P</option>
+                    <option value="https://fastex.pk/">Daewoo</option>
+                    <option value="https://track.withrider.com/#/">
+                      Rider Courier
+                    </option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div className="col-sm-8 ">

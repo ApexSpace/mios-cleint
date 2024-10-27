@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CloseIcon from "@mui/icons-material/Close";
+import image from "../assets/images/logo_sml 1.png";
+
 import {
   AppBar,
   Divider,
@@ -30,7 +32,7 @@ export default function SidebarForLoggedOut() {
     setOpen(false);
   };
   const Navbar = styled(AppBar)`
-    background-color: transparent;
+    background-color: White;
     backdrop-filter: blur(10px);
     color: black;
   `;
@@ -59,7 +61,7 @@ export default function SidebarForLoggedOut() {
 
   useEffect(() => {
     setCategoryState(categories);
-  }, [categories])
+  }, [categories]);
 
   //capitalize first letter of a word and also after space in a string
   const capitalizeFirstWord = (str) => {
@@ -79,7 +81,7 @@ export default function SidebarForLoggedOut() {
     if (
       location.pathname === "/" ||
       userOrders.length !==
-      numbers.pending + numbers.delivered + numbers.returned
+        numbers.pending + numbers.delivered + numbers.returned
     ) {
       getMyOrders();
       Cart();
@@ -103,7 +105,6 @@ export default function SidebarForLoggedOut() {
     // eslint-disable-next-line
   }, [userOrders]);
 
-
   const logout = async () => {
     await axios.get(`${host}/api/auth/logout`, {
       withCredentials: true,
@@ -116,20 +117,17 @@ export default function SidebarForLoggedOut() {
     setCategoryState([]);
     categories.forEach((i) => {
       if (i?.name?.toLowerCase().includes(e.target.value.toLowerCase())) {
-        setCategoryState((prevVal) => [
-          ...prevVal,
-          i
-        ])
+        setCategoryState((prevVal) => [...prevVal, i]);
       }
-    })
-  }
+    });
+  };
 
   const bodyStyles =
     window.innerWidth >= 750
       ? {
-        paddingLeft: "220px",
-        width: "95%",
-      }
+          paddingLeft: "220px",
+          width: "95%",
+        }
       : {};
   document.body.style.paddingLeft = bodyStyles.paddingLeft;
   document.body.style.width = bodyStyles.width;
@@ -162,7 +160,7 @@ export default function SidebarForLoggedOut() {
                       width="14"
                       height="1.5"
                       rx="1"
-                      fill="#007FFF"
+                      fill="#ffffff"
                     ></rect>
                     <rect
                       x="1"
@@ -170,13 +168,13 @@ export default function SidebarForLoggedOut() {
                       width="14"
                       height="1.5"
                       rx="1"
-                      fill="#007FFF"
+                      fill="#ffffff"
                     ></rect>
                   </svg>{" "}
                 </IconButton>
                 <center style={{ flexGrow: 1 }}>
                   <Link to="/" className="header__logo">
-                    MIOS
+                    <img className="logo_mios" src={image} alt="logo" />
                   </Link>
                 </center>
                 <div
@@ -192,7 +190,7 @@ export default function SidebarForLoggedOut() {
                   >
                     <AccountCircleIcon fontSize="large" />
                   </div>
-                  <div className="dropdown-menu" aria-labelledby="triggerId">
+                  {/* <div className="dropdown-menu" aria-labelledby="triggerId">
                     <Link style={{ textDecoration: "none" }} to="/user/Profile">
                       <div className="dropdown-item">Profile</div>
                     </Link>
@@ -205,6 +203,14 @@ export default function SidebarForLoggedOut() {
                     <div onClick={logout} className="dropdown-item">
                       Logout
                     </div>
+                  </div> */}
+                  <div className="dropdown-menu" aria-labelledby="triggerId">
+                    <Link style={{ textDecoration: "none" }} to="/signup">
+                      <div className="dropdown-item">Sign Up</div>
+                    </Link>
+                    <Link style={{ textDecoration: "none" }} to="/login">
+                      <div className="dropdown-item">Login</div>
+                    </Link>
                   </div>
                 </div>
               </Toolbar>
@@ -214,13 +220,12 @@ export default function SidebarForLoggedOut() {
             anchor="left"
             PaperProps={{
               style: {
-                backgroundColor: "transparent",
-                backdropFilter: "blur(5px)",
+                backgroundColor: "white",
               },
             }}
             BackdropProps={{
               invisible: false,
-              style: { opacity: 1, backgroundColor: "transparent" },
+              style: { opacity: 1, backgroundColor: "white" },
             }}
             open={open}
             onClose={handleDrawerClose}
@@ -241,7 +246,7 @@ export default function SidebarForLoggedOut() {
 
             <div
               style={{
-                backgroundColor: "transparent",
+                backgroundColor: "White",
                 height: "100vh",
                 width: "300px",
               }}
@@ -256,8 +261,8 @@ export default function SidebarForLoggedOut() {
                       className="AdminSideBarLink py-1"
                       style={
                         location.pathname.toLowerCase() ===
-                          item.path.toLowerCase()
-                          ? { backgroundColor: "deepskyblue", color: "white" }
+                        item.path.toLowerCase()
+                          ? { backgroundColor: "#1a4d84", color: "white" }
                           : null
                       }
                       onClick={Navigation}
@@ -280,8 +285,8 @@ export default function SidebarForLoggedOut() {
                         className="AdminSidebarSubHead m-0 py-1"
                         style={
                           location.pathname.toLowerCase() ===
-                            item.path.toLowerCase()
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          item.path.toLowerCase()
+                            ? { backgroundColor: "#1a4d84", color: "white" }
                             : null
                         }
                         onClick={Navigation}
@@ -304,8 +309,8 @@ export default function SidebarForLoggedOut() {
                         className="AdminSidebarSubHead"
                         style={
                           location.pathname.toLowerCase() ===
-                            "/user/mypaidprofits"
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          "/user/mypaidprofits"
+                            ? { backgroundColor: "#1a4d84", color: "white" }
                             : null
                         }
                       >
@@ -318,8 +323,8 @@ export default function SidebarForLoggedOut() {
                         className="AdminSidebarSubHead"
                         style={
                           location.pathname.toLowerCase() ===
-                            "/user/mypendingprofits"
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          "/user/mypendingprofits"
+                            ? { backgroundColor: "#1a4d84", color: "white" }
                             : null
                         }
                       >
@@ -342,8 +347,8 @@ export default function SidebarForLoggedOut() {
                         className="AdminSidebarSubHead m-0 py-1"
                         style={
                           location.pathname.toLowerCase() ===
-                            item.path.toLowerCase()
-                            ? { backgroundColor: "deepskyblue", color: "white" }
+                          item.path.toLowerCase()
+                            ? { backgroundColor: "#1a4d84", color: "white" }
                             : null
                         }
                         onClick={Navigation}
@@ -372,11 +377,11 @@ export default function SidebarForLoggedOut() {
                             className="AdminSidebarSubHead m-0 py-1 px-2"
                             style={
                               location.pathname.toLowerCase() ===
-                                `/categoryview/${item._id}`
+                              `/categoryview/${item._id}`
                                 ? {
-                                  backgroundColor: "deepskyblue",
-                                  color: "white",
-                                }
+                                    backgroundColor: "#1a4d84",
+                                    color: "white",
+                                  }
                                 : null
                             }
                           >
@@ -399,8 +404,7 @@ export default function SidebarForLoggedOut() {
               <Toolbar>
                 <div
                   className="nav-link"
-                  style={
-                    { marginLeft: "200px", flexGrow: 1 }}
+                  style={{ marginLeft: "200px", flexGrow: 1 }}
                 >
                   <span className="mx-2">
                     <Link className="nav__name" to="/">
@@ -461,19 +465,11 @@ export default function SidebarForLoggedOut() {
                     <AccountCircleIcon fontSize="large" />
                   </div>
                   <div className="dropdown-menu" aria-labelledby="triggerId">
-                    <Link
-                      style={{ textDecoration: "none" }}
-                      to="/signup"
-                    >
+                    <Link style={{ textDecoration: "none" }} to="/signup">
                       <div className="dropdown-item">Signup</div>
                     </Link>
-                    <Link
-                      style={{ textDecoration: "none" }}
-                      to="/login"
-                    >
-                      <div className="dropdown-item">
-                        Login
-                      </div>
+                    <Link style={{ textDecoration: "none" }} to="/login">
+                      <div className="dropdown-item">Login</div>
                     </Link>
                   </div>
                 </div>
@@ -487,7 +483,7 @@ export default function SidebarForLoggedOut() {
           >
             <div
               style={{
-                backgroundColor: "transparent",
+                backgroundColor: "white",
                 height: "100vh",
                 marginTop: "2vh",
                 width: "200px",
@@ -495,42 +491,43 @@ export default function SidebarForLoggedOut() {
             >
               <center style={{ fontSize: "30px" }}>
                 <Link to="/" className="header__logo">
-                  MIOS
+                  <img className="logo_mios" src={image} alt="logo" />
                 </Link>
               </center>
               <ul>
                 <Divider />
 
-
                 {/* Categories */}
                 <div>
-
                   <div>
                     <h6 style={{ paddingTop: "10px", paddingLeft: "6px" }}>
                       Categories
                     </h6>
-                    <input type="text" onChange={search} className="form-control" placeholder="Search categories" />
-                    {categoryState && categoryState.map((item, ind) => {
-                      return (
-                        <Link key={ind} to={`/categoryview/${item._id}`}>
-                          <p
-                            className="AdminSidebarSubHead mt-0 mb-0 px-2"
-                            style={
-                              location.pathname.toLowerCase() ===
+                    <input
+                      type="text"
+                      onChange={search}
+                      className="form-control"
+                      placeholder="Search categories"
+                    />
+                    {categoryState &&
+                      categoryState.map((item, ind) => {
+                        return (
+                          <Link key={ind} to={`/categoryview/${item._id}`}>
+                            <p
+                              className="AdminSidebarSubHead mt-0 mb-0 px-2"
+                              style={
+                                location.pathname.toLowerCase() ===
                                 `/categoryview/${item._id}`
-                                ? {
-                                  backgroundColor: "deepskyblue",
-                                  color: "white",
-                                }
-                                : null
-                            }
-                          >
-                            {capitalizeFirstWord(item?.name)}
-                            {/* ({count[item._id]}) */}
-                          </p>
-                        </Link>
-                      );
-                    })}
+                                  ? {}
+                                  : null
+                              }
+                            >
+                              {capitalizeFirstWord(item?.name)}
+                              {/* ({count[item._id]}) */}
+                            </p>
+                          </Link>
+                        );
+                      })}
                   </div>
                 </div>
               </ul>

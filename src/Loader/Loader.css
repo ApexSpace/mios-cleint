@@ -1,7 +1,7 @@
 .loader {
   border: 5px solid #fff;
   border-radius: 50%;
-  border-top: 4px solid deepskyblue;
+  border-top: 4px solid #1a4d84 !important;
   width: 60px;
   height: 60px;
   -webkit-animation: spin 0.4s linear infinite; /* Safari */
