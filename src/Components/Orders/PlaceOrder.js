@@ -29,7 +29,17 @@ const PlaceOrder = () => {
     if (!(CartItems?.cart?.length >= 1) || !subTotal) {
       Navigate("/Cart");
     }
-    calcProductTotal();
+    console.log("city", city);
+
+    if (
+      user.isAdmin === false &&
+      user.role === "dropshipper" &&
+      user.dropShipperStatus === true
+    ) {
+      setTotal(subTotal);
+      calcProductTotal();
+    }
+
     let w = 0;
     CartItems?.cart?.forEach((item) => {
       w += item.product.weight * item.quantity;
@@ -109,46 +119,92 @@ const PlaceOrder = () => {
   };
 
   const calculateShippingcost = (city) => {
-    if (parseFloat(weight / 1) <= 0.5) {
-      const data = shippCat.find((item) => item.weight === "half");
-      if (city === "Lahore") {
-        setShipping(data.incity);
-        setTotal(subTotal + data.incity);
-      } else {
-        setShipping(data.outcity);
-        setTotal(subTotal + data.outcity);
+    if (
+      user.isAdmin === false &&
+      user.role === "dropshipper" &&
+      user.dropShipperStatus === true
+    ) {
+      setTotal(subTotal);
+      if (parseFloat(weight / 1) <= 0.5) {
+        const data = shippCat.find((item) => item.weight === "half");
+        if (city === "Lahore") {
+          setShipping(data.incity);
+          // setTotal(subTotal + data.incity);
+        } else {
+          setShipping(data.outcity);
+          // setTotal(subTotal + data.outcity);
+        }
+      } else if (parseFloat(weight / 1) == 1.0) {
+        const data = shippCat.find((item) => item.weight === "one");
+        if (city === "Lahore") {
+          setShipping(data.incity);
+          setTotal(subTotal + data.incity);
+        } else {
+          setShipping(data.outcity);
+          // setTotal(subTotal + data.outcity);
+        }
+      } else if (parseFloat(weight / 1) > 1.0) {
+        const Priceforone = shippCat.find((item) => item.weight === "one");
+        const additionalPrice = shippCat.find(
+          (item) => item.weight === "greater"
+        );
+        if (city === "Lahore") {
+          const additionalWeight = Math.ceil(weight) - 1;
+          const additionalPriceforWeight =
+            additionalWeight * additionalPrice.incity;
+          const shppingTotal = Priceforone.incity + additionalPriceforWeight;
+          setShipping(shppingTotal);
+          // setTotal(subTotal + shppingTotal);
+        } else {
+          const additionalWeight = Math.ceil(weight) - 1;
+          const additionalPriceforWeight =
+            additionalWeight * additionalPrice.outcity;
+          const shppingTotal = Priceforone.outcity + additionalPriceforWeight;
+          setShipping(shppingTotal);
+          // setTotal(subTotal + shppingTotal);
+        }
       }
-    } else if (parseFloat(weight / 1) == 1.0) {
-      const data = shippCat.find((item) => item.weight === "one");
-      if (city === "Lahore") {
-        setShipping(data.incity);
-        setTotal(subTotal + data.incity);
-      } else {
-        setShipping(data.outcity);
-        setTotal(subTotal + data.outcity);
-      }
-    } else if (parseFloat(weight / 1) > 1.0) {
-      const Priceforone = shippCat.find((item) => item.weight === "one");
-      const additionalPrice = shippCat.find(
-        (item) => item.weight === "greater"
-      );
-      if (city === "Lahore") {
-        const additionalWeight = Math.ceil(weight) - 1;
-        const additionalPriceforWeight =
-          additionalWeight * additionalPrice.incity;
-        const shppingTotal = Priceforone.incity + additionalPriceforWeight;
-        setShipping(shppingTotal);
-        setTotal(subTotal + shppingTotal);
-      } else {
-        const additionalWeight = Math.ceil(weight) - 1;
-        const additionalPriceforWeight =
-          additionalWeight * additionalPrice.outcity;
-        const shppingTotal = Priceforone.outcity + additionalPriceforWeight;
-        setShipping(shppingTotal);
-        setTotal(subTotal + shppingTotal);
+    } else {
+      if (parseFloat(weight / 1) <= 0.5) {
+        const data = shippCat.find((item) => item.weight === "half");
+        if (city === "Lahore") {
+          setShipping(data.incity);
+          setTotal(subTotal + data.incity);
+        } else {
+          setShipping(data.outcity);
+          setTotal(subTotal + data.outcity);
+        }
+      } else if (parseFloat(weight / 1) == 1.0) {
+        const data = shippCat.find((item) => item.weight === "one");
+        if (city === "Lahore") {
+          setShipping(data.incity);
+          setTotal(subTotal + data.incity);
+        } else {
+          setShipping(data.outcity);
+          setTotal(subTotal + data.outcity);
+        }
+      } else if (parseFloat(weight / 1) > 1.0) {
+        const Priceforone = shippCat.find((item) => item.weight === "one");
+        const additionalPrice = shippCat.find(
+          (item) => item.weight === "greater"
+        );
+        if (city === "Lahore") {
+          const additionalWeight = Math.ceil(weight) - 1;
+          const additionalPriceforWeight =
+            additionalWeight * additionalPrice.incity;
+          const shppingTotal = Priceforone.incity + additionalPriceforWeight;
+          setShipping(shppingTotal);
+          setTotal(subTotal + shppingTotal);
+        } else {
+          const additionalWeight = Math.ceil(weight) - 1;
+          const additionalPriceforWeight =
+            additionalWeight * additionalPrice.outcity;
+          const shppingTotal = Priceforone.outcity + additionalPriceforWeight;
+          setShipping(shppingTotal);
+          setTotal(subTotal + shppingTotal);
+        }
       }
     }
-    setTotal(subTotal);
   };
 
   const changeShippingDetails = (e) => {
@@ -184,9 +240,7 @@ const PlaceOrder = () => {
       ...prevVal,
       shippingDetails,
     }));
-    //await calcProductTotal();
-    console.log("total", total);
-    console.log("ptotal", productTotal);
+    console.log(city);
     if (!products) {
       Notification("Error", "Cart is Empty.", "danger");
     } else if (
@@ -210,7 +264,12 @@ const PlaceOrder = () => {
         }   `,
         "danger"
       );
-    } else if (total - shipping < productTotal) {
+    } else if (
+      total - shipping < productTotal &&
+      user.isAdmin === false &&
+      user.role === "dropshipper" &&
+      user.dropShipperStatus === true
+    ) {
       Notification(
         "Error",
         "To proceed, the dropship price plus shipping charges must exceed the product price. Please adjust your dropship price accordingly!",
@@ -802,18 +861,43 @@ const PlaceOrder = () => {
                         </tr>
                       );
                     })}
-                    {/* <tr className="product-price">
-                      <td colspan="2">Subtotal</td>
-                      <td>Rs.{subTotal}</td>
-                    </tr> */}
-                    <tr className="product-price">
-                      <td colspan="2">Shipping</td>
-                      <td>Rs.{shipping}</td>
-                    </tr>
-                    <tr className="product-price">
-                      <td colspan="2">Total</td>
-                      <td>Rs.{total}</td>
-                    </tr>
+                    {user.isAdmin === false &&
+                    user.role === "dropshipper" &&
+                    user.dropShipperStatus === true ? null : (
+                      <tr className="product-price">
+                        <td colspan="2">Subtotal</td>
+                        <td>Rs.{subTotal}</td>
+                      </tr>
+                    )}
+                    {city ? (
+                      <tr className="product-price">
+                        <td colspan="2">Shipping</td>
+                        <td>Rs.{shipping}</td>
+                      </tr>
+                    ) : (
+                      <tr className="product-price">
+                        <td colspan="2">Shipping</td>
+                        <td>Select city</td>
+                      </tr>
+                    )}
+                    {user.isAdmin === false &&
+                    user.role === "dropshipper" &&
+                    user.dropShipperStatus === true ? (
+                      <tr className="product-price">
+                        <td colspan="2">Total</td>
+                        <td>Rs.{subTotal}</td>
+                      </tr>
+                    ) : city ? (
+                      <tr className="product-price">
+                        <td colspan="2">Shipping</td>
+                        <td>Rs.{shipping}</td>
+                      </tr>
+                    ) : (
+                      <tr className="product-price">
+                        <td colspan="2">Shipping</td>
+                        <td>Select city</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
