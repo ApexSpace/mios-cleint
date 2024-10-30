@@ -99,6 +99,8 @@ import AboutView from "./Components/BlankPages/AboutView";
 import SalesReport from "./AdminComponents/Reports/SalesReport";
 import Home from "./Components/Home";
 import HomeSidebar from "./Components/Sidebar/homeSidebar";
+import ProductWithSearchLoggedOut from "./Components/Product/ProductWithSearchLoggedOut";
+import ProductWithSearchForLogin from "./Components/Product/ProductWithSearchForLogin";
 
 axios.defaults.withCredentials = true;
 function App() {
@@ -181,6 +183,19 @@ function App() {
                           <Dashboard />
                         ) : (
                           <ProductWithoutPrices />
+                        )
+                      }
+                    />
+                    <Route
+                      path="/search/:query"
+                      element={
+                        DSrequest ? (
+                          <RequestedDS setUser={setUser} />
+                        ) : user._id && user.isAdmin === false ? (
+                          // <ProductMain data="fetchallproducts" />
+                          <ProductWithSearchForLogin />
+                        ) : (
+                          <ProductWithSearchLoggedOut />
                         )
                       }
                     />

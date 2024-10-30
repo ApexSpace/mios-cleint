@@ -1,46 +1,79 @@
-import React, { useContext, useRef, useState } from "react";
-import Product from "./Product";
-import { useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { ReactNotifications } from "react-notifications-component";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import Loader from "../../Loader/Loader";
+import Notification from "../../Notifications/Notifications";
 import ProductContext from "../../context/Product/ProductContext";
 import UserContext from "../../context/User/UserContext";
-import Notification from "../../Notifications/Notifications";
-import { ReactNotifications } from "react-notifications-component";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import Loader from "../../Loader/Loader";
+import SidebarForLoggedOut from "../Sidebar/SidebarForLoggedOut";
+import ProductView from "./ProductView";
+import "./Product.css";
+import SearchBar from "../SearchBar";
 
-const CategoryProducts = () => {
-  const host = process.env.REACT_APP_API_URL;
-  const { products, getProducts, getCategories, loading, setLoading } =
-    useContext(ProductContext);
-  const [currentPro, setProductState] = useState([]);
+// import { useNavigate } from "react-router-dom";
+
+const ProductWithSearchLoggedOut = () => {
+  const {
+    products,
+    getProducts,
+    getCategories,
+    cartLoading,
+    getPaginateProduct,
+  } = useContext(ProductContext);
+  const [currentPro, setProductState] = useState(products);
+  const [loading, setLoading] = useState(false);
+
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
-  const userloading = useContext(UserContext);
+  const userload = useContext(UserContext);
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
   const { addToCart } = context;
-  const { id } = useParams();
-  useEffect(() => {
-    const getFeatured = async () => {
-      setLoading(true);
-      const { data } = await axios.get(
-        `${host}/api/product/categoryProducts/${id}`
-      );
-      setProductState(data.products);
-      setLoading(false);
-    };
-    getFeatured();
-
-    // eslint-disable-next-line
-  }, [id]);
-
+  const Navigate = useNavigate();
   const modalRef = useRef(null);
   const closeRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const { query } = useParams();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    getProducts();
-    getCategories();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    //getCategories();
+    setLoading(true);
+    const getting = async () => {
+      await getProducts();
+    };
+    getting();
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {}, [query, products]);
+
+  const handleSearch = (query) => {
+    navigate(`/search/${query}`);
+  };
+  useEffect(() => {
+    setProductState(products);
+    if (query) {
+      searchFun(query);
+    }
+  }, [query, products]);
+
+  const searchFun = (query) => {
+    setLoading(true);
+    setProductState([]);
+
+    products.forEach((i) => {
+      if (
+        i?.title?.toLowerCase().includes(query.toLowerCase()) ||
+        i?.description?.toLowerCase().includes(query.toLowerCase())
+      ) {
+        setProductState((prevVal) => [...prevVal, i]);
+      }
+    });
+    setLoading(false);
+  };
+
   const [quantity, setQuantity] = useState(1);
 
   const modelFunction = (id) => {
@@ -62,46 +95,36 @@ const CategoryProducts = () => {
       setQuantity(0);
     }
   };
-  const searchFun = (e) => {
-    setProductState([]);
 
-    products.forEach((i) => {
-      if (
-        i?.title?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        i?.description?.toLowerCase().includes(e.target.value.toLowerCase())
-      ) {
-        setProductState((prevVal) => [...prevVal, i]);
-      }
-    });
-  };
   const addAndRefresh = async (product) => {
+    setLoading(true);
     await addToCart({ product }, quantity);
-    Notification("Success", "Added to Cart", "success");
+    setLoading(false);
     await Refresh();
+    setTimeout(() => {
+      Notification("Success", "Added to Cart", "success");
+    }, 10);
   };
-
+  const location = useLocation();
   return (
     <>
+      {!["login", "signup"].includes(location.pathname) && (
+        <SidebarForLoggedOut />
+      )}
       <ReactNotifications />
-      {loading || userloading?.loading ? (
+      {currentPro.length < products.length && <ReactNotifications />}
+
+      {/* {loading ? <Loader /> : <> */}
+      {loading || cartLoading || userload?.loading ? (
         <Loader />
       ) : (
         <>
           <div className="main-product">
-            <div className={`container ${user?.name && "mt-1"} home-sidebar`}>
+            <div className="container mt-1 home-sidebar">
               <div className="row">
-                <div className="input-group mb-1">
-                  <input
-                    onChange={searchFun}
-                    type="text"
-                    className="form-control"
-                    placeholder="Search Products"
-                  />
-                  {currentPro.length < products.length && (
-                    <ReactNotifications />
-                  )}
-                </div>
-                {/* Product Data */}
+                <SearchBar onSearch={handleSearch} enable={true} />
+                <h1>Search Results for "{query}"</h1>
+                {currentPro.length < products.length && <ReactNotifications />}
               </div>
             </div>
             <div class="container">
@@ -110,8 +133,8 @@ const CategoryProducts = () => {
                   currentPro.map((product, index) => {
                     return (
                       product.deActivated === false && (
-                        <div className="col">
-                          <Product
+                        <div className="col" key={index + 1}>
+                          <ProductView
                             product={product}
                             modalRef={modelFunction}
                             key={index + 1}
@@ -132,11 +155,10 @@ const CategoryProducts = () => {
           >
             Product Modal
           </button>
-
           <div
             className="modal fade mt-5"
             id="exampleModal"
-            tabIndex="-1"
+            tabIndex="1"
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"
           >
@@ -169,52 +191,43 @@ const CategoryProducts = () => {
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
                       <p>{singleProduct.description}</p>
-                      <h6 className=" ">
-                        {user.role === "wholeseller" ? (
-                          singleProduct.discountedPriceW > 0 ? (
-                            <>
-                              Rs. {singleProduct.discountedPriceW}{" "}
-                              <del>{singleProduct.wholesalePrice}</del>
-                            </>
-                          ) : (
-                            <>Rs. {singleProduct.wholesalePrice}</>
-                          )
-                        ) : singleProduct.discountedPriceD > 0 ? (
-                          <>
-                            Rs. {singleProduct.discountedPriceD}{" "}
-                            <del>{singleProduct.dropshipperPrice}</del>
-                          </>
-                        ) : (
-                          <>Rs. {singleProduct.dropshipperPrice}</>
-                        )}
-                      </h6>
-                      <div className="d-flex justify-content-start ">
+                      <button
+                        data-bs-dismiss="modal"
+                        ref={closeRef}
+                        onClick={() => Navigate("/login")}
+                        className="btn btn-primary mb-2"
+                      >
+                        Show Price
+                      </button>
+                      <div className="d-flex ">
                         <label htmlFor="" className="mt-2">
                           Qty
                         </label>
-
                         <input
                           className="form-control mx-1"
-                          style={{ width: "50px" }}
+                          style={{ width: "70px" }}
                           min="1"
                           type="number"
                           name="qty"
                           value={quantity}
-                          onChange={handleChange}
+                          onChange={() => handleChange()}
                         />
-
-                        <button
-                          className="cartbtn"
-                          type="button"
-                          name="add_cart"
-                          id="button"
-                          onClick={() => addAndRefresh(singleProduct)}
-                        >
-                          <i
-                            className="bx bx-cart cart-button mt-1 pl-5"
-                            style={{ marginRight: "8px" }}
-                          ></i>
-                        </button>
+                        <Link to="/login">
+                          {" "}
+                          <button
+                            className="cartbtn"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                            type="button"
+                            name="add_cart"
+                            id="button"
+                          >
+                            <i
+                              className="bx bx-cart cart-button mt-1 pl-5"
+                              style={{ marginRight: "8px" }}
+                            ></i>
+                          </button>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -234,11 +247,8 @@ const CategoryProducts = () => {
           </div>
         </>
       )}
-      {!loading && !userloading.loading && currentPro.length <= 0 && (
-        <h1 className="notFound">No Products Found In this category</h1>
-      )}
     </>
   );
 };
 
-export default CategoryProducts;
+export default ProductWithSearchLoggedOut;

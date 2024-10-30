@@ -6,6 +6,8 @@ import UserContext from "../../context/User/UserContext";
 import Notification from "../../Notifications/Notifications";
 import { ReactNotifications } from "react-notifications-component";
 import Loader from "../../Loader/Loader";
+import SearchBar from "../SearchBar";
+import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
 const ProductMain = () => {
@@ -31,6 +33,11 @@ const ProductMain = () => {
   const closeRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const navigate = useNavigate();
+
+  const handleSearch = (query) => {
+    navigate(`/search/${query}`);
+  };
 
   useEffect(() => {
     getCategories();
@@ -107,7 +114,7 @@ const ProductMain = () => {
           <div className="main-product">
             <div className={`container ${user?.name && "mt-1"} home-sidebar`}>
               <div className="row">
-                <div className="input-group mb-1">
+                {/* <div className="input-group mb-1">
                   <input
                     onChange={searchFun}
                     type="text"
@@ -117,7 +124,8 @@ const ProductMain = () => {
                   {currentPro.length < products.length && (
                     <ReactNotifications />
                   )}
-                </div>
+                </div> */}
+                <SearchBar onSearch={handleSearch} enable={false} />
                 {/* Product Data */}
               </div>
             </div>
@@ -127,7 +135,7 @@ const ProductMain = () => {
                   currentPro.map((product, index) => {
                     return (
                       product.deActivated === false && (
-                        <div className="col">
+                        <div className="col" key={index + 1}>
                           <Product
                             product={product}
                             modalRef={modelFunction}

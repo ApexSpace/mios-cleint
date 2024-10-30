@@ -109,7 +109,7 @@ export default function Sidebar() {
     await axios.get(`${host}/api/auth/logout`, {
       withCredentials: true,
     });
-    Navigate("/login");
+    Navigate("/");
     window.location.reload();
   };
 

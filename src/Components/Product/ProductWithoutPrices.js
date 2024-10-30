@@ -8,6 +8,7 @@ import UserContext from "../../context/User/UserContext";
 import SidebarForLoggedOut from "../Sidebar/SidebarForLoggedOut";
 import ProductView from "./ProductView";
 import "./Product.css";
+import SearchBar from "../SearchBar";
 // import { useNavigate } from "react-router-dom";
 
 const ProductWithoutPrices = () => {
@@ -32,12 +33,14 @@ const ProductWithoutPrices = () => {
   const closeRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const navigate = useNavigate();
 
+  const handleSearch = (query) => {
+    navigate(`/search/${query}`);
+  };
   useEffect(() => {
     getCategories();
     getPaginateProduct(currentPage, limit);
-    console.log("prev", currentPage);
-    console.log("limit", limit);
   }, []);
 
   useEffect(() => {
@@ -112,17 +115,8 @@ const ProductWithoutPrices = () => {
           <div className="main-product">
             <div className="container mt-1 home-sidebar">
               <div className="row">
-                <div className="input-group mb-1">
-                  <input
-                    onChange={searchFun}
-                    type="text"
-                    className="form-control"
-                    placeholder="Search Products"
-                  />
-                  {currentPro.length < products.length && (
-                    <ReactNotifications />
-                  )}
-                </div>
+                <SearchBar onSearch={handleSearch} enable={false} />
+                {currentPro.length < products.length && <ReactNotifications />}
               </div>
             </div>
             <div class="container">

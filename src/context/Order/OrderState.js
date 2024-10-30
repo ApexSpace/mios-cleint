@@ -15,7 +15,6 @@ const OrderState = (props) => {
 
   useEffect(() => {
     getMyOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

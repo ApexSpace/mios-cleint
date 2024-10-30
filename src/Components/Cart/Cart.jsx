@@ -48,15 +48,8 @@ const Cart = () => {
 
   return (
     <>
-      <div className="cart">
-        <h2 className="text-center">Cart</h2>
-        <div className="text-end">
-          <Link to="/">
-            <button className="btn btn-info mb-2 me-1 btn-sm">
-              Continue Shopping
-            </button>
-          </Link>
-        </div>
+      <div className="cart container">
+        <h2 className="text-center container mb-3">Cart</h2>
 
         {cartLoading || loading ? (
           <Loader />
@@ -64,17 +57,6 @@ const Cart = () => {
           <>
             {localCart === null ? (
               <div>
-                {/* <p style={{ color: "rgb(88,88,88)", fontSize: "14px" }}>
-                        Nothing to see here yet! Sign in to see items that you've previously
-                        placed in your Cart or check out all the awesome things you can buy on
-                        MIOS.pk
-                    </p> */}
-                {/* <EmptyCart>
-                        <EmptyCartLink to="/sign-in">Sign In</EmptyCartLink>
-                        <EmptyCartLink to="/">Home Page</EmptyCartLink>
-                        <EmptyCartLink to="/brands">Brand List</EmptyCartLink>
-                        <EmptyCartLink to="/contact-us">Contact Us</EmptyCartLink>
-                    </EmptyCart> */}
                 <EmptyImage>
                   <img
                     className="emptyCartImage"
@@ -89,52 +71,98 @@ const Cart = () => {
                 </EmptyImage>
               </div>
             ) : (
-              <div>
-                <div className="px-2">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th scope="col">Sr#</th>
-                        <th scope="col">Product Image</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Price</th>
-                        {user.role === "dropshipper" ? (
-                          <th scope="col">Dropship Price</th>
-                        ) : null}
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {localCart?.cart?.map((el, index) => {
-                        return (
-                          <CartProduct
-                            Data={el}
-                            Index={index + 1}
-                            key={index + 1}
-                          />
-                        );
-                      })}
-                      <tr>
+              <div className="cart-info">
+                <div className="cart-items">
+                  <div className="table-responsive">
+                    <table className="table table-bordered table-striped round">
+                      <thead className="table-light">
+                        <tr>
+                          <th scope="col">Image</th>
+                          <th scope="col">Name</th>
+                          {/* <th scope="col">Price</th> */}
+                          {user.role === "dropshipper" ? (
+                            <th scope="col">Dropship Price</th>
+                          ) : null}
+                          {/* <th scope="col">Quantity</th> */}
+                          <th scope="col">Total</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {localCart?.cart?.map((el, index) => {
+                          return (
+                            <CartProduct
+                              Data={el}
+                              Index={index + 1}
+                              key={index + 1}
+                            />
+                          );
+                        })}
+                        {/* <tr>
                         <td
-                          colSpan={user.role === "dropshipper" ? 6 : 5}
+                          colSpan={user.role === "dropshipper" ? 3 : 4}
                           className="text-end"
                         >
                           <h6>Subtotal</h6>
                         </td>
-                        <td colSpan={2}>
+                        <td>
                           <h6>Rs.{subTotl}</h6>
                         </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                      </tr> */}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+                <div class="cart-total-info">
+                  <ul
+                    class="list-group list-group-flus"
+                    style={{ height: "300px" }}
+                  >
+                    <li class="list-group-item">
+                      <div className="cart-subtotal">
+                        <div>
+                          <h6>Subtotal</h6>
+                        </div>
 
-                <div className="d-flex justify-content-end mt-4  me-md-0 me-sm-3">
-                  <Link to={"/checkout"} className="btn btn-primary btn-sm">
-                    Proceed to Checkout
-                  </Link>
+                        <div>
+                          <h6>Rs.{subTotl}</h6>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div className="cart-shipping">
+                        <div>
+                          <h6>Shipping</h6>
+                        </div>
+
+                        <div style={{ width: "60%", textAlign: "right" }}>
+                          <h6>Proceed Checkout to see Shipping Charges</h6>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <br />
+                      <br />
+                      <br />
+                    </li>
+
+                    <li class="list-group-item">
+                      <Link to={"/"}>
+                        <button type="button" class="cart-action-btn">
+                          Back to shopping
+                        </button>
+                      </Link>
+                    </li>
+                    <li class="list-group-item">
+                      <Link to={"/checkout"}>
+                        <button type="button" class="cart-action-btn">
+                          Proceed to Checkout
+                        </button>
+                      </Link>
+                    </li>
+                    <br />
+                    <br />
+                  </ul>
                 </div>
               </div>
             )}

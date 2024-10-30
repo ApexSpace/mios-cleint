@@ -70,6 +70,18 @@ const CategoryProductsView = () => {
     Notification("Success", "Added to Cart", "success");
     await Refresh();
   };
+  const searchFun = (e) => {
+    setProductState([]);
+
+    products.forEach((i) => {
+      if (
+        i?.title?.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        i?.description?.toLowerCase().includes(e.target.value.toLowerCase())
+      ) {
+        setProductState((prevVal) => [...prevVal, i]);
+      }
+    });
+  };
 
   return (
     <>
@@ -80,6 +92,22 @@ const CategoryProductsView = () => {
       ) : (
         <>
           <div className="main-product">
+            <div className={`container ${user?.name && "mt-1"} home-sidebar`}>
+              <div className="row">
+                <div className="input-group mb-1">
+                  <input
+                    onChange={searchFun}
+                    type="text"
+                    className="form-control"
+                    placeholder="Search Products"
+                  />
+                  {currentPro.length < products.length && (
+                    <ReactNotifications />
+                  )}
+                </div>
+                {/* Product Data */}
+              </div>
+            </div>
             <div class="container">
               <div className="row row-cols-1 row-cols-lg-5 row-cols-md-3 row-cols-sm-3 row-cols-2  justify-content-md-center">
                 {currentPro &&

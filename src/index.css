@@ -176,6 +176,13 @@ option:hover {
 .bank-receipt {
   width: 95% !important;
 }
+table {
+  border-radius: 1px solid #1a4d84 !important;
+  border-radius: 5px !important;
+}
+.table-responsive {
+  border-radius: 5px !important;
+}
 /* .out-stock-box {
   width: 100%;
   display: flex;
@@ -194,8 +201,15 @@ option:hover {
     width: 40% !important;
   }
 }
+.product-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
 .cart {
   padding-right: 10px;
+  height: 100vh !important;
 }
 .login-signup {
   display: flex;
@@ -206,6 +220,9 @@ option:hover {
   /* justify-content: center; */
   flex-wrap: wrap;
 }
+p {
+  margin-bottom: 0.2rem !important;
+}
 .checkout-left {
   width: 50%;
   /* padding-left: 30px; */
@@ -215,6 +232,11 @@ option:hover {
   padding: 20px;
   display: flex;
   background-color: #f1f1f1;
+}
+.cart {
+  background-color: #f1f1f1 !important;
+  padding-top: 30px;
+  margin-top: -20px !important;
 }
 .place-order {
   padding-top: 30px;
@@ -307,7 +329,65 @@ a.next:hover {
   align-items: center;
   gap: 4px;
 }
+
+.cart-quantity {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 4px !important;
+}
+.cart-info {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.cart-actions {
+  /* display: flex;
+  justify-content: center;
+  align-items: flex-end !important; */
+
+  height: 200px;
+}
+.cart-subtotal {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  color: white !important;
+}
+.cart-action-btn {
+  width: 100%;
+  padding: 10px 5px;
+}
+.cart-shipping {
+  display: flex;
+  justify-content: space-between;
+  color: white !important;
+}
+.cart-items {
+  width: 60%;
+  padding-top: 5px;
+}
+.cart-total-info {
+  width: 35%;
+
+  color: white !important;
+
+  border-radius: 5px;
+}
+.list-group {
+  padding-right: 0px !;
+}
 @media (max-width: 768px) {
+  .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation16.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+    background-color: white !important;
+  }
+  .cart-items {
+    width: 100%;
+  }
+  .cart-total-info {
+    width: 100%;
+  }
   .main-product {
     padding-left: 10px !important;
     padding-right: 5px !important;
@@ -327,6 +407,12 @@ a.next:hover {
   .order-details {
     width: 100%;
     /* display: none; */
+  }
+
+  .cart-quantity {
+    display: flex;
+    justify-content: start;
+    gap: 4px !important;
   }
   form.formtag {
     width: 100% !important;

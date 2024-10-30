@@ -6,7 +6,7 @@ import UserContext from "../../context/User/UserContext";
 import Notification from "../../Notifications/Notifications";
 import { ReactNotifications } from "react-notifications-component";
 
-const Product = ({ product, modalRef, Key }) => {
+const Product = ({ product, modalRef }) => {
   const context = useContext(ProductContext);
   const { user } = useContext(UserContext);
   const { addToCart, addToMyShop } = context;
@@ -45,17 +45,19 @@ const Product = ({ product, modalRef, Key }) => {
     <>
       {/* <ReactNotifications /> */}
 
-      <div className="card m-0" key={Key}>
+      <div className="card m-0 h-100">
         <div className="content">
-          <div className="content-overlay"></div>
-          <Link to={`/product/${product._id}`}>
-            <img
-              style={{ height: "150px" }}
-              className="card-img-top image"
-              src={product.photo?.url || "https://i.imgur.com/xdbHo4E.png"}
-              alt="Product"
-            />
-          </Link>
+          <div className="content-overlay "></div>
+          <div className="image product-img">
+            <Link to={`/product/${product._id}`}>
+              <img
+                style={{ height: "160px", width: "100%" }}
+                className="card-img-top "
+                src={product.photo?.url || "https://i.imgur.com/xdbHo4E.png"}
+                alt="Product"
+              />
+            </Link>
+          </div>
           <div className="content-details fadeIn-bottom text-white btn btn-primary my-2">
             <span
               className=" text-white"

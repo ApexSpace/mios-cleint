@@ -48,14 +48,16 @@ const ProductView = ({ product, modalRef }) => {
         <div className="card m-0">
           <div className="content">
             <div className="content-overlay"></div>
-            <Link to={`/product/${product._id}`}>
-              <img
-                style={{ height: "150px" }}
-                className="card-img-top image"
-                src={product.photo?.url || "https://i.imgur.com/xdbHo4E.png"}
-                alt="ProductView"
-              />
-            </Link>
+            <div className="image product-img">
+              <Link to={`/product/${product._id}`}>
+                <img
+                  style={{ height: "160px", width: "100%" }}
+                  className="card-img-top "
+                  src={product.photo?.url || "https://i.imgur.com/xdbHo4E.png"}
+                  alt="Product"
+                />
+              </Link>
+            </div>
             <div className="content-details fadeIn-bottom text-white btn btn-primary my-2">
               <span
                 className=" text-white"

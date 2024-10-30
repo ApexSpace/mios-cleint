@@ -768,13 +768,9 @@ const PlaceOrder = () => {
                             />
                           </td>
                           <td>
-                            {
-                              // show some words of only
-                              // product name
-                              i.product.title.length > 20
-                                ? i.product.title.substring(0, 20) + "..."
-                                : i.product.title
-                            }
+                            {i.product.title.length > 20
+                              ? i.product.title.substring(0, 20) + "..."
+                              : i.product.title}
                             <div>Qty: {i.quantity}</div>
                             <div>
                               Price: Rs.
@@ -894,7 +890,7 @@ const PlaceOrder = () => {
                       </tr>
                     ) : (
                       <tr className="product-price">
-                        <td colspan="2">Shipping</td>
+                        <td colspan="2">Total</td>
                         <td>Select city</td>
                       </tr>
                     )}
