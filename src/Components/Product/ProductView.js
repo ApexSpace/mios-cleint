@@ -53,7 +53,7 @@ const ProductView = ({ product, modalRef }) => {
                 <img
                   style={{ height: "160px", width: "100%" }}
                   className="card-img-top "
-                  src={product.photo?.url || "https://i.imgur.com/xdbHo4E.png"}
+                  src={product.photo?.url || ""}
                   alt="Product"
                 />
               </Link>

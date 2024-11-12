@@ -14,7 +14,9 @@ const Product = ({ product, modalRef }) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleChange = (e) => {
-    const newQty = parseInt(e.target.value);
+    const newQty = 0;
+    console.log(e);
+
     if (!isNaN(newQty)) {
       setQuantity(newQty);
       // updateProductQty(Data.product._id, newQty)
@@ -22,6 +24,7 @@ const Product = ({ product, modalRef }) => {
       setQuantity(0);
     }
   };
+
   const addAndRefresh = async (product) => {
     if (quantity >= 1 && quantity <= product?.stock) {
       await addToCart({ product }, quantity);
@@ -53,7 +56,7 @@ const Product = ({ product, modalRef }) => {
               <img
                 style={{ height: "160px", width: "100%" }}
                 className="card-img-top "
-                src={product.photo?.url || "https://i.imgur.com/xdbHo4E.png"}
+                src={product.photo?.url || ""}
                 alt="Product"
               />
             </Link>
@@ -156,8 +159,8 @@ const Product = ({ product, modalRef }) => {
                 min="0"
                 type="number"
                 name="qty"
-                value="1"
-                onChange={handleChange}
+                value={quantity}
+                onChange={(e) => handleChange(e)}
               />
 
               <div className="cartbtn d-none">

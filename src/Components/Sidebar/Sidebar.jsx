@@ -543,6 +543,7 @@ export default function Sidebar() {
                   location.pathname.toLowerCase() !== "/cart" &&
                   !location.pathname.includes("/product/") &&
                   !location.pathname.includes("/category/") &&
+                  !location.pathname.includes("/search/") &&
                   arr.map((item, ind) => {
                     return (
                       <li
@@ -574,7 +575,8 @@ export default function Sidebar() {
                   location.pathname.toLowerCase() !== "/myshop" &&
                   location.pathname.toLowerCase() !== "/cart" &&
                   !location.pathname.includes("/product/") &&
-                  !location.pathname.includes("/category/") && (
+                  !location.pathname.includes("/category/") &&
+                  !location.pathname.includes("/search/") && (
                     <div>
                       <h4 style={{ paddingTop: "10px", paddingLeft: "10px" }}>
                         Orders

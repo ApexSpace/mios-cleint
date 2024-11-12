@@ -63,10 +63,7 @@ const ProductWithSearchForLogin = () => {
     setSearchState(true);
 
     products.forEach((i) => {
-      if (
-        i?.title?.toLowerCase().includes(query.toLowerCase()) ||
-        i?.description?.toLowerCase().includes(query.toLowerCase())
-      ) {
+      if (i?.title?.toLowerCase().includes(query.toLowerCase())) {
         setProductState((prevVal) => [...prevVal, i]);
       }
     });
@@ -171,16 +168,14 @@ const ProductWithSearchForLogin = () => {
                       <img
                         style={{ width: "200px", height: "200px" }}
                         className="card-img-top image"
-                        src={
-                          singleProduct.photo?.url ||
-                          "https://i.imgur.com/xdbHo4E.png"
-                        }
+                        src={singleProduct.photo?.url || ""}
                         alt="Product"
                       />
+                      <p>{singleProduct.description}</p>
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
-                      <p>{singleProduct.description}</p>
+
                       <h6 className=" ">
                         {user.role === "wholeseller" ? (
                           singleProduct.discountedPriceW > 0 ? (
