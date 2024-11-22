@@ -14,9 +14,7 @@ const Product = ({ product, modalRef }) => {
   const [quantity, setQuantity] = useState(1);
 
   const handleChange = (e) => {
-    const newQty = 0;
-    console.log(e);
-
+    const newQty = parseInt(e.target.value);
     if (!isNaN(newQty)) {
       setQuantity(newQty);
       // updateProductQty(Data.product._id, newQty)
@@ -160,7 +158,7 @@ const Product = ({ product, modalRef }) => {
                 type="number"
                 name="qty"
                 value={quantity}
-                onChange={(e) => handleChange(e)}
+                onChange={handleChange}
               />
 
               <div className="cartbtn d-none">
@@ -183,7 +181,7 @@ const Product = ({ product, modalRef }) => {
                 type="number"
                 name="qty"
                 value={quantity}
-                onChange={() => handleChange()}
+                onChange={handleChange}
               />
 
               <button

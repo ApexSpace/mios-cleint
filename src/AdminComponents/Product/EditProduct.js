@@ -15,8 +15,34 @@ const EditProduct = () => {
   const { id } = params;
   let { categories } = useContext(ProductContext);
 
-  let [product, setProduct] = useState({ category: "", skuNumber: "", title: "", stock: 0, wholesalePrice: 0, discountedPriceW: 0, purchasePrice: 0, weight: 0, featured: false, onSale: false, photo: "", description: "", });
-  const { category, skuNumber, title, stock, wholesalePrice, discountedPriceW, purchasePrice, weight, featured, onSale, photo, description, } = product;
+  let [product, setProduct] = useState({
+    category: "",
+    skuNumber: "",
+    title: "",
+    stock: 0,
+    wholesalePrice: 0,
+    discountedPriceW: 0,
+    purchasePrice: 0,
+    weight: 0,
+    featured: false,
+    onSale: false,
+    photo: "",
+    description: "",
+  });
+  const {
+    category,
+    skuNumber,
+    title,
+    stock,
+    wholesalePrice,
+    discountedPriceW,
+    purchasePrice,
+    weight,
+    featured,
+    onSale,
+    photo,
+    description,
+  } = product;
 
   useEffect(() => {
     if (img) {
@@ -33,32 +59,41 @@ const EditProduct = () => {
 
   useEffect(() => {
     const getProduct = async () => {
-      setLoading(true)
+      setLoading(true);
       const { data } = await axios.get(`${host}/api/product/product/${id}`);
       setProduct(data);
-      setLoading(false)
+      setLoading(false);
     };
     getProduct();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!category || !skuNumber || !title || !stock || Number(stock) === 0 || !wholesalePrice || Number(wholesalePrice) === 0 || !purchasePrice || Number(purchasePrice) === 0 || !weight || !photo || !description
+    if (
+      !category ||
+      !skuNumber ||
+      !title ||
+      !wholesalePrice ||
+      Number(wholesalePrice) === 0 ||
+      !purchasePrice ||
+      Number(purchasePrice) === 0 ||
+      !weight ||
+      !photo ||
+      !description
     ) {
       Notification(
         "Error",
-        "Enter Complete Details.(Prices and Stock can't be 0).",
+        "Enter Complete Details.(Prices can't be 0).",
         "danger"
       );
-    } else if (onSale && !(discountedPriceW)) {
+    } else if (onSale && !discountedPriceW) {
       Notification("Error", "Enter Discounted Price", "danger");
     } else if (title.length <= 2) {
       Notification("Error", "Minimum Length for Title should be 3.", "danger");
     } else if (
       onSale &&
       (Number(discountedPriceW) >= Number(wholesalePrice) ||
-
-        (Number(discountedPriceW) === 0))
+        Number(discountedPriceW) === 0)
     ) {
       Notification(
         "Error",
@@ -69,9 +104,33 @@ const EditProduct = () => {
       try {
         setLoading(true);
         await axios.put(`${host}/api/product/editProduct/${id}`, {
-          category, skuNumber, title, stock, wholesalePrice, discountedPriceW, purchasePrice, weight, featured, onSale, photo, description,
+          category,
+          skuNumber,
+          title,
+          stock,
+          wholesalePrice,
+          discountedPriceW,
+          purchasePrice,
+          weight,
+          featured,
+          onSale,
+          photo,
+          description,
         });
-        setProduct({ category: "", skuNumber: "", title: "", stock: 0, wholesalePrice: 0, discountedPriceW: 0, purchasePrice: 0, weight: 0, featured: false, onSale: false, photo: "", description: "", });
+        setProduct({
+          category: "",
+          skuNumber: "",
+          title: "",
+          stock: 0,
+          wholesalePrice: 0,
+          discountedPriceW: 0,
+          purchasePrice: 0,
+          weight: 0,
+          featured: false,
+          onSale: false,
+          photo: "",
+          description: "",
+        });
         await getProducts();
         setLoading(false);
         Notification("Success", "Product Added Successfully", "success");
@@ -119,7 +178,6 @@ const EditProduct = () => {
     setImg(e.target.files[0]);
   };
 
-
   return (
     <>
       <ReactNotifications />
@@ -132,8 +190,8 @@ const EditProduct = () => {
               <h2 className="text-center my-4">Edit Product</h2>
               <form className="form">
                 <br />
-
-                <label>Title</label>          <input
+                <label>Title</label>{" "}
+                <input
                   type="text"
                   className="form-control"
                   placeholder="title"
@@ -162,7 +220,8 @@ const EditProduct = () => {
                   })}
                 </select>
                 <br />
-                <label>skuNumber</label>          <input
+                <label>skuNumber</label>{" "}
+                <input
                   type="text"
                   min={100}
                   className="form-control"
@@ -173,7 +232,8 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-                <label>Stock</label>          <input
+                <label>Stock</label>{" "}
+                <input
                   type="number"
                   min={1}
                   className="form-control"
@@ -184,7 +244,8 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-                <label>Purchase Price</label>          <input
+                <label>Purchase Price</label>{" "}
+                <input
                   type="number"
                   min={0}
                   className="form-control"
@@ -195,7 +256,8 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-                <label>Wholesale Price</label>          <input
+                <label>Wholesale Price</label>{" "}
+                <input
                   type="number"
                   min={0}
                   className="form-control"
@@ -206,8 +268,8 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-
-                <label>Weight</label>          <input
+                <label>Weight</label>{" "}
+                <input
                   type="number"
                   className="form-control"
                   min={0}
@@ -263,9 +325,9 @@ const EditProduct = () => {
                   </>
                 )}
                 {onSale && <br />}
-
                 {onSale && <br />}
-                <label>Image</label>          <input
+                <label>Image</label>{" "}
+                <input
                   type="file"
                   accept="image/*"
                   className="form-control"
@@ -276,15 +338,19 @@ const EditProduct = () => {
                 />
                 <br />
                 <center>
-                  <img width="200px" alt="" src={!img ? product.photo.url : photo} />
+                  <img
+                    width="200px"
+                    alt=""
+                    src={!img ? product.photo.url : photo}
+                  />
                   <br />
                   <br />
                 </center>
                 <label>Description</label>
-
                 <textarea
                   type="text"
                   className="form-control"
+                  rows="10"
                   id="description"
                   placeholder="description"
                   value={description}

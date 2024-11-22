@@ -208,7 +208,7 @@ const ProductWithSearchForLogin = () => {
                           type="number"
                           name="qty"
                           value={quantity}
-                          onChange={() => handleChange()}
+                          onChange={handleChange}
                         />
 
                         <button
