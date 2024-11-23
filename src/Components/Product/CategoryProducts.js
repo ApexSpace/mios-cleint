@@ -6,8 +6,9 @@ import UserContext from "../../context/User/UserContext";
 import Notification from "../../Notifications/Notifications";
 import { ReactNotifications } from "react-notifications-component";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
+import SearchBar from "../SearchBar";
 
 const CategoryProducts = () => {
   const host = process.env.REACT_APP_API_URL;
@@ -21,6 +22,7 @@ const CategoryProducts = () => {
   const Refresh = context.Cart;
   const { addToCart } = context;
   const { id } = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     const getFeatured = async () => {
       setLoading(true);
@@ -79,6 +81,9 @@ const CategoryProducts = () => {
     Notification("Success", "Added to Cart", "success");
     await Refresh();
   };
+  const handleSearch = (query) => {
+    navigate(`/search/${query}`);
+  };
 
   return (
     <>
@@ -91,15 +96,7 @@ const CategoryProducts = () => {
             <div className={`container ${user?.name && "mt-1"} home-sidebar`}>
               <div className="row">
                 <div className="input-group mb-1">
-                  <input
-                    onChange={searchFun}
-                    type="text"
-                    className="form-control"
-                    placeholder="Search Products"
-                  />
-                  {currentPro.length < products.length && (
-                    <ReactNotifications />
-                  )}
+                  <SearchBar onSearch={handleSearch} enable={false} />
                 </div>
                 {/* Product Data */}
               </div>

@@ -337,7 +337,9 @@ function App() {
                           <RequestedDS setUser={setUser} />
                         ) : user._id && user.isAdmin === false ? (
                           <ProductDetail params={{ id: "id" }} />
-                        ) : null
+                        ) : (
+                          <ProductDetail params={{ id: "id" }} />
+                        )
                       }
                     />
 

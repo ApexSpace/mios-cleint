@@ -114,19 +114,7 @@ const ProductMain = () => {
           <div className="main-product">
             <div className={`container ${user?.name && "mt-1"} home-sidebar`}>
               <div className="row">
-                {/* <div className="input-group mb-1">
-                  <input
-                    onChange={searchFun}
-                    type="text"
-                    className="form-control"
-                    placeholder="Search Products"
-                  />
-                  {currentPro.length < products.length && (
-                    <ReactNotifications />
-                  )}
-                </div> */}
                 <SearchBar onSearch={handleSearch} enable={false} />
-                {/* Product Data */}
               </div>
             </div>
             <div class="container">

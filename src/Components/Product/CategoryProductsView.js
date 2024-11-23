@@ -10,6 +10,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import SidebarForLoggedOut from "../Sidebar/SidebarForLoggedOut";
 import ProductView from "./ProductView";
+import SearchBar from "../SearchBar";
 
 const CategoryProductsView = () => {
   const host = process.env.REACT_APP_API_URL;
@@ -23,6 +24,8 @@ const CategoryProductsView = () => {
   const Refresh = context.Cart;
   const { addToCart } = context;
   const { id } = useParams();
+  const Navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const getFeatured = async () => {
       setLoading(true);
@@ -36,7 +39,10 @@ const CategoryProductsView = () => {
 
     // eslint-disable-next-line
   }, [id]);
-  const Navigate = useNavigate();
+  const handleSearch = (query) => {
+    navigate(`/search/${query}`);
+  };
+
   const modalRef = useRef(null);
   const closeRef = useRef(null);
   useEffect(() => {
@@ -95,12 +101,7 @@ const CategoryProductsView = () => {
             <div className={`container ${user?.name && "mt-1"} home-sidebar`}>
               <div className="row">
                 <div className="input-group mb-1">
-                  <input
-                    onChange={searchFun}
-                    type="text"
-                    className="form-control"
-                    placeholder="Search Products"
-                  />
+                  <SearchBar onSearch={handleSearch} enable={false} />
                   {currentPro.length < products.length && (
                     <ReactNotifications />
                   )}

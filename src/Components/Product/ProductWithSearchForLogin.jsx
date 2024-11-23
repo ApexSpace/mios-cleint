@@ -39,7 +39,9 @@ const ProductWithSearchForLogin = () => {
     //getCategories();
     setLoading(true);
     const getting = async () => {
+      setLoading(true);
       await getProducts();
+      setLoading(false);
     };
     getting();
     setLoading(false);
@@ -57,12 +59,12 @@ const ProductWithSearchForLogin = () => {
     }
   }, [query, products]);
 
-  const searchFun = (query) => {
+  const searchFun = async (query) => {
     setLoading(true);
     setProductState([]);
     setSearchState(true);
 
-    products.forEach((i) => {
+    await products.forEach((i) => {
       if (i?.title?.toLowerCase().includes(query.toLowerCase())) {
         setProductState((prevVal) => [...prevVal, i]);
       }
