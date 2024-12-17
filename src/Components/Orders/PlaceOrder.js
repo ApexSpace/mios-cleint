@@ -885,8 +885,8 @@ const PlaceOrder = () => {
                       </tr>
                     ) : city ? (
                       <tr className="product-price">
-                        <td colspan="2">Shipping</td>
-                        <td>Rs.{shipping}</td>
+                        <td colspan="2">Total</td>
+                        <td>Rs.{total}</td>
                       </tr>
                     ) : (
                       <tr className="product-price">

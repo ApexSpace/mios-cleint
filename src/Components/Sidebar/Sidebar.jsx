@@ -339,6 +339,25 @@ export default function Sidebar() {
                       </Link>
                     </p>
                     <Divider />
+                    <h4 style={{ paddingTop: "10px", paddingLeft: "10px" }}>
+                      Profits
+                    </h4>
+                    <p className="mt-1 ps-2 py-1">
+                      <Link
+                        to="/user/updatebank"
+                        className="AdminSidebarSubHead"
+                        style={
+                          location.pathname.toLowerCase() === "/user/updatebank"
+                            ? {
+                                backgroundColor: "#1a4d84 !important",
+                                color: "white !important",
+                              }
+                            : null
+                        }
+                      >
+                        Bank Details
+                      </Link>
+                    </p>
                   </div>
                 )}
                 {/* Types of Product Sales */}
@@ -592,8 +611,8 @@ export default function Sidebar() {
                               location.pathname.toLowerCase() ===
                               item.path.toLowerCase()
                                 ? {
-                                    backgroundColor: "#1a4d84",
-                                    color: "white !important",
+                                    // backgroundColor: "#1a4d84",
+                                    // color: "white !important",
                                   }
                                 : null
                             }
@@ -628,8 +647,8 @@ export default function Sidebar() {
                             location.pathname.toLowerCase() ===
                             "/user/mypaidprofits"
                               ? {
-                                  backgroundColor: "#1a4d84",
-                                  color: "white !important",
+                                  // backgroundColor: "#1a4d84",
+                                  // color: "white !important",
                                 }
                               : null
                           }
@@ -645,8 +664,8 @@ export default function Sidebar() {
                             location.pathname.toLowerCase() ===
                             "/user/mypendingprofits"
                               ? {
-                                  backgroundColor: "#1a4d84",
-                                  color: "white !important",
+                                  // backgroundColor: "#1a4d84",
+                                  // color: "white !important",
                                 }
                               : null
                           }
@@ -655,6 +674,27 @@ export default function Sidebar() {
                         </Link>
                       </p>
                       <Divider />
+
+                      <h4 style={{ paddingTop: "10px", paddingLeft: "10px" }}>
+                        Bank
+                      </h4>
+                      <p className="mt-1 ps-2 py-1">
+                        <Link
+                          to="/user/updatebank"
+                          className="AdminSidebarSubHead"
+                          style={
+                            location.pathname.toLowerCase() ===
+                            "/user/updatebank"
+                              ? {
+                                  backgroundColor: "#1a4d84 !important",
+                                  color: "white !important",
+                                }
+                              : null
+                          }
+                        >
+                          Bank Details
+                        </Link>
+                      </p>
                     </div>
                   )}
 

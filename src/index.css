@@ -34,6 +34,38 @@ h6 {
 path {
   color: #1a4d84 !important;
 }
+
+/* Styling for the WhatsApp button */
+.whatsapp-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #25d366;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whatsapp-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* WhatsApp icon style */
+.whatsapp-button img {
+  width: 35px;
+  height: 35px;
+}
+.bankDetails {
+  padding: 0 10px 0 10px !important;
+}
 p.AdminSidebarSubHead {
   color: #1a4d84 !important;
 }
@@ -265,10 +297,10 @@ p {
   right: 0; */
 }
 .product-details {
-  position: fixed;
-  width: 45%; /* or any specific width as per your requirement */
-  min-width: 300px; /* prevents shrinking */
-  max-width: 50%;
+  /* position: fixed; */
+  /* width: 45%; or any specific width as per your requirement */
+  /* min-width: 300px; prevents shrinking */
+  /* max-width: 50%; */
 }
 form.formtag {
   padding: 0px !important;

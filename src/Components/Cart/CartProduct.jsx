@@ -191,7 +191,7 @@ export const CartProduct = ({ Data, Index }) => {
                       handleDropshipPriceUpdate(Data.product._id, dropshipPrice)
                     }
                   >
-                    x
+                    Save
                   </button>
                 ) : null}
               </div>

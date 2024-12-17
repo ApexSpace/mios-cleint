@@ -45,23 +45,11 @@ const EditProduct = () => {
   } = product;
 
   useEffect(() => {
-    if (img) {
-      let reader = new FileReader();
-      reader.onloadend = () => {
-        setProduct((prevValue) => ({
-          ...prevValue,
-          photo: reader.result,
-        }));
-      };
-      reader.readAsDataURL(img);
-    }
-  }, [img]);
-
-  useEffect(() => {
     const getProduct = async () => {
       setLoading(true);
       const { data } = await axios.get(`${host}/api/product/product/${id}`);
       setProduct(data);
+      setImg(data.photo.url);
       setLoading(false);
     };
     getProduct();
@@ -69,6 +57,7 @@ const EditProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    photo.url = img;
     if (
       !category ||
       !skuNumber ||
@@ -83,7 +72,7 @@ const EditProduct = () => {
     ) {
       Notification(
         "Error",
-        "Enter Complete Details.(Prices can't be 0).",
+        "Enter Complete Details.(Prices or Weight can't be 0).",
         "danger"
       );
     } else if (onSale && !discountedPriceW) {
@@ -133,7 +122,7 @@ const EditProduct = () => {
         });
         await getProducts();
         setLoading(false);
-        Notification("Success", "Product Added Successfully", "success");
+        Notification("Success", "Product Updated Successfully", "success");
         setTimeout(() => {
           Navigate("/admin/products");
         }, 2000);
@@ -175,7 +164,8 @@ const EditProduct = () => {
   };
 
   const handlePhoto = (e) => {
-    setImg(e.target.files[0]);
+    setImg(e.target.value);
+    photo.url = e.target.value;
   };
 
   return (
@@ -326,23 +316,19 @@ const EditProduct = () => {
                 )}
                 {onSale && <br />}
                 {onSale && <br />}
-                <label>Image</label>{" "}
+                <label>Image URL</label>{" "}
                 <input
-                  type="file"
-                  accept="image/*"
+                  type="url"
                   className="form-control"
                   id="image"
-                  placeholder="image"
+                  placeholder="Enter Url for Image"
                   name="image"
-                  onChange={handlePhoto}
+                  value={img}
+                  onChange={(e) => setImg(e.target.value)}
                 />
                 <br />
                 <center>
-                  <img
-                    width="200px"
-                    alt=""
-                    src={!img ? product.photo.url : photo}
-                  />
+                  <img width="200px" alt="" src={img} />
                   <br />
                   <br />
                 </center>

@@ -102,7 +102,7 @@ const CategoryProducts = () => {
               </div>
             </div>
             <div class="container">
-              <div className="row row-cols-1 row-cols-lg-5 row-cols-md-3 row-cols-sm-3 row-cols-2  justify-content-md-center">
+              <div className="row row-cols-1 row-cols-lg-5 row-cols-md-3 row-cols-sm-3 row-cols-2  justify-content-start">
                 {currentPro &&
                   currentPro.map((product, index) => {
                     return (

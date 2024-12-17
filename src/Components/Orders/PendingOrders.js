@@ -135,6 +135,7 @@ const PendingOrders = () => {
                 <th>Address</th>
                 <th>City</th>
                 <th>Shipping Charges</th>
+                <th>Tracking Id</th>
                 <th>Total</th>
                 <th>Payment Method</th>
                 <th>Date</th>
@@ -153,13 +154,17 @@ const PendingOrders = () => {
                   var min = date.getMinutes();
                   return (
                     <tr key={ind}>
-                      <td>{ind + 1}</td>
+                      <td>{item.id}</td>
                       {/* <td>{item.id}</td> */}
                       <td>{item.shippingDetails.name}</td>
                       <td>{item.shippingDetails.phone}</td>
                       <td>{item.shippingDetails.address}</td>
                       <td>{item.shippingDetails.city}</td>
                       <td>{item.shippingPrice}</td>
+                      <td>
+                        {item.trackingDetails &&
+                          item.trackingDetails.trackingId}
+                      </td>
                       <td>{item.orderAmount}</td>
                       <td>{item.paymentOption}</td>
                       <td>{`${d}/${m}/${y} at ${h}:${min}`}</td>

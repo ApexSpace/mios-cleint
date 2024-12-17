@@ -10,18 +10,41 @@ const AddProduct = () => {
   const host = process.env.REACT_APP_API_URL;
   const Navigate = useNavigate();
   const { getProducts, loading, setLoading } = useContext(ProductContext);
-  let [img, setImg] = useState("");
   let { categories } = useContext(ProductContext);
-  let [product, setProduct] = useState({ category: "", skuNumber: "", title: "", stock: 0, wholesalePrice: 0, dropshipperPrice: 0, discountedPriceW: 0, discountedPriceD: 0, purchasePrice: 0, weight: 0, featured: false, onSale: false, photo: "", description: "", });
-  const { category, skuNumber, title, stock, wholesalePrice, dropshipperPrice, discountedPriceW, discountedPriceD, purchasePrice, weight, featured, onSale, photo, description, } = product;
+
+  const [category, setCategory] = useState("");
+  const [skuNumber, setSkuNumber] = useState("");
+  const [title, setTitle] = useState("");
+  const [stock, setStock] = useState(0);
+  const [wholesalePrice, setWholesalePrice] = useState(0);
+  const [dropshipperPrice, setDropshipperPrice] = useState(0);
+  const [discountedPriceW, setDiscountedPriceW] = useState(0);
+  const [discountedPriceD, setDiscountedPriceD] = useState(0);
+  const [purchasePrice, setPurchasePrice] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [featured, setFeatured] = useState(false);
+  const [onSale, setOnSale] = useState(false);
+  const [photo, setPhoto] = useState(null);
+  const [description, setDescription] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!category || !skuNumber || !title || !stock || Number(stock) <= 0 || !wholesalePrice || Number(wholesalePrice) <= 0 || !purchasePrice || Number(purchasePrice) <= 0 || !weight || !photo || !description
+    if (
+      !category ||
+      !skuNumber ||
+      !stock ||
+      Number(stock) <= 0 ||
+      !wholesalePrice ||
+      Number(wholesalePrice) <= 0 ||
+      !purchasePrice ||
+      Number(purchasePrice) <= 0 ||
+      !weight ||
+      !photo ||
+      !description
     ) {
       Notification(
         "Error",
-        "Enter Complete Details.(Prices and Stock can't be 0).",
+        "Enter Complete Details.(Prices, Stock or Weight can't be 0).",
         "danger"
       );
     } else if (onSale && !(discountedPriceW || discountedPriceD)) {
@@ -31,7 +54,7 @@ const AddProduct = () => {
     } else if (
       onSale &&
       (Number(discountedPriceW) >= Number(wholesalePrice) ||
-        (Number(discountedPriceW) <= 0))
+        Number(discountedPriceW) <= 0)
     ) {
       Notification(
         "Error",
@@ -42,13 +65,24 @@ const AddProduct = () => {
       try {
         setLoading(true);
         await axios.post(`${host}/api/product/addProduct`, {
-          category, skuNumber, title, stock, wholesalePrice, dropshipperPrice, discountedPriceW, discountedPriceD, purchasePrice, weight, featured, onSale, photo, description,
+          category,
+          skuNumber,
+          title,
+          stock,
+          wholesalePrice,
+          dropshipperPrice,
+          discountedPriceW,
+          discountedPriceD,
+          purchasePrice,
+          weight,
+          featured,
+          onSale,
+          photo,
+          description,
         });
         setLoading(false);
         Notification("Success", "Product Added Successfully", "success");
-        setProduct({
-          category: "", skuNumber: "", title: "", stock: 0, wholesalePrice: 0, dropshipperPrice: 0, discountedPriceW: 0, discountedPriceD: 0, purchasePrice: 0, weight: 0, featured: false, onSale: false, photo: "", description: "",
-        });
+
         Navigate("/admin/products");
         await getProducts();
       } catch (e) {
@@ -68,44 +102,31 @@ const AddProduct = () => {
     }
   };
 
-  useEffect(() => {
-    if (img) {
-      let reader = new FileReader();
-      reader.onloadend = () => {
-        setProduct((prevValue) => ({
-          ...prevValue,
-          photo: reader.result,
-        }));
-      };
-      reader.readAsDataURL(img);
-    }
-  }, [img]);
+  // const onChange = (e) => {
+  //   if (e.target.name === "onSale" || e.target.name === "featured") {
+  //     setProduct((prevValue) => ({
+  //       ...prevValue,
+  //       [e.target.name]: e.target.checked,
+  //     }));
+  //     if (e.target.name === "onSale" && !e.target.checked) {
+  //       setProduct((prevValue) => ({
+  //         ...prevValue,
+  //         discountedPriceW: "",
+  //         discountedPriceD: "",
+  //       }));
+  //     }
+  //   } else {
+  //     setProduct((prevValue) => ({
+  //       ...prevValue,
+  //       [e.target.name]: e.target.value,
+  //     }));
+  //   }
+  // };
 
-  const onChange = (e) => {
-    if (e.target.name === "onSale" || e.target.name === "featured") {
-      setProduct((prevValue) => ({
-        ...prevValue,
-        [e.target.name]: e.target.checked,
-      }));
-      if (e.target.name === "onSale" && !e.target.checked) {
-        setProduct((prevValue) => ({
-          ...prevValue,
-          discountedPriceW: "",
-          discountedPriceD: "",
-        }));
-      }
-    } else {
-      setProduct((prevValue) => ({
-        ...prevValue,
-        [e.target.name]: e.target.value,
-      }));
-    }
-  };
-
-  const handlePhoto = (e) => {
-    setImg(e.target.files[0]);
-  };
-
+  // const handlePhoto = (e) => {
+  //   setImg(e.target.value);
+  //   photo = img;
+  // };
 
   return (
     <>
@@ -119,22 +140,23 @@ const AddProduct = () => {
               <h2 className="text-center my-4">Add New Product</h2>
               <form className="form">
                 <br />
-
-                <label>Title</label>                <input
+                <label>Title</label>{" "}
+                <input
                   type="text"
                   className="form-control"
                   placeholder="title"
                   name="title"
-                  onChange={onChange}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
-                <br /><label>Category</label>
+                <br />
+                <label>Category</label>
                 <select
                   className="form-control"
                   type="text"
                   id="category"
                   placeholder="category"
                   name="category"
-                  onChange={onChange}
+                  onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Select Category</option>
                   {categories.map((category) => {
@@ -146,44 +168,48 @@ const AddProduct = () => {
                   })}{" "}
                 </select>
                 <br />
-                <label>SkuNumber</label>                <input
+                <label>SkuNumber</label>{" "}
+                <input
                   type="text"
                   min={100}
                   className="form-control"
                   id="pSKU"
                   placeholder="skuNumber"
                   name="skuNumber"
-                  onChange={onChange}
+                  onChange={(e) => setSkuNumber(e.target.value)}
                 />
                 <br />
-                <label>Stock</label>                <input
+                <label>Stock</label>{" "}
+                <input
                   type="number"
                   min={1}
                   className="form-control"
                   id="stock"
                   placeholder="stock"
                   name="stock"
-                  onChange={onChange}
+                  onChange={(e) => setStock(e.target.value)}
                 />
                 <br />
-                <label>Purchase Price</label>                <input
+                <label>Purchase Price</label>{" "}
+                <input
                   type="number"
                   min={0}
                   className="form-control"
                   id="purchasePrice"
                   placeholder="purchase Price"
                   name="purchasePrice"
-                  onChange={onChange}
+                  onChange={(e) => setPurchasePrice(e.target.value)}
                 />
                 <br />
-                <label>wholesale Price</label>                <input
+                <label>wholesale Price</label>{" "}
+                <input
                   type="number"
                   min={0}
                   className="form-control"
                   id="wholesalePrice"
                   placeholder="wholesale Price"
                   name="wholesalePrice"
-                  onChange={onChange}
+                  onChange={(e) => setWholesalePrice(e.target.value)}
                 />
                 <br />
                 {/* <label>dropshipper Price</label>                <input
@@ -196,19 +222,20 @@ const AddProduct = () => {
                   onChange={onChange}
                 />
                 <br /> */}
-                <label>Weight</label>                <input
+                <label>Weight</label>{" "}
+                <input
                   type="number"
                   className="form-control"
                   min={0}
                   id="weight"
                   placeholder="weight(grams)"
                   name="weight"
-                  onChange={onChange}
+                  onChange={(e) => setWeight(e.target.value)}
                 />
                 <br />
                 <input
                   type="checkbox"
-                  onChange={onChange}
+                  onChange={(e) => setFeatured(e.target.checked)}
                   placeholder="featured"
                   name="featured"
                   className="form-check-input"
@@ -219,9 +246,10 @@ const AddProduct = () => {
                   Featured Product
                 </label>
                 &nbsp;&nbsp;&nbsp;
-                <label></label>                <input
+                <label></label>{" "}
+                <input
                   type="checkbox"
-                  onChange={onChange}
+                  onChange={(e) => setOnSale(e.target.checked)}
                   placeholder="onSale"
                   name="onSale"
                   className="form-check-input"
@@ -233,17 +261,19 @@ const AddProduct = () => {
                 </label>
                 <br />
                 <br />
-                {onSale && (<>
-                  <label>WholeSeller Discounted Price</label>                <input
-                    type="number"
-                    className="form-control"
-                    min={0}
-                    id="discountedPriceW"
-                    placeholder="WholeSeller Discounted Price"
-                    name="discountedPriceW"
-                    onChange={onChange}
-                  />
-                </>
+                {onSale && (
+                  <>
+                    <label>WholeSeller Discounted Price</label>{" "}
+                    <input
+                      type="number"
+                      className="form-control"
+                      min={0}
+                      id="discountedPriceW"
+                      placeholder="WholeSeller Discounted Price"
+                      name="discountedPriceW"
+                      onChange={(e) => setDiscountedPriceW(e.target.value)}
+                    />
+                  </>
                 )}
                 {onSale && <br />}
                 {/* {onSale && (
@@ -260,18 +290,19 @@ const AddProduct = () => {
                   </>
                 )}
                 {onSale && <br />} */}
-                <label>Image</label>                <input
-                  type="file"
-                  accept="image/*"
+                <label>Image</label>{" "}
+                <input
+                  type="url"
                   className="form-control"
                   id="image"
-                  placeholder="image"
+                  placeholder="Enter Url for Image"
                   name="image"
-                  onChange={handlePhoto}
+                  value={photo}
+                  onChange={(e) => setPhoto(e.target.value)}
                 />
                 <br />
                 <center>
-                  <img width="200px" alt="" src={photo && photo} />
+                  <img width="200px" alt="" src={photo} />
                   <br />
                 </center>
                 <label>Description</label>
@@ -281,7 +312,7 @@ const AddProduct = () => {
                   id="description"
                   placeholder="description"
                   name="description"
-                  onChange={onChange}
+                  onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
                 <br />
                 <button

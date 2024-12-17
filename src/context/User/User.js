@@ -1,94 +1,106 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import UserContext from "./UserContext";
 
-
-
 const User = (props) => {
-    const host = process.env.REACT_APP_API_URL;
-    const [allUsers, setAllUsers] = useState(0)
-    const [loading, setLoading] = useState(false)
-    const [wholesellers, setWholeSellers] = useState(0)
-    const [dropShippers, setDropShippers] = useState(0)
-    const [requests, setRequests] = useState(0)
+  const host = process.env.REACT_APP_API_URL;
+  const [allUsers, setAllUsers] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [wholesellers, setWholeSellers] = useState(0);
+  const [dropShippers, setDropShippers] = useState(0);
+  const [requests, setRequests] = useState(0);
 
+  let [user, setUser] = useState({});
+  let [error, setError] = useState("");
 
-    let [user, setUser] = useState({})
-    let [error, setError] = useState('');
+  useEffect(() => {
+    const userDetails = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get(`${host}/api/auth/user`, {
+          withCredentials: true,
+        });
+        setUser(data);
+        setLoading(false);
+      } catch (e) {
+        setLoading(false);
+        setError(e);
+      }
+    };
+    userDetails();
 
-    useEffect(() => {
-        const userDetails = async () => {
-            try {
-                setLoading(true)
-                const { data } = await axios.get(`${host}/api/auth/user`, { withCredentials: true });
-                setUser(data);
-                setLoading(false)
-            } catch (e) {
-                setLoading(false)
-                setError(e);
-            }
-        }
-        userDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+  const getAllUsers = async () => {
+    setLoading(true);
+    const { data } = await axios.get(`${host}/api/auth/allUsers`);
+    const Wholesellers = await axios.get(`${host}/api/auth/allwholesellers`);
+    const DropShippers = await axios.get(`${host}/api/auth/alldropShippers`);
+    const Requests = await axios.get(`${host}/api/auth/allrequests`);
+    setAllUsers(data.length);
+    setWholeSellers(Wholesellers.data.length);
+    setDropShippers(DropShippers.data.length);
+    setRequests(Requests.data.length);
+    setLoading(false);
+  };
 
-    const getAllUsers = async () => {
-        setLoading(true)
-        const { data } = await axios.get(`${host}/api/auth/allUsers`);
-        const Wholesellers = await axios.get(`${host}/api/auth/allwholesellers`);
-        const DropShippers = await axios.get(`${host}/api/auth/alldropShippers`);
-        const Requests = await axios.get(`${host}/api/auth/allrequests`);
-        setAllUsers(data.length);
-        setWholeSellers(Wholesellers.data.length);
-        setDropShippers(DropShippers.data.length);
-        setRequests(Requests.data.length);
-        setLoading(false)
+  const getAndSetUsers = async () => {
+    setLoading(true);
+    const { data } = await axios.get(`${host}/api/auth/allUsers`);
+    const Wholesellers = await axios.get(`${host}/api/auth/allwholesellers`);
+    const DropShippers = await axios.get(`${host}/api/auth/alldropShippers`);
+    const Requests = await axios.get(`${host}/api/auth/allrequests`);
+    setAllUsers(data.length);
+    setWholeSellers(Wholesellers.data.length);
+    setDropShippers(DropShippers.data.length);
+    setRequests(Requests.data.length);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (user.isAdmin === true) {
+      getAllUsers();
+      getAndSetUsers();
     }
+  }, [user, allUsers, wholesellers, dropShippers, requests]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const getAndSetUsers = async () => {
-        setLoading(true)
-        const { data } = await axios.get(`${host}/api/auth/allUsers`);
-        const Wholesellers = await axios.get(`${host}/api/auth/allwholesellers`);
-        const DropShippers = await axios.get(`${host}/api/auth/alldropShippers`);
-        const Requests = await axios.get(`${host}/api/auth/allrequests`);
-        setAllUsers(data.length);
-        setWholeSellers(Wholesellers.data.length);
-        setDropShippers(DropShippers.data.length);
-        setRequests(Requests.data.length);
-        setLoading(false)
+  const getUserDetails = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`${host}/api/auth/user`, {
+        withCredentials: true,
+      });
+      setUser(data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      setError("");
     }
+  };
 
-    useEffect(() => {
-        if (user.isAdmin === true) {
-            getAllUsers();
-            getAndSetUsers();
-        }
-    }, [user, allUsers, wholesellers, dropShippers, requests])// eslint-disable-line react-hooks/exhaustive-deps
+  return (
+    <UserContext.Provider
+      value={{
+        loading,
+        setLoading,
+        user,
+        getUserDetails,
+        error,
+        allUsers,
+        setAllUsers,
+        wholesellers,
+        setWholeSellers,
+        dropShippers,
+        setDropShippers,
+        requests,
+        setRequests,
+        getAndSetUsers,
+      }}
+    >
+      {props.children}
+    </UserContext.Provider>
+  );
+};
 
-
-
-
-    const getUserDetails = async () => {
-        try {
-            setLoading(true)
-            const { data } = await axios.get(`${host}/api/auth/user`, { withCredentials: true });
-            setUser(data);
-            setLoading(false)
-        } catch (e) {
-            setLoading(false)
-            setError('');
-        }
-    }
-
-
-
-
-    return (
-        <UserContext.Provider value={{ loading, setLoading, user, getUserDetails, error, allUsers, setAllUsers, wholesellers, setWholeSellers, dropShippers, setDropShippers, requests, setRequests, getAndSetUsers }}>
-            {props.children}
-        </UserContext.Provider>
-    )
-}
-
-export default User
+export default User;

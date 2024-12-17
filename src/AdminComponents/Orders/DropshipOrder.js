@@ -1,81 +1,91 @@
-import { React, useEffect, useState, useRef } from 'react'
+import { React, useEffect, useState, useRef } from "react";
 import axios from "axios";
 // import moment from "moment";
 import "./Order.css";
 import { Link } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
 // import { DateRangePicker } from 'react-date-range';
 const image = window.location.origin + "/Assets/no-data.svg";
 
 const DropshipOrder = () => {
-
   const host = process.env.REACT_APP_API_URL;
 
   const modalRef = useRef(null);
   // const closeRef = useRef(null);
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
   // eslint-disable-next-line
-  const [allOrders, setAllOrders] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [allOrders, setAllOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
   // const [checked, setChecked] = useState(false)
-  const [details, setDetails] = useState([])
+  const [details, setDetails] = useState([]);
   const paymentRef = useRef(null);
-  const [payment, setPayment] = useState([])
+  const [payment, setPayment] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-
+  const [trackingId, setTrackingId] = useState("");
+  const [courier, setCourier] = useState("");
 
   const getPayment = async (id, option) => {
-
-    if (option === 'Receipt') {
-
+    if (option === "Receipt") {
       let url = `${host}/api/order/paymentbyorderid/${id}`;
       const { data } = await axios.get(url);
       const obj = {
         option,
         photo: data.photo.url,
-        transactionId: data.transactionId
-      }
-      setPayment(obj)
+        transactionId: data.transactionId,
+      };
+      setPayment(obj);
     } else {
-      setPayment({ option: 'Cash on Delivery' })
+      setPayment({ option: "Cash on Delivery" });
     }
     paymentRef.current.click();
   };
-
 
   // const [startDate, setStartDate] = useState(new Date());
   // const [endDate, setEndDate] = useState(new Date());
 
   const getOrders = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/order/dropshiporder`);
-    setOrders(data)
+    setOrders(data);
     // setAllOrders(data)
-    setFilteredRecords(data)
-    setLoading(false)
-  }
+    setFilteredRecords(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getOrders()
+    getOrders();
 
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   // eslint-disable-next-line
   // const onChecked = (e) => {
   //   setChecked(!checked)
   // };
 
-  const handleShipping = (id, method) => {
+  const handleShipping = async (id, method) => {
     modalRef.current.click();
+    try {
+      const tracking = await axios.get(`${host}/api/order/trackingid/${id}`);
+      setTrackingId(tracking.data.trackingId); // Assuming setTrackingId updates your state with the API response
+      setCourier(tracking.data.courierServiceName);
+    } catch (error) {
+      // Check if the error has a response (e.g., 404, 500)
+      if (error.response.status === 404) {
+        setTrackingId("Order Not Shipped yet");
+        setCourier("Order Not Shipped yet");
+      }
+      console.error("Error Response:", error.response.data.msg);
+    }
     let order = orders.find((order) => order._id === id);
-    order.shippingDetails.paymentOption = method
-    setDetails(order.shippingDetails)
+    order.shippingDetails.paymentOption = method;
+    setDetails(order.shippingDetails);
   };
+
   const handleOrderStatues = async (id, orderStatus) => {
     let url = `${host}/api/order/changeorderstatus/${id}`;
     await fetch(url, {
@@ -94,22 +104,22 @@ const DropshipOrder = () => {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this order?")) {
-      axios.delete(`${host}/api/order/deleteorderadmin/${id}`)
-        .then(res => {
-          getOrders()
-        })
+      axios.delete(`${host}/api/order/deleteorderadmin/${id}`).then((res) => {
+        getOrders();
+      });
     }
   };
 
   const handleReverse = async (id) => {
-    axios.put(`${host}/api/order/reverseorder/${id}`)
-      .then(res => {
-        getOrders()
+    axios
+      .put(`${host}/api/order/reverseorder/${id}`)
+      .then((res) => {
+        getOrders();
       })
-      .catch(err => {
-        window.alert("Something went wrong")
-      })
-  }
+      .catch((err) => {
+        window.alert("Something went wrong");
+      });
+  };
 
   // const handlePayment = async (id) => {
   //   if (window.confirm("Are you sure you want to verify payment?")) {
@@ -154,8 +164,12 @@ const DropshipOrder = () => {
     if (search) {
       const filtered = orders?.filter((record) => {
         return (
-          record?.billingDetails?.name?.toLowerCase().includes(search.toLowerCase()) ||
-          record?.billingDetails?.phone?.toLowerCase().includes(search.toLowerCase())
+          record?.billingDetails?.name
+            ?.toLowerCase()
+            .includes(search.toLowerCase()) ||
+          record?.billingDetails?.phone
+            ?.toLowerCase()
+            .includes(search.toLowerCase())
         );
       });
       setFilteredRecords(filtered);
@@ -166,7 +180,9 @@ const DropshipOrder = () => {
 
   return (
     <>
-      {loading ? <Loader /> :
+      {loading ? (
+        <Loader />
+      ) : (
         <>
           <div className="d-flex w-80 align-items-center justify-content-evenly mb-3 mt-3">
             <div>
@@ -219,9 +235,7 @@ const DropshipOrder = () => {
           </div>
           <div className="main">
             <div className="container-fluid">
-              <h3 className='text-center my-4'>
-                Dropship Orders
-              </h3>
+              <h3 className="text-center my-4">Dropship Orders</h3>
               <table className="table">
                 <thead>
                   <tr>
@@ -278,7 +292,9 @@ const DropshipOrder = () => {
                         <td className="text-center align-middle hover-pointer">
                           <span
                             className="btn btn-primary btn-sm"
-                            onClick={() => handleShipping(order._id, order.paymentOption)}
+                            onClick={() =>
+                              handleShipping(order._id, order.paymentOption)
+                            }
                             title="Shipping Details"
                           >
                             Details
@@ -301,26 +317,23 @@ const DropshipOrder = () => {
                           <button className='btn btn-primary btn-sm' onClick={() => getPayment(order._id, order.paymentOption)}>Payment</button>
                         </td> */}
 
-
                         <td className="text-center align-middle">
-                          {
-                            order.shippingStatus === true ? (
-                              <span className="text-success">Shipped</span>
-                            ) : (
-                              <Link to={`/admin/updateshippingstatusD/${order._id}`} className="text-white" >
-                                <button
-                                  className="btn btn-primary btn-sm text-white">
-                                  Click to ship
-                                </button>
-                              </Link>
-                            )
-                          }
-
+                          {order.shippingStatus === true ? (
+                            <span className="text-success">Shipped</span>
+                          ) : (
+                            <Link
+                              to={`/admin/updateshippingstatusD/${order._id}`}
+                              className="text-white"
+                            >
+                              <button className="btn btn-primary btn-sm text-white">
+                                Click to ship
+                              </button>
+                            </Link>
+                          )}
                         </td>
                         <td className="text-center align-middle">
-
-                          {
-                            order.profitStatus === "Not Paid" ? (order.shippingStatus === true ? (
+                          {order.profitStatus === "Not Paid" ? (
+                            order.shippingStatus === true ? (
                               order.orderStatus === "Pending" ? (
                                 <>
                                   <button
@@ -329,7 +342,9 @@ const DropshipOrder = () => {
                                       handleOrderStatues(order._id, "Returned")
                                     }
                                     disabled={
-                                      order.shippingStatus === false ? true : false
+                                      order.shippingStatus === false
+                                        ? true
+                                        : false
                                     }
                                   >
                                     {order.orderStatus === "Returned"
@@ -342,7 +357,9 @@ const DropshipOrder = () => {
                                       handleOrderStatues(order._id, "Delivered")
                                     }
                                     disabled={
-                                      order.shippingStatus === false ? true : false
+                                      order.shippingStatus === false
+                                        ? true
+                                        : false
                                     }
                                   >
                                     {order.orderStatus === "Delivered"
@@ -351,35 +368,32 @@ const DropshipOrder = () => {
                                   </button>
                                 </>
                               ) : (
-                                <span className="">
-                                  {order.orderStatus}
-                                </span>)
-                            ) : (
-                              <span className="text-danger">Not Shipped</span>
-                            )) : (
-                              <span className="text-success">Profit Paid</span>
-                            )
-
-                          }
-                        </td>
-                        <td className="text-center align-middle">
-                          {
-                            order.profitStatus === "Not Paid" ? (
-                              order.orderStatus !== "Pending" ? (
-                                <button className='btn btn-warning btn-sm' onClick={() => { handleReverse(order._id) }}>
-                                  Reverse Order
-                                </button>
-                              ) : (
-                                <span>
-                                  Order Pending
-                                </span>
+                                <span className="">{order.orderStatus}</span>
                               )
                             ) : (
-                              <span className="text-success">Profit Paid</span>
+                              <span className="text-danger">Not Shipped</span>
                             )
-
-                          }
-
+                          ) : (
+                            <span className="text-success">Profit Paid</span>
+                          )}
+                        </td>
+                        <td className="text-center align-middle">
+                          {order.profitStatus === "Not Paid" ? (
+                            order.orderStatus !== "Pending" ? (
+                              <button
+                                className="btn btn-warning btn-sm"
+                                onClick={() => {
+                                  handleReverse(order._id);
+                                }}
+                              >
+                                Reverse Order
+                              </button>
+                            ) : (
+                              <span>Order Pending</span>
+                            )
+                          ) : (
+                            <span className="text-success">Profit Paid</span>
+                          )}
                         </td>
                         <td className="text-center align-middle">
                           <Link to={`/admin/editdropshiporder/${order._id}`}>
@@ -462,7 +476,14 @@ const DropshipOrder = () => {
                         <th scope="row">Payment Method</th>
                         <td>{details.paymentOption}</td>
                       </tr>
-
+                      <tr>
+                        <th scope="row">Tracking Number</th>
+                        <td>{trackingId && trackingId}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Courier Service</th>
+                        <td>{courier && courier}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -506,16 +527,27 @@ const DropshipOrder = () => {
                         <th scope="row">Payment Option</th>
                         <td>{payment.option}</td>
                       </tr>
-                      {payment.option === 'Receipt' && <tr>
-                        <th scope="row">Transaction Id</th>
-                        <td>{payment.transactionId}</td>
-                      </tr>}
+                      {payment.option === "Receipt" && (
+                        <tr>
+                          <th scope="row">Transaction Id</th>
+                          <td>{payment.transactionId}</td>
+                        </tr>
+                      )}
 
-                      {payment.option === 'Receipt' && <tr>
-                        <th scope="row">Click Image to Open</th>
-                        <td><a href={payment.photo}><img height={'200px'} width={'200px'} src={payment.photo} /></a></td>
-                      </tr>}
-
+                      {payment.option === "Receipt" && (
+                        <tr>
+                          <th scope="row">Click Image to Open</th>
+                          <td>
+                            <a href={payment.photo}>
+                              <img
+                                height={"200px"}
+                                width={"200px"}
+                                src={payment.photo}
+                              />
+                            </a>
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -523,9 +555,9 @@ const DropshipOrder = () => {
             </div>
           </div>
         </>
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
-export default DropshipOrder
+export default DropshipOrder;

@@ -105,7 +105,7 @@ const Signup = ({ setuser }) => {
           Navigate("/login");
           await getUserDetails();
           setLoading(false);
-          Notification("Success", "Successfully Logged In.", "success");
+          Notification("Success", "Successfully Signed Up.", "success");
         }
       }
     } catch (e) {

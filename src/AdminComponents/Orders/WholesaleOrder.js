@@ -1,74 +1,70 @@
-import { React, useEffect, useState, useRef } from 'react'
+import { React, useEffect, useState, useRef } from "react";
 import axios from "axios";
 // import moment from "moment";
 import "./Order.css";
 import { Link } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import TrackingDetails from "./TrackingDetails";
 // import { DateRangePicker } from 'react-date-range';
 const image = window.location.origin + "/Assets/no-data.svg";
 
 const WholesaleOrder = () => {
-
   const host = process.env.REACT_APP_API_URL;
 
   const modalRef = useRef(null);
   // const closeRef = useRef(null);
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
   // eslint-disable-next-line
-  const [allOrders, setAllOrders] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [details, setDetails] = useState([])
+  const [allOrders, setAllOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [details, setDetails] = useState([]);
   const paymentRef = useRef(null);
-  const [payment, setPayment] = useState([])
+  const [payment, setPayment] = useState([]);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-
-
-  // const getPayment = async (id, option) => {
-
-  //   if (option === 'Receipt') {
-
-  //     let url = `${host}/api/order/paymentbyorderid/${id}`;
-  //     const { data } = await axios.get(url);
-  //     const obj = {
-  //       option,
-  //       photo: data.photo.url,
-  //       transactionId: data.transactionId
-  //     }
-  //     setPayment(obj)
-  //   } else {
-  //     setPayment({ option: 'Cash on Delivery' })
-  //   }
-  //   paymentRef.current.click();
-  // };
-
+  const [orderId, setOrderId] = useState("");
+  const [trackingId, setTrackingId] = useState("");
+  const [courier, setCourier] = useState("");
 
   const getOrders = async () => {
-    setLoading(true)
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/order/wholesaleorder`);
-    setOrders(data)
-    setAllOrders(data)
-    setFilteredRecords(data)
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    getOrders()
-
-    // eslint-disable-next-line
-  }, [])
-
-
-  const handleShipping = (id) => {
-    modalRef.current.click();
-    let order = orders.find((order) => order._id === id);
-    setDetails(order.shippingDetails)
+    setOrders(data);
+    setAllOrders(data);
+    setFilteredRecords(data);
+    setLoading(false);
   };
 
+  useEffect(() => {
+    getOrders();
 
+    // eslint-disable-next-line
+  }, []);
+
+  const handleShipping = async (id) => {
+    // setLoading(true);
+
+    modalRef.current.click();
+    try {
+      const tracking = await axios.get(`${host}/api/order/trackingid/${id}`);
+      setTrackingId(tracking.data.trackingId); // Assuming setTrackingId updates your state with the API response
+      setCourier(tracking.data.courierServiceName);
+    } catch (error) {
+      // Check if the error has a response (e.g., 404, 500)
+      if (error.response.status === 404) {
+        setTrackingId("Order Not Shipped yet");
+        setCourier("Order Not Shipped yet");
+      }
+      console.error("Error Response:", error.response.data.msg);
+    }
+    let order = orders.find((order) => order._id === id);
+    setDetails(order.shippingDetails);
+
+    // setLoading(false);
+  };
 
   const handleOrderStatues = async (id, orderStatus) => {
     let url = `${host}/api/order/changeorderstatus/${id}`;
@@ -79,39 +75,27 @@ const WholesaleOrder = () => {
       },
       body: JSON.stringify({ orderStatus }),
     });
-    getOrders()
+    getOrders();
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this order?")) {
-      axios.delete(`${host}/api/order/deleteorderadmin/${id}`)
-        .then(res => {
-          getOrders()
-        })
+      axios.delete(`${host}/api/order/deleteorderadmin/${id}`).then((res) => {
+        getOrders();
+      });
     }
   };
 
   const handleReverse = async (id) => {
-    axios.put(`${host}/api/order/reverseorder/${id}`)
-      .then(res => {
-        getOrders()
+    axios
+      .put(`${host}/api/order/reverseorder/${id}`)
+      .then((res) => {
+        getOrders();
       })
-      .catch(err => {
-        window.alert("Something went wrong")
-      })
-  }
-
-  // const handlePayment = async (id) => {
-  //   if (window.confirm("Are you sure you want to verify payment?")) {
-  //     await axios.put(`${host}/api/order/verifyorderpayment/${id}`)
-  //       .then(res => {
-  //         getOrders()
-  //       })
-  //       .catch(err => {
-  //         window.alert("Something went wrong")
-  //       })
-  //   }
-  // }
+      .catch((err) => {
+        window.alert("Something went wrong");
+      });
+  };
 
   const filter = () => {
     if (
@@ -144,8 +128,12 @@ const WholesaleOrder = () => {
     if (search) {
       const filtered = orders?.filter((record) => {
         return (
-          record?.billingDetails?.name?.toLowerCase().includes(search.toLowerCase()) ||
-          record?.billingDetails?.phone?.toLowerCase().includes(search.toLowerCase())
+          record?.billingDetails?.name
+            ?.toLowerCase()
+            .includes(search.toLowerCase()) ||
+          record?.billingDetails?.phone
+            ?.toLowerCase()
+            .includes(search.toLowerCase())
         );
       });
       setFilteredRecords(filtered);
@@ -156,7 +144,9 @@ const WholesaleOrder = () => {
 
   return (
     <>
-      {loading ? <Loader /> :
+      {loading ? (
+        <Loader />
+      ) : (
         <>
           <div className="d-flex w-80 align-items-center justify-content-evenly mb-3 mt-3">
             <div>
@@ -209,9 +199,7 @@ const WholesaleOrder = () => {
           </div>
           <div className="main">
             <div className="container-fluid">
-              <h3 className='text-center my-4'>
-                Wholesale Orders
-              </h3>
+              <h3 className="text-center my-4">Wholesale Orders</h3>
               <table className="table">
                 <thead>
                   <tr>
@@ -291,80 +279,75 @@ const WholesaleOrder = () => {
                           <button className='btn btn-primary btn-sm' onClick={() => getPayment(order._id, order.paymentOption)}>Payment</button>
                         </td> */}
 
-
                         <td className="text-center align-middle">
-                          {
-                            order.shippingStatus === true ? (
-                              <span className="text-success">Shipped</span>
-                            ) : (
-                              <Link to={`/admin/updateshippingstatusW/${order._id}`} className="text-white" >
-                                <button
-                                  className="btn btn-primary btn-sm text-white">
-                                  Click to ship
-                                </button>
-                              </Link>
-                            )
-                          }
-
-                        </td>
-                        <td className="text-center align-middle">
-
-                          {
-                            order.shippingStatus === true ? (
-                              order.orderStatus === "Pending" ? (
-                                <>
-                                  <button
-                                    className="btn btn-primary btn-sm mx-2"
-                                    onClick={() =>
-                                      handleOrderStatues(order._id, "Returned")
-                                    }
-                                    disabled={
-                                      order.shippingStatus === false ? true : false
-                                    }
-                                  >
-                                    {order.orderStatus === "Returned"
-                                      ? "Returned"
-                                      : "Order Return"}
-                                  </button>
-                                  <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() =>
-                                      handleOrderStatues(order._id, "Delivered")
-                                    }
-                                    disabled={
-                                      order.shippingStatus === false ? true : false
-                                    }
-                                  >
-                                    {order.orderStatus === "Delivered"
-                                      ? "Delivered"
-                                      : "Order Deliver"}
-                                  </button>
-                                </>
-                              ) : (
-                                <span className="">
-                                  {order.orderStatus}
-                                </span>)
-                            ) : (
-                              <span className="text-danger">Not Shipped</span>
-                            )
-                          }
-
-
-
-                        </td>
-                        <td className="text-center align-middle">
-                          {
-                            order.orderStatus !== "Pending" ? (
-                              <button className='btn btn-warning btn-sm' onClick={() => { handleReverse(order._id) }}>
-                                Reverse Order
+                          {order.shippingStatus === true ? (
+                            <span className="text-success">Shipped</span>
+                          ) : (
+                            <Link
+                              to={`/admin/updateshippingstatusW/${order._id}`}
+                              className="text-white"
+                            >
+                              <button className="btn btn-primary btn-sm text-white">
+                                Click to ship
                               </button>
+                            </Link>
+                          )}
+                        </td>
+                        <td className="text-center align-middle">
+                          {order.shippingStatus === true ? (
+                            order.orderStatus === "Pending" ? (
+                              <>
+                                <button
+                                  className="btn btn-primary btn-sm mx-2"
+                                  onClick={() =>
+                                    handleOrderStatues(order._id, "Returned")
+                                  }
+                                  disabled={
+                                    order.shippingStatus === false
+                                      ? true
+                                      : false
+                                  }
+                                >
+                                  {order.orderStatus === "Returned"
+                                    ? "Returned"
+                                    : "Order Return"}
+                                </button>
+                                <button
+                                  className="btn btn-primary btn-sm"
+                                  onClick={() =>
+                                    handleOrderStatues(order._id, "Delivered")
+                                  }
+                                  disabled={
+                                    order.shippingStatus === false
+                                      ? true
+                                      : false
+                                  }
+                                >
+                                  {order.orderStatus === "Delivered"
+                                    ? "Delivered"
+                                    : "Order Deliver"}
+                                </button>
+                              </>
                             ) : (
-                              <span>
-                                Order Pending
-                              </span>
+                              <span className="">{order.orderStatus}</span>
                             )
-                          }
-
+                          ) : (
+                            <span className="text-danger">Not Shipped</span>
+                          )}
+                        </td>
+                        <td className="text-center align-middle">
+                          {order.orderStatus !== "Pending" ? (
+                            <button
+                              className="btn btn-warning btn-sm"
+                              onClick={() => {
+                                handleReverse(order._id);
+                              }}
+                            >
+                              Reverse Order
+                            </button>
+                          ) : (
+                            <span>Order Pending</span>
+                          )}
                         </td>
                         <td className="text-center align-middle">
                           <Link to={`/admin/editwholesaleorder/${order._id}`}>
@@ -443,13 +426,20 @@ const WholesaleOrder = () => {
                         <th scope="row">Phone</th>
                         <td>{details.phone}</td>
                       </tr>
+                      <tr>
+                        <th scope="row">Tracking Number</th>
+                        <td>{trackingId && trackingId}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Courier Service</th>
+                        <td>{courier && courier}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-
 
           <button
             ref={paymentRef}
@@ -487,16 +477,27 @@ const WholesaleOrder = () => {
                         <th scope="row">Payment Option</th>
                         <td>{payment.option}</td>
                       </tr>
-                      {payment.option === 'Receipt' && <tr>
-                        <th scope="row">Transaction Id</th>
-                        <td>{payment.transactionId}</td>
-                      </tr>}
+                      {payment.option === "Receipt" && (
+                        <tr>
+                          <th scope="row">Transaction Id</th>
+                          <td>{payment.transactionId}</td>
+                        </tr>
+                      )}
 
-                      {payment.option === 'Receipt' && <tr>
-                        <th scope="row">Click Image to Open</th>
-                        <td><a href={payment.photo}><img height={'200px'} width={'200px'} src={payment.photo} /></a></td>
-                      </tr>}
-
+                      {payment.option === "Receipt" && (
+                        <tr>
+                          <th scope="row">Click Image to Open</th>
+                          <td>
+                            <a href={payment.photo}>
+                              <img
+                                height={"200px"}
+                                width={"200px"}
+                                src={payment.photo}
+                              />
+                            </a>
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -504,9 +505,9 @@ const WholesaleOrder = () => {
             </div>
           </div>
         </>
-      }
+      )}
     </>
-  )
-}
+  );
+};
 
-export default WholesaleOrder
+export default WholesaleOrder;
