@@ -28,6 +28,9 @@ const PaidPerUser = () => {
   const [to, setTo] = useState("");
   const [loading, setLoading] = useState(false);
   const [trackingIds, setTrackingIds] = useState({}); // Store tracking IDs
+  const [deliveredOrders, setDeliveredOrders] = useState(0);
+  const [returnedOrders, setReturnedOrders] = useState(0);
+
   useEffect(() => {
     getAllProfits();
     // eslint-disable-next-line
@@ -48,8 +51,9 @@ const PaidPerUser = () => {
     for (const order of data?.records?.records[0]?.orders || []) {
       try {
         const response = await axios.get(
-          `${host}/api/order/trackingid/${order.id}`
+          `${host}/api/order/trackingid/${order._id}`
         );
+
         trackingData[order.id] = response.data.trackingId || "N/A"; // Handle missing tracking ID
       } catch (error) {
         console.error(
@@ -186,8 +190,17 @@ const PaidPerUser = () => {
     );
     let bank = await axios.get(`${host}/api/bankDetails/${data?.user?._id}`);
     await fetchTrackingIds(data);
+    const deliveredOrdersCount =
+      data?.records?.records[0]?.orders?.filter(
+        (order) => order.orderStatus === "Delivered"
+      ).length || 0;
+    setDeliveredOrders(deliveredOrdersCount);
+    const returnedOrdersCount =
+      data?.records?.records[0]?.orders?.filter(
+        (order) => order.orderStatus === "Returned"
+      ).length || 0;
+    setReturnedOrders(returnedOrdersCount);
     console.log(data);
-
     // Create the PDF Document
     const MyPDF = (
       <Document>
@@ -221,11 +234,11 @@ const PaidPerUser = () => {
             </View>
             <View style={styles.bankInfo}>
               <Text style={styles.infoHeader}>Bank Details</Text>
-              <Text>Bank Name: {bank?.data?.bankName || "N/A"}</Text>
+              <Text>Bank Name: {bank?.data[0]?.bankName || "N/A"}</Text>
               <Text>
-                Account Holder: {bank?.data?.accountHolderName || "N/A"}
+                Account Holder: {bank?.data[0]?.accountHolderName || "N/A"}
               </Text>
-              <Text>IBAN: {bank?.data?.iban || "N/A"}</Text>
+              <Text>IBAN: {bank?.data[0]?.iban || "N/A"}</Text>
             </View>
           </View>
 
@@ -237,13 +250,15 @@ const PaidPerUser = () => {
               <Text style={styles.cellSmall}>Order ID</Text>
               <Text style={styles.cellLarge}>Customer</Text>
               <Text style={styles.cellLarge}>Product</Text>
+              <Text style={styles.cellSmall}>Quantity</Text>
               <Text style={styles.cellSmall}>Product Price (PKR)</Text>
               <Text style={styles.cellSmall}>Dropship Price (PKR)</Text>
-              <Text style={styles.cellSmall}>Profit (PKR)</Text>
+
               <Text style={styles.cellSmall}>Shipping</Text>
+              <Text style={styles.cellSmall}>Profit (PKR)</Text>
               <Text style={styles.cellSmall}>Tracking Id</Text>
-              <Text style={styles.cellSmall}>Delivery Date</Text>
-              <Text style={styles.cellSmall}>Return Date</Text>
+              <Text style={styles.cellSmall}>Order Status</Text>
+              <Text style={styles.cellSmall}>Order Status Date</Text>
               <Text style={styles.cellSmall}>Payment Date</Text>
             </View>
 
@@ -287,31 +302,27 @@ const PaidPerUser = () => {
                     {product.product?.title || "N/A"}
                   </Text>
                   <Text style={styles.cellSmall}>
+                    {product.quantity || "N/A"}
+                  </Text>
+                  <Text style={styles.cellSmall}>
                     {product.product.discountedPriceW ? (
                       <>
                         <Text style={styles.strikethrough}>
-                          {product.product.wholesalePrice}
+                          {product.product.wholesalePrice * product.quantity}
                         </Text>
                         {"  "} {/* Adds space between old and new price */}
-                        {product.product.discountedPriceW}
+                        {product.product.discountedPriceW * product.quantity}
                       </>
                     ) : (
-                      product.product.wholesalePrice
+                      product.product.wholesalePrice * product.quantity
                     )}
                   </Text>
                   <Text style={styles.cellSmall}>
-                    {product.product?.dropshipperPrice || "N/A"}
+                    {product.product?.dropshipperPrice * product.quantity ||
+                      "N/A"}
                   </Text>
 
                   {/* Order-related data repeated for alignment */}
-                  <Text
-                    style={[
-                      styles.cellSmall,
-                      productIndex > 0 ? styles.mergedText : {},
-                    ]}
-                  >
-                    {order.profitAmount || "N/A"}
-                  </Text>
                   <Text
                     style={[
                       styles.cellSmall,
@@ -326,7 +337,24 @@ const PaidPerUser = () => {
                       productIndex > 0 ? styles.mergedText : {},
                     ]}
                   >
-                    {trackingIds[order.id] || "Loading..."}
+                    {order.profitAmount || "N/A"}
+                  </Text>
+
+                  <Text
+                    style={[
+                      styles.cellSmall,
+                      productIndex > 0 ? styles.mergedText : {},
+                    ]}
+                  >
+                    {trackingIds[order.id]}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.cellSmall,
+                      productIndex > 0 ? styles.mergedText : {},
+                    ]}
+                  >
+                    {order.orderStatus || "N/A"}
                   </Text>
                   <Text
                     style={[
@@ -344,14 +372,6 @@ const PaidPerUser = () => {
                       productIndex > 0 ? styles.mergedText : {},
                     ]}
                   >
-                    N/A
-                  </Text>
-                  <Text
-                    style={[
-                      styles.cellSmall,
-                      productIndex > 0 ? styles.mergedText : {},
-                    ]}
-                  >
                     {new Date(
                       data?.records?.records[0]?.datePaid
                     ).toLocaleDateString("en-PK", { timeZone: "Asia/Karachi" })}
@@ -360,36 +380,34 @@ const PaidPerUser = () => {
               ))
             )}
           </View>
-
+        </Page>
+        <Page size="A4" orientation="landscape" style={styles.page}>
           {/* Summary Section */}
           <View style={styles.summaryContainer}>
-            <View style={styles.summaryLogoSection}>
-              <Image src="/path/to/logo.png" style={styles.summaryLogo} />
-            </View>
-
             <Text style={styles.summaryTitle}>Summary</Text>
 
             {/* Summary Table */}
             <View style={styles.summaryTable}>
               {/* Table Header */}
-              <View style={[styles.summaryTableRow, styles.summaryTableHeader]}>
-                <Text style={styles.summaryTableHeaderText}>Category</Text>
-                <Text style={styles.summaryTableHeaderText}>Amount (PKR)</Text>
-              </View>
 
               {/* Total Orders */}
               <View style={styles.summaryTableRow}>
-                <Text style={styles.summaryTableCell}>Total Orders</Text>
+                <Text style={styles.summaryTableCell}>Orders</Text>
                 <Text style={styles.summaryTableCell}>
                   {data?.records?.records[0]?.orders?.length || 0}
                 </Text>
               </View>
-
+              <View style={styles.summaryTableRow}>
+                <Text style={styles.summaryTableCell}>Delivered Orders</Text>
+                <Text style={styles.summaryTableCell}>{deliveredOrders}</Text>
+              </View>
+              <View style={styles.summaryTableRow}>
+                <Text style={styles.summaryTableCell}>Returned Orders</Text>
+                <Text style={styles.summaryTableCell}>{returnedOrders}</Text>
+              </View>
               {/* Total Wholesale Amount */}
               <View style={styles.summaryTableRow}>
-                <Text style={styles.summaryTableCell}>
-                  Total Wholesale Amount
-                </Text>
+                <Text style={styles.summaryTableCell}>Wholesale Amount</Text>
                 <Text style={styles.summaryTableCell}>
                   {data?.records?.records[0]?.orders
                     ? data.records.records[0].orders.reduce(
@@ -397,7 +415,11 @@ const PaidPerUser = () => {
                           acc +
                           (order.products?.reduce(
                             (prodAcc, product) =>
-                              prodAcc + (product.product?.wholesalePrice || 0),
+                              prodAcc +
+                              (product.product?.discountedPriceW // Check if there's a sale price
+                                ? product.product.discountedPriceW
+                                : product.product?.wholesalePrice || 0) *
+                                (product.quantity || 1), // Multiply by quantity
                             0
                           ) || 0),
                         0
@@ -408,9 +430,7 @@ const PaidPerUser = () => {
 
               {/* Total Dropship Amount */}
               <View style={styles.summaryTableRow}>
-                <Text style={styles.summaryTableCell}>
-                  Total Dropship Amount
-                </Text>
+                <Text style={styles.summaryTableCell}>Dropship Amount</Text>
                 <Text style={styles.summaryTableCell}>
                   {data?.records?.records[0]?.orders
                     ? data.records.records[0].orders.reduce(
@@ -419,7 +439,8 @@ const PaidPerUser = () => {
                           (order.products?.reduce(
                             (prodAcc, product) =>
                               prodAcc +
-                              (product.product?.dropshipperPrice || 0),
+                              (product.product?.dropshipperPrice || 0) *
+                                (product.quantity || 1), // Multiply by quantity
                             0
                           ) || 0),
                         0
@@ -430,22 +451,19 @@ const PaidPerUser = () => {
 
               {/* Total Shipping Charges */}
               <View style={styles.summaryTableRow}>
+                <Text style={styles.summaryTableCell}>Shipping Charges</Text>
                 <Text style={styles.summaryTableCell}>
-                  Total Shipping Charges
-                </Text>
-                <Text style={styles.summaryTableCell}>
-                  {data?.records?.records[0]?.orders
-                    ? data.records.records[0].orders.reduce(
-                        (acc, order) => acc + (order.shippingPrice || 0),
-                        0
-                      )
-                    : 0}
+                  {data?.records?.records[0]?.orders?.reduce(
+                    (total, order) =>
+                      total + (Number(order?.shippingPrice) || 0),
+                    0
+                  )}
                 </Text>
               </View>
 
               {/* Total Profit */}
               <View style={styles.summaryTableRow}>
-                <Text style={styles.summaryTableCell}>Total Profit</Text>
+                <Text style={styles.summaryTableCell}>Profit</Text>
                 <Text style={styles.summaryTableCell}>
                   {data?.records?.records[0]?.orders
                     ? data.records.records[0].orders.reduce(
@@ -460,13 +478,15 @@ const PaidPerUser = () => {
         </Page>
       </Document>
     );
-
+    // Format file name properly
+    const formattedDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+    const fileName = `Profit Report - ${data?.user?.name.replace(
+      /\s/g,
+      " "
+    )} - ${formattedDate}.pdf`;
     // Use @react-pdf/renderer's PDFDownloadLink to trigger the download
     const downloadLink = (
-      <PDFDownloadLink
-        document={MyPDF}
-        fileName={`${data?.user?.name || "user"}_profit_report.pdf`}
-      >
+      <PDFDownloadLink document={MyPDF} fileName={fileName}>
         {({ loading }) =>
           loading ? "Generating PDF..." : "Click to download your PDF!"
         }
@@ -590,7 +610,10 @@ const PaidPerUser = () => {
                     Customer Name
                   </th>
                   <th colSpan="1" className="text-center">
-                    Orders No.
+                    Orders
+                  </th>
+                  <th colSpan="1" className="text-center">
+                    Details
                   </th>
                   <th colSpan="1" className="text-center">
                     Profit Amount
@@ -618,11 +641,16 @@ const PaidPerUser = () => {
                           {profits?.user?.name}
                         </td>
                         <td colSpan="1" className="text-center">
+                          {item?.orders?.length}
+                        </td>
+                        <td colSpan="1" className="text-center">
                           <Link
                             to={`/admin/singleprofit/${profits?.user?._id}/${item._id}`}
                             style={{ fontSize: "20px" }}
                           >
-                            {item?.orders?.length}
+                            <button className="btn btn-sm btn-info text-light">
+                              View Orders
+                            </button>
                           </Link>
                         </td>
                         <td colSpan="1" className="text-center">
