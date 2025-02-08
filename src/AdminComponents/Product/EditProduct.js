@@ -5,6 +5,8 @@ import ProductContext from "../../context/Product/ProductContext";
 import { ReactNotifications } from "react-notifications-component";
 import Notification from "../../Notifications/Notifications";
 import Loader from "../../Loader/Loader";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const EditProduct = () => {
   const host = process.env.REACT_APP_API_URL;
@@ -29,20 +31,6 @@ const EditProduct = () => {
     photo: "",
     description: "",
   });
-  const {
-    category,
-    skuNumber,
-    title,
-    stock,
-    wholesalePrice,
-    discountedPriceW,
-    purchasePrice,
-    weight,
-    featured,
-    onSale,
-    photo,
-    description,
-  } = product;
 
   useEffect(() => {
     const getProduct = async () => {
@@ -57,115 +45,56 @@ const EditProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    photo.url = img;
+
     if (
-      !category ||
-      !skuNumber ||
-      !title ||
-      !wholesalePrice ||
-      Number(wholesalePrice) === 0 ||
-      !purchasePrice ||
-      Number(purchasePrice) === 0 ||
-      !weight ||
-      !photo ||
-      !description
+      !product.category ||
+      !product.skuNumber ||
+      !product.title ||
+      !product.wholesalePrice ||
+      Number(product.wholesalePrice) === 0 ||
+      !product.purchasePrice ||
+      Number(product.purchasePrice) === 0 ||
+      !product.weight ||
+      !product.photo ||
+      !product.description
     ) {
-      Notification(
-        "Error",
-        "Enter Complete Details.(Prices or Weight can't be 0).",
-        "danger"
-      );
-    } else if (onSale && !discountedPriceW) {
-      Notification("Error", "Enter Discounted Price", "danger");
-    } else if (title.length <= 2) {
-      Notification("Error", "Minimum Length for Title should be 3.", "danger");
-    } else if (
-      onSale &&
-      (Number(discountedPriceW) >= Number(wholesalePrice) ||
-        Number(discountedPriceW) === 0)
-    ) {
-      Notification(
-        "Error",
-        "Discounted Price Should be less than Selling Price and can't be 0.",
-        "danger"
-      );
+      Notification("Error", "Enter complete details.", "danger");
     } else {
       try {
         setLoading(true);
-        await axios.put(`${host}/api/product/editProduct/${id}`, {
-          category,
-          skuNumber,
-          title,
-          stock,
-          wholesalePrice,
-          discountedPriceW,
-          purchasePrice,
-          weight,
-          featured,
-          onSale,
-          photo,
-          description,
-        });
-        setProduct({
-          category: "",
-          skuNumber: "",
-          title: "",
-          stock: 0,
-          wholesalePrice: 0,
-          discountedPriceW: 0,
-          purchasePrice: 0,
-          weight: 0,
-          featured: false,
-          onSale: false,
-          photo: "",
-          description: "",
-        });
+        await axios.put(`${host}/api/product/editProduct/${id}`, product);
         await getProducts();
         setLoading(false);
-        Notification("Success", "Product Updated Successfully", "success");
+        Notification("Success", "Product updated successfully", "success");
         setTimeout(() => {
           Navigate("/admin/products");
         }, 2000);
       } catch (e) {
         setLoading(false);
-        if (e.response?.data?.keyPattern) {
-          Notification(
-            "Error",
-            `Enter a unique ${Object.keys(e.response?.data?.keyPattern)[0]}`,
-            "danger"
-          );
-        } else if (e.response?.data?.message) {
-          Notification("Error", e.response?.data?.message, "danger");
-        } else if (e.response?.data) {
-          Notification("Error", e.response?.data, "danger");
-        }
+        Notification("Error", "Failed to update product", "danger");
       }
     }
   };
 
   const onChange = (e) => {
-    if (e.target.name === "onSale" || e.target.name === "featured") {
+    const { name, value, type, checked } = e.target;
+    setProduct((prevValue) => ({
+      ...prevValue,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    if (name === "onSale" && !checked) {
       setProduct((prevValue) => ({
         ...prevValue,
-        [e.target.name]: e.target.checked,
-      }));
-      if (e.target.name === "onSale" && !e.target.checked) {
-        setProduct((prevValue) => ({
-          ...prevValue,
-          discountedPriceW: "",
-        }));
-      }
-    } else {
-      setProduct((prevValue) => ({
-        ...prevValue,
-        [e.target.name]: e.target.value,
+        discountedPriceW: "",
       }));
     }
   };
 
-  const handlePhoto = (e) => {
-    setImg(e.target.value);
-    photo.url = e.target.value;
+  const handleDescriptionChange = (value) => {
+    setProduct((prevValue) => ({
+      ...prevValue,
+      description: value,
+    }));
   };
 
   return (
@@ -185,7 +114,7 @@ const EditProduct = () => {
                   type="text"
                   className="form-control"
                   placeholder="title"
-                  value={title}
+                  value={product.title}
                   name="title"
                   onChange={onChange}
                 />
@@ -193,11 +122,8 @@ const EditProduct = () => {
                 <label>Category</label>
                 <select
                   className="form-control"
-                  type="text"
-                  id="category"
-                  placeholder="category"
-                  value={category}
                   name="category"
+                  value={product.category}
                   onChange={onChange}
                 >
                   <option value="">Select Category</option>
@@ -213,11 +139,9 @@ const EditProduct = () => {
                 <label>skuNumber</label>{" "}
                 <input
                   type="text"
-                  min={100}
                   className="form-control"
-                  id="pSKU"
                   placeholder="skuNumber"
-                  value={skuNumber}
+                  value={product.skuNumber}
                   name="skuNumber"
                   onChange={onChange}
                 />
@@ -225,11 +149,9 @@ const EditProduct = () => {
                 <label>Stock</label>{" "}
                 <input
                   type="number"
-                  min={1}
                   className="form-control"
-                  id="stock"
                   placeholder="stock"
-                  value={stock}
+                  value={product.stock}
                   name="stock"
                   onChange={onChange}
                 />
@@ -237,11 +159,9 @@ const EditProduct = () => {
                 <label>Purchase Price</label>{" "}
                 <input
                   type="number"
-                  min={0}
                   className="form-control"
-                  id="purchasePrice"
                   placeholder="purchase Price"
-                  value={purchasePrice}
+                  value={product.purchasePrice}
                   name="purchasePrice"
                   onChange={onChange}
                 />
@@ -249,11 +169,9 @@ const EditProduct = () => {
                 <label>Wholesale Price</label>{" "}
                 <input
                   type="number"
-                  min={0}
                   className="form-control"
-                  id="wholesalePrice"
                   placeholder="wholesale Price"
-                  value={wholesalePrice}
+                  value={product.wholesalePrice}
                   name="wholesalePrice"
                   onChange={onChange}
                 />
@@ -262,10 +180,8 @@ const EditProduct = () => {
                 <input
                   type="number"
                   className="form-control"
-                  min={0}
-                  id="weight"
                   placeholder="weight(grams)"
-                  value={weight}
+                  value={product.weight}
                   name="weight"
                   onChange={onChange}
                 />
@@ -273,76 +189,67 @@ const EditProduct = () => {
                 <input
                   type="checkbox"
                   onChange={onChange}
-                  placeholder="featured"
-                  checked={featured}
+                  checked={product.featured}
                   name="featured"
                   className="form-check-input"
-                  id="featured"
                 />
                 &nbsp;
-                <label className="form-check-label" htmlFor="featured">
-                  Featured Product
-                </label>
+                <label className="form-check-label">Featured Product</label>
                 &nbsp;&nbsp;&nbsp;
                 <input
                   type="checkbox"
                   onChange={onChange}
-                  placeholder="onSale"
-                  checked={onSale}
+                  checked={product.onSale}
                   name="onSale"
                   className="form-check-input"
-                  id="onSale"
                 />
                 &nbsp;
-                <label className="form-check-label" htmlFor="sale">
-                  On Sale
-                </label>
+                <label className="form-check-label">On Sale</label>
                 <br />
                 <br />
-                {onSale && (
+                {product.onSale && (
                   <>
                     <label>Wholeseller Discounted Price</label>
                     <input
                       type="number"
                       className="form-control"
-                      min={0}
-                      id="discountedPriceW"
                       placeholder="WholeSeller Discounted Price"
-                      value={onSale && discountedPriceW}
+                      value={product.discountedPriceW}
                       name="discountedPriceW"
                       onChange={onChange}
                     />
                   </>
                 )}
-                {onSale && <br />}
-                {onSale && <br />}
+                <br />
                 <label>Image URL</label>{" "}
                 <input
                   type="url"
                   className="form-control"
-                  id="image"
                   placeholder="Enter Url for Image"
-                  name="image"
-                  value={img}
-                  onChange={(e) => setImg(e.target.value)}
+                  name="photo"
+                  value={product.photo?.url || product.photo}
+                  onChange={(e) =>
+                    setProduct((prevValue) => ({
+                      ...prevValue,
+                      photo: e.target.value,
+                    }))
+                  }
                 />
                 <br />
                 <center>
-                  <img width="200px" alt="" src={img} />
+                  <img
+                    width="200px"
+                    alt=""
+                    src={product.photo?.url || product.photo}
+                  />
                   <br />
                   <br />
                 </center>
                 <label>Description</label>
-                <textarea
-                  type="text"
-                  className="form-control"
-                  rows="10"
-                  id="description"
-                  placeholder="description"
-                  value={description}
-                  name="description"
-                  onChange={onChange}
-                ></textarea>
+                <ReactQuill
+                  value={product.description}
+                  onChange={handleDescriptionChange}
+                />
                 <br />
                 <button
                   type="submit"

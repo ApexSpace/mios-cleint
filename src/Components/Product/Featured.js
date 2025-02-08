@@ -7,27 +7,30 @@ import Notification from "../../Notifications/Notifications";
 import { ReactNotifications } from "react-notifications-component";
 import axios from "axios";
 import Loader from "../../Loader/Loader";
-
+import SearchBar from "../SearchBar";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedProducts = () => {
   const host = process.env.REACT_APP_API_URL;
-  const { products, getProducts, getCategories, loading } = useContext(ProductContext);
+  const { products, getProducts, getCategories, loading } =
+    useContext(ProductContext);
   const [currentPro, setProductState] = useState([]);
-  const [singleProduct, setSingleProduct] = useState({})
+  const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
   const userload = useContext(UserContext);
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
   const { addToCart } = context;
+  const navigate = useNavigate();
   useEffect(() => {
     const getFeatured = async () => {
       const { data } = await axios.get(`${host}/api/product/featured`);
       setProductState(data.featuredProducts);
-    }
+    };
     getFeatured();
 
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   const modalRef = useRef(null);
   const closeRef = useRef(null);
@@ -41,11 +44,11 @@ const FeaturedProducts = () => {
     modalRef.current.click();
     products.filter((product) => {
       if (product._id === id) {
-        setSingleProduct(product)
+        setSingleProduct(product);
       }
-      return null
-    })
-  }
+      return null;
+    });
+  };
 
   const handleChange = (e) => {
     const newQty = parseInt(e.target.value);
@@ -57,31 +60,64 @@ const FeaturedProducts = () => {
     }
   };
 
-
   const addAndRefresh = async (product) => {
     await addToCart({ product }, quantity);
-    Notification("Success", "Added to Cart", "success")
+    Notification("Success", "Added to Cart", "success");
     await Refresh();
+  };
+  const handleSearch = (query) => {
+    navigate(`/search/${query}`);
   };
 
   return (
     <>
-      {loading || userload?.loading ? <Loader /> :
+      {loading || userload?.loading ? (
+        <Loader />
+      ) : (
         <>
           <ReactNotifications />
-          <div className="container-fluid mt-5 home-sidebar">
+          {/* <div className="container-fluid mt-5 home-sidebar">
             <div className="row">
-
               <div className="grid-container">
-                {currentPro && currentPro.map((product, index) => {
-                  return (
-                    product.deActivated === false &&
-                    <Product product={product} modalRef={modelFunction} key={index + 1} />
-                  )
-                })}
+                {currentPro &&
+                  currentPro.map((product, index) => {
+                    return (
+                      product.deActivated === false && (
+                        <Product
+                          product={product}
+                          modalRef={modelFunction}
+                          key={index + 1}
+                        />
+                      )
+                    );
+                  })}
               </div>
             </div>
+          </div> */}
+          <div className={`container ${user?.name && "mt-1"} home-sidebar`}>
+            <div className="row">
+              <SearchBar onSearch={handleSearch} enable={false} />
+            </div>
           </div>
+          <div class="container">
+            <div className="row row-cols-1 row-cols-lg-5 row-cols-md-3 row-cols-sm-3 row-cols-2  justify-content-start">
+              {currentPro &&
+                currentPro.map((product, index) => {
+                  return (
+                    product.deActivated === false && (
+                      <div className="col" key={index + 1}>
+                        <Product
+                          product={product}
+                          modalRef={modelFunction}
+                          key={index + 1}
+                        />
+                      </div>
+                    )
+                  );
+                })}
+            </div>
+          </div>
+
           <button
             ref={modalRef}
             type="button"
@@ -119,14 +155,15 @@ const FeaturedProducts = () => {
                         style={{ width: "200px", height: "200px" }}
                         className="card-img-top image"
                         src={
-                          singleProduct.photo?.url || "https://i.imgur.com/xdbHo4E.png"
+                          singleProduct.photo?.url ||
+                          "https://i.imgur.com/xdbHo4E.png"
                         }
                         alt="Product"
                       />
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
-                      <p>{singleProduct.description}</p>
+
                       <h6 className=" ">
                         {user.role === "wholeseller" ? (
                           singleProduct.discountedPriceW > 0 ? (
@@ -176,6 +213,13 @@ const FeaturedProducts = () => {
                       </div>
                     </div>
                   </div>
+                  <div className="row mb-2">
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: singleProduct.description,
+                      }}
+                    ></p>{" "}
+                  </div>
                 </div>
                 <div className="modal-footer">
                   <button
@@ -191,9 +235,10 @@ const FeaturedProducts = () => {
             </div>
           </div>
         </>
-      }
-      {(!loading && !userload.loading && currentPro.length <= 0) && <h1>No Fearture Products Found</h1>}
-
+      )}
+      {!loading && !userload.loading && currentPro.length <= 0 && (
+        <h1>No Fearture Products Found</h1>
+      )}
     </>
   );
 };

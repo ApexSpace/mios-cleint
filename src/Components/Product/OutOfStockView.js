@@ -150,7 +150,7 @@ const OutOfStockView = () => {
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
-                      <p>{singleProduct.description}</p>
+
                       <button
                         data-bs-dismiss="modal"
                         ref={closeRef}
@@ -190,6 +190,9 @@ const OutOfStockView = () => {
                         </Link>
                       </div>
                     </div>
+                  </div>
+                  <div className="row mb-2">
+                    <p>{singleProduct.description}</p>
                   </div>
                 </div>
                 <div className="modal-footer">

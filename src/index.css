@@ -238,6 +238,9 @@ table {
     justify-content: center;
     align-items: center;
     height: 80vh;
+    border: 1px solid gray;
+    box-shadow: gray;
+    border-radius: 5px;
   }
   .image-product img {
     height: 50%;
@@ -503,4 +506,7 @@ code {
 }
 .product-info {
   padding-top: 10px !important;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }

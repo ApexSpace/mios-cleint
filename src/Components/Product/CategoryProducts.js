@@ -159,7 +159,6 @@ const CategoryProducts = () => {
                         src={singleProduct.photo?.url || ""}
                         alt="Product"
                       />
-                      <p>{singleProduct.description}</p>
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
@@ -212,6 +211,13 @@ const CategoryProducts = () => {
                         </button>
                       </div>
                     </div>
+                  </div>
+                  <div className="row mb-2">
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: singleProduct.description,
+                      }}
+                    ></p>{" "}
                   </div>
                 </div>
                 <div className="modal-footer">

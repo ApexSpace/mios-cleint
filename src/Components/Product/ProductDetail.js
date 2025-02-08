@@ -21,12 +21,12 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(false);
   const Refresh = context.Cart;
 
-  const { id } = params;
+  const { slug } = params;
 
   const getProduct = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`${host}/api/product/product/${id}`);
+      const { data } = await axios.get(`${host}/api/product/product/${slug}`);
       setProduct(data);
       setLoading(false);
     } catch (error) {
@@ -38,11 +38,11 @@ const ProductDetail = () => {
     getProduct();
 
     // eslint-disable-next-line
-  }, [id]);
+  }, [slug]);
 
   useEffect(() => {
     if (quantity >= 1 && quantity <= product?.stock) {
-      updateCartProductQty(id, quantity);
+      updateCartProductQty(product._id, quantity);
     }
 
     // eslint-disable-next-line
@@ -71,10 +71,10 @@ const ProductDetail = () => {
     <>
       {/* {user._id && !["login", "signup"].includes(location.pathname) && (
         <SidebarForLoggedin />
-      )}
+      )} */}
       {!user._id && !["login", "signup"].includes(location.pathname) && (
         <SidebarForLoggedOut />
-      )} */}
+      )}
       <ReactNotifications />
       {loading ? (
         <Loader />
@@ -191,13 +191,16 @@ const ProductDetail = () => {
                             </div>
                           </div>
                         </div>
-
-                        <div className="product-description mt-3">
-                          <h6>Description:</h6>
-                          <p>{product.description}</p>
-                        </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+                <div className="row mt-5 mb-5">
+                  <div className="product-description mt-3">
+                    <h6>Description:</h6>
+                    <p
+                      dangerouslySetInnerHTML={{ __html: product.description }}
+                    ></p>
                   </div>
                 </div>
               </div>

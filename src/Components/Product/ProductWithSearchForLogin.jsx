@@ -133,6 +133,15 @@ const ProductWithSearchForLogin = () => {
                     );
                   })}
               </div>
+              {currentPro.length === 0 ? (
+                <div className="no-results">
+                  <p className="no-results-text">
+                    Oops! No products found. Try searching for something else.
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <button
@@ -173,7 +182,11 @@ const ProductWithSearchForLogin = () => {
                         src={singleProduct.photo?.url || ""}
                         alt="Product"
                       />
-                      <p>{singleProduct.description}</p>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: singleProduct.description,
+                        }}
+                      ></p>{" "}
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>

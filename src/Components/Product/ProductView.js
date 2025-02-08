@@ -49,7 +49,7 @@ const ProductView = ({ product, modalRef }) => {
           <div className="content">
             <div className="content-overlay"></div>
             <div className="image product-img">
-              <Link to={`/product/${product._id}`}>
+              <Link to={`/product/${product.slug}`}>
                 <img
                   style={{ height: "160px", width: "100%" }}
                   className="card-img-top "
@@ -82,7 +82,7 @@ const ProductView = ({ product, modalRef }) => {
           )}
 
           <div className="card-body">
-            <Link to={`/product/${product._id}`}>
+            <Link to={`/product/${product.slug}`}>
               <h1 className=" text-center limit-text">{product.title}</h1>
             </Link>
 
@@ -93,7 +93,7 @@ const ProductView = ({ product, modalRef }) => {
                 </label>
 
                 <input
-                  className="form-control mx-1"
+                  className="form-control mx-1 px-2"
                   style={{ width: "60px" }}
                   min="0"
                   type="number"
@@ -116,8 +116,8 @@ const ProductView = ({ product, modalRef }) => {
                 </label>
 
                 <input
-                  className="form-control mx-1"
-                  style={{ width: "50px" }}
+                  className="form-control mx-1 px-2"
+                  style={{ width: "60px" }}
                   min="1"
                   type="number"
                   name="qty"

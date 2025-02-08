@@ -401,7 +401,7 @@ export default function Sidebar() {
                           handleDrawerClose();
                         }}
                       >
-                        <Link key={ind} to={`/category/${item._id}`}>
+                        <Link key={ind} to={`/category/${item.slug}`}>
                           <p
                             className="AdminSidebarSubHead m-0 py-1 px-2"
                             style={
@@ -634,6 +634,7 @@ export default function Sidebar() {
                   location.pathname.toLowerCase() !== "/cart" &&
                   !location.pathname.includes("/category/") &&
                   !location.pathname.includes("/product/") &&
+                  !location.pathname.includes("/search/") &&
                   user?.role === "dropshipper" && (
                     <div>
                       <h4 style={{ paddingTop: "10px", paddingLeft: "10px" }}>
@@ -726,7 +727,7 @@ export default function Sidebar() {
                         {categoryState &&
                           categoryState.map((item, ind) => {
                             return (
-                              <Link key={ind} to={`/category/${item._id}`}>
+                              <Link key={ind} to={`/category/${item.slug}`}>
                                 <p
                                   className="AdminSidebarSubHead mt-0 mb-0 px-2"
                                   style={

@@ -21,6 +21,7 @@ const Cart = () => {
 
   const subTotalD = (cart) => {
     let subTotal = 0;
+
     cart?.forEach((item) => {
       subTotal += item.product.dropshipperPrice * item.quantity;
     });

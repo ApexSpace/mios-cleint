@@ -26,6 +26,7 @@ const ShippedWholesale = () => {
   const [to, setTo] = useState("");
   const [trackingId, setTrackingId] = useState("");
   const [courier, setCourier] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // const getPayment = async (id, option) => {
 
@@ -165,6 +166,46 @@ const ShippedWholesale = () => {
       setFilteredRecords(orders);
     }
   };
+  const handleSearchByTrackingId = async () => {
+    const search = searchQuery;
+
+    if (search) {
+      try {
+        const response = await axios.get(
+          `${host}/api/shipping/orderTracking/${search}`
+        );
+
+        if (response.data && response.data.orderId) {
+          console.log("Here are records:", response.data);
+
+          const filtered = orders?.filter((record) => {
+            return record?._id
+              ?.toLowerCase()
+              .includes(response.data.orderId.toLowerCase());
+          });
+
+          setFilteredRecords(filtered);
+        } else {
+          setFilteredRecords([]); // Clear results if no order is found
+        }
+      } catch (error) {
+        console.error("Error fetching order by tracking ID:", error);
+        setFilteredRecords([]); // Reset if an error occurs
+      }
+    } else {
+      setFilteredRecords(orders); // Restore original orders if input is empty
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value); // Update input value
+  };
+
+  const handleSearchClick = () => {
+    if (searchQuery) {
+      handleSearchByTrackingId(searchQuery); // Call search function when button is clicked
+    }
+  };
 
   return (
     <>
@@ -220,6 +261,24 @@ const ShippedWholesale = () => {
             >
               Fetch All
             </button>
+          </div>
+          <div className="d-flex w-80 align-items-center justify-content-start mb-3 mt-3">
+            <div>
+              <label for="" className="form-label">
+                Search: &nbsp;&nbsp;&nbsp;
+              </label>
+              <input
+                type="text"
+                className="p-1"
+                name="search"
+                placeholder="By Tracking ID"
+                value={searchQuery}
+                onChange={handleSearchChange} // Only updates state, does not call API
+              />
+              <button className="btn btn-primary" onClick={handleSearchClick}>
+                Search
+              </button>
+            </div>
           </div>
           <div className="main">
             <div className="container-fluid">

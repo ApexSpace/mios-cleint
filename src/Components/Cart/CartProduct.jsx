@@ -17,22 +17,12 @@ export const CartProduct = ({ Data, Index }) => {
   );
   const [dropPriceButton, setDropPriceButton] = useState(true);
   const [cartQtyDisable, setCartQtyDisable] = useState(true);
-  const [currPrice, setCurrPrice] = useState(
-    user.role === "wholeseller"
-      ? Data?.product?.wholesalePrice
-      : user.role === "dropshipper"
-      ? Data.product.dropshipperPrice
-      : 0
-  );
+  const [currPrice, setCurrPrice] = useState(Data?.product?.wholesalePrice);
   useEffect(() => {
     if (user.isAdmin === false) {
-      if (user.role === "wholeseller") {
-        if (Data.product.onSale) {
-          setCurrPrice(Data.product.discountedPriceW);
-        } else {
-          setCurrPrice(Data.product.wholesalePrice);
-        }
-      } else if (user.role === "dropshipper") {
+      if (Data.product.onSale) {
+        setCurrPrice(Data.product.discountedPriceW);
+      } else {
         setCurrPrice(Data.product.wholesalePrice);
       }
     }

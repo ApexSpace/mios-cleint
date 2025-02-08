@@ -72,3 +72,13 @@ table {
 .ql-editor {
   min-height: 30em;
 }
+.no-results {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.no-results-text {
+  font-size: 18px;
+  color: #666;
+  width: 100%;
+}

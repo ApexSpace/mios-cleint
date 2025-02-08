@@ -23,14 +23,14 @@ const CategoryProductsView = () => {
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
   const { addToCart } = context;
-  const { id } = useParams();
+  const { slug } = useParams();
   const Navigate = useNavigate();
   const navigate = useNavigate();
   useEffect(() => {
     const getFeatured = async () => {
       setLoading(true);
       const { data } = await axios.get(
-        `${host}/api/product/categoryProducts/${id}`
+        `${host}/api/product/categoryProducts/${slug}`
       );
       setProductState(data.products);
       setLoading(false);
@@ -38,7 +38,7 @@ const CategoryProductsView = () => {
     getFeatured();
 
     // eslint-disable-next-line
-  }, [id]);
+  }, [slug]);
   const handleSearch = (query) => {
     navigate(`/search/${query}`);
   };
@@ -173,7 +173,7 @@ const CategoryProductsView = () => {
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
-                      <p>{singleProduct.description}</p>
+
                       <button
                         data-bs-dismiss="modal"
                         ref={closeRef}
@@ -213,6 +213,9 @@ const CategoryProductsView = () => {
                         </Link>
                       </div>
                     </div>
+                  </div>
+                  <div className="row mb-2">
+                    <p>{singleProduct.description}</p>
                   </div>
                 </div>
                 <div className="modal-footer">

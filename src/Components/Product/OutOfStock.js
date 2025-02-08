@@ -162,7 +162,7 @@ const OutOfStock = () => {
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
-                      <p>{singleProduct.description}</p>
+
                       <h6 className=" ">
                         {user.role === "wholeseller" ? (
                           singleProduct.discountedPriceW > 0 ? (
@@ -211,6 +211,13 @@ const OutOfStock = () => {
                         </button>
                       </div>
                     </div>
+                  </div>
+                  <div className="row mb-2">
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: singleProduct.description,
+                      }}
+                    ></p>{" "}
                   </div>
                 </div>
                 <div className="modal-footer">

@@ -29,7 +29,6 @@ const PlaceOrder = () => {
     if (!(CartItems?.cart?.length >= 1) || !subTotal) {
       Navigate("/Cart");
     }
-    console.log("city", city);
 
     if (
       user.isAdmin === false &&
@@ -60,7 +59,11 @@ const PlaceOrder = () => {
 
     let cart = CartItems.cart;
     await cart.forEach((index) => {
-      tot += index.product.wholesalePrice * index.quantity;
+      if (index.product.discountedPriceW > 0) {
+        tot += index.product.discountedPriceW * index.quantity;
+      } else {
+        tot += index.product.wholesalePrice * index.quantity;
+      }
     });
     setProductTotal(tot);
   };
@@ -240,7 +243,12 @@ const PlaceOrder = () => {
       ...prevVal,
       shippingDetails,
     }));
-    console.log(city);
+    // console.log("totall", total);
+    // console.log("subtotall", subTotal);
+
+    // console.log("shipping", shipping);
+    // console.log("Product Total", productTotal);
+    // return;
     if (!products) {
       Notification("Error", "Cart is Empty.", "danger");
     } else if (

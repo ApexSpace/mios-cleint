@@ -104,25 +104,7 @@ const Instock = () => {
                 })}
             </div>
           </div>
-          {/* <div className="container-fluid mt-5 home-sidebar">
-            <div className="row">
-              <div className="grid-container">
-                {currentPro &&
-                  currentPro.map((product, index) => {
-                    return (
-                      product.deActivated === false &&
-                      product.stock > 0 && (
-                        <Product
-                          product={product}
-                          modalRef={modelFunction}
-                          key={index + 1}
-                        />
-                      )
-                    );
-                  })}
-              </div>
-            </div>
-          </div> */}
+
           <button
             ref={modalRef}
             type="button"
@@ -168,7 +150,7 @@ const Instock = () => {
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
-                      <p>{singleProduct.description}</p>
+
                       <h6 className=" ">
                         {user.role === "wholeseller" ? (
                           singleProduct.discountedPriceW > 0 ? (
@@ -217,6 +199,13 @@ const Instock = () => {
                         </button>
                       </div>
                     </div>
+                  </div>
+                  <div className="row mb-2">
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: singleProduct.description,
+                      }}
+                    ></p>{" "}
                   </div>
                 </div>
                 <div className="modal-footer">

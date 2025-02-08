@@ -25,6 +25,11 @@ const Product = ({ product, modalRef }) => {
 
   const addAndRefresh = async (product) => {
     if (quantity >= 1 && quantity <= product?.stock) {
+      if (product.discountedPriceW > 0) {
+        product.dropshipperPrice = product.discountedPriceW;
+      } else {
+        product.dropshipperPrice = product.wholesalePrice;
+      }
       await addToCart({ product }, quantity);
       await Refresh();
       setTimeout(() => {
@@ -50,7 +55,7 @@ const Product = ({ product, modalRef }) => {
         <div className="content">
           <div className="content-overlay "></div>
           <div className="image product-img">
-            <Link to={`/product/${product._id}`}>
+            <Link to={`/product/${product.slug}`}>
               <img
                 style={{ height: "160px", width: "100%" }}
                 className="card-img-top "
@@ -122,26 +127,17 @@ const Product = ({ product, modalRef }) => {
           )}
         </div>
         <div className="card-body">
-          <Link to={`/product/${product._id}`}>
+          <Link to={`/product/${product.slug}`}>
             <h1 className=" text-center limit-text">{product.title}</h1>
           </Link>
           <h6 className="text-center " style={{ fontSize: "12px" }}>
-            {user.role === "wholeseller" ? (
-              product.discountedPriceW > 0 ? (
-                <>
-                  Rs. {product.discountedPriceW}{" "}
-                  <del>{product.wholesalePrice}</del>
-                </>
-              ) : (
-                <>Rs. {product.wholesalePrice}</>
-              )
-            ) : product.discountedPriceD > 0 ? (
+            {product.discountedPriceW > 0 ? (
               <>
-                Rs. {product.discountedPriceD}{" "}
-                <del>{product.dropshipperPrice}</del>
+                Rs. {product.discountedPriceW}{" "}
+                <del>{product.wholesalePrice}</del>
               </>
             ) : (
-              <>Rs. {product.dropshipperPrice}</>
+              <>Rs. {product.wholesalePrice}</>
             )}
           </h6>
 

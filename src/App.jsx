@@ -331,7 +331,7 @@ function App() {
                     />
 
                     <Route
-                      path="/product/:id"
+                      path="/product/:slug"
                       element={
                         DSrequest ? (
                           <RequestedDS setUser={setUser} />
@@ -432,7 +432,7 @@ function App() {
                     />
 
                     <Route
-                      path="/category/:id"
+                      path="/category/:slug"
                       element={
                         DSrequest ? (
                           <RequestedDS setUser={setUser} />
@@ -442,7 +442,7 @@ function App() {
                       }
                     />
                     <Route
-                      path="/categoryview/:id"
+                      path="/categoryview/:slug"
                       element={<CategoryProductsView />}
                     />
 

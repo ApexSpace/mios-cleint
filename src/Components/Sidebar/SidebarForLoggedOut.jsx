@@ -372,7 +372,7 @@ export default function SidebarForLoggedOut() {
                           handleDrawerClose();
                         }}
                       >
-                        <Link key={ind} to={`/categoryview/${item._id}`}>
+                        <Link key={ind} to={`/categoryview/${item.slug}`}>
                           <p
                             className="AdminSidebarSubHead m-0 py-1 px-2"
                             style={
@@ -512,7 +512,7 @@ export default function SidebarForLoggedOut() {
                     {categoryState &&
                       categoryState.map((item, ind) => {
                         return (
-                          <Link key={ind} to={`/categoryview/${item._id}`}>
+                          <Link key={ind} to={`/categoryview/${item.slug}`}>
                             <p
                               className="AdminSidebarSubHead mt-0 mb-0 px-2"
                               style={
