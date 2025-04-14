@@ -14,11 +14,12 @@ const ProductMain = () => {
   const {
     products,
     getProducts,
+    pgProducts,
     getCategories,
     cartLoading,
     getPaginateProduct,
   } = useContext(ProductContext);
-  const [currentPro, setProductState] = useState(products);
+  const [currentPro, setProductState] = useState([]);
   const [searchState, setSearchState] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
@@ -40,17 +41,33 @@ const ProductMain = () => {
   };
 
   useEffect(() => {
-    getCategories();
-    getPaginateProduct(currentPage, limit);
+    const productsetting = async () => {
+      setLoading(true);
+      getCategories();
+      await getPaginateProduct(currentPage, limit);
+      setLoading(false);
+    };
+    productsetting();
   }, []);
 
   useEffect(() => {
-    getPaginateProduct(currentPage, limit);
+    const productsetting = async () => {
+      setLoading(true);
+      await getPaginateProduct(currentPage, limit);
+      setLoading(false);
+    };
+    productsetting();
   }, [currentPage, limit]);
 
   useEffect(() => {
-    setProductState(products);
-  }, [products]);
+    const productsetting = async () => {
+      setLoading(true);
+      await setProductState(pgProducts);
+      setLoading(false);
+    };
+    productsetting();
+  }, [pgProducts]);
+
   const handleNextPage = () => setCurrentPage((prev) => prev + 1);
   const handlePreviousPage = () =>
     setCurrentPage((prev) => Math.max(prev - 1, 1));

@@ -15,6 +15,7 @@ const OutOfStock = () => {
   const { products, getProducts, getCategories, loading } =
     useContext(ProductContext);
   const [currentPro, setProductState] = useState([]);
+  const [fetching, setFetching] = useState(false);
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
   const userload = useContext(UserContext);
@@ -233,10 +234,10 @@ const OutOfStock = () => {
               </div>
             </div>
           </div>
+          {!loading && !fetching && currentPro.length <= 0 && (
+            <h1 className="notFound">No Products Found In this category</h1>
+          )}
         </>
-      )}
-      {!loading && !userload.loading && currentPro.length <= 0 && (
-        <h1>No Products Found Out Of Stock.</h1>
       )}
     </>
   );

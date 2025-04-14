@@ -133,7 +133,7 @@ const ProductWithSearchForLogin = () => {
                     );
                   })}
               </div>
-              {currentPro.length === 0 ? (
+              {currentPro.length === 0 && !loading ? (
                 <div className="no-results">
                   <p className="no-results-text">
                     Oops! No products found. Try searching for something else.
@@ -182,32 +182,18 @@ const ProductWithSearchForLogin = () => {
                         src={singleProduct.photo?.url || ""}
                         alt="Product"
                       />
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: singleProduct.description,
-                        }}
-                      ></p>{" "}
                     </div>
                     <div className="col-sm-6">
                       <h5>{singleProduct.title}</h5>
 
                       <h6 className=" ">
-                        {user.role === "wholeseller" ? (
-                          singleProduct.discountedPriceW > 0 ? (
-                            <>
-                              Rs. {singleProduct.discountedPriceW}{" "}
-                              <del>{singleProduct.wholesalePrice}</del>
-                            </>
-                          ) : (
-                            <>Rs. {singleProduct.wholesalePrice}</>
-                          )
-                        ) : singleProduct.discountedPriceD > 0 ? (
+                        {singleProduct.discountedPriceW > 0 ? (
                           <>
-                            Rs. {singleProduct.discountedPriceD}{" "}
-                            <del>{singleProduct.dropshipperPrice}</del>
+                            Rs. {singleProduct.discountedPriceW}{" "}
+                            <del>{singleProduct.wholesalePrice}</del>
                           </>
                         ) : (
-                          <>Rs. {singleProduct.dropshipperPrice}</>
+                          <>Rs. {singleProduct.wholesalePrice}</>
                         )}
                       </h6>
 
@@ -242,6 +228,9 @@ const ProductWithSearchForLogin = () => {
                         </button>
                       </div>
                     </div>
+                  </div>
+                  <div className="row mb-2">
+                    <p>{singleProduct.description}</p>
                   </div>
                 </div>
                 <div className="modal-footer">

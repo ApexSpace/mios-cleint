@@ -302,10 +302,10 @@ const MyShop = ({ product, modalRef }) => {
             ) : product.discountedPriceD > 0 ? (
               <>
                 Rs. {product.discountedPriceD}{" "}
-                <del>{product.dropshipperPrice}</del>
+                <del>{product.wholesalePrice}</del>
               </>
             ) : (
-              <>Rs. {product.dropshipperPrice}</>
+              <>Rs. {product.wholesalePrice}</>
             )}
           </h6>
 

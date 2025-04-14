@@ -18,6 +18,7 @@ const Instock = () => {
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
   const userload = useContext(UserContext);
+  const [fetching, setFetching] = useState(false);
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
   const { addToCart } = context;
@@ -221,10 +222,10 @@ const Instock = () => {
               </div>
             </div>
           </div>
+          {!loading && !fetching && currentPro.length <= 0 && (
+            <h1 className="notFound">No Products Found In this category</h1>
+          )}
         </>
-      )}
-      {!loading && !userload.loading && currentPro.length <= 0 && (
-        <h1>No Products Found In stock</h1>
       )}
     </>
   );

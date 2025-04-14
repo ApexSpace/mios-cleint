@@ -15,11 +15,12 @@ const ProductWithoutPrices = () => {
   const {
     products,
     getProducts,
+    pgProducts,
     getCategories,
     cartLoading,
     getPaginateProduct,
   } = useContext(ProductContext);
-  const [currentPro, setProductState] = useState(products);
+  const [currentPro, setProductState] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [singleProduct, setSingleProduct] = useState({});
@@ -48,8 +49,9 @@ const ProductWithoutPrices = () => {
   }, [currentPage, limit]);
 
   useEffect(() => {
-    setProductState(products);
-  }, [products]);
+    setProductState(pgProducts);
+  }, [pgProducts]);
+
   const handleNextPage = () => setCurrentPage((prev) => prev + 1);
   const handlePreviousPage = () =>
     setCurrentPage((prev) => Math.max(prev - 1, 1));

@@ -259,12 +259,12 @@
   padding: 0 10px 0 0;
 }
 
-.rate:not(:checked)>input {
+.rate:not(:checked) > input {
   position: absolute;
   top: -9999px;
 }
 
-.rate:not(:checked)>label {
+.rate:not(:checked) > label {
   float: right;
   width: 15px;
   white-space: nowrap;
@@ -275,24 +275,24 @@
   line-height: 21px;
 }
 
-.rate:not(:checked)>label:before {
+.rate:not(:checked) > label:before {
   content: "\2605";
 }
 
-.rate>input:checked~label {
+.rate > input:checked ~ label {
   color: #ffc700;
 }
 
-.rate:not(:checked)>label:hover,
-.rate:not(:checked)>label:hover~label {
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
   color: #deb217;
 }
 
-.rate>input:checked+label:hover,
-.rate>input:checked+label:hover~label,
-.rate>input:checked~label:hover,
-.rate>input:checked~label:hover~label,
-.rate>label:hover~input:checked~label {
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
   color: #c59b08;
 }
 
@@ -439,51 +439,6 @@
   cursor: pointer;
 }
 
-
-
-.ribbon {
-  line-height: 0.9em;
-  font-size: 1em;
-  text-transform: uppercase;
-  text-align: center;
-  /* font-weight: lighter; */
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
-  /* letter-spacing: -1px; */
-  display: block;
-  width: 3rem;
-  height: 3rem;
-  background-color: #029ecb;
-  color: white;
-  margin: -1.3em -1.3em 0;
-  float: right;
-  padding-top: 1rem;
-  position: relative;
-  top: 0px;
-  left: 0px;
-  /* -webkit-filter: drop-shadow(0 0.5rem 0.3em rgba(0, 0, 0, 0.5)); */
-  transform: translate3d(0, 0, 0);
-}
-
-.ribbon:after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-right: 1.5rem solid transparent;
-  border-left: 1.5rem solid transparent;
-  border-top: 0.75rem solid #CCCCCC;
-  position: absolute;
-  top: 3rem;
-  left: 0;
-}
-
-.ribbon.ribbon--blue {
-  background-color: #029ecb;
-}
-
-.ribbon.ribbon--blue:after {
-  border-top: 1.5rem solid #029ecb;
-}
-
 .img-overlay {
   position: absolute;
   top: 0;
@@ -561,7 +516,6 @@ padding-right: 1em; */
   transition: all 0.3s ease-in-out 0s;
 }
 
-
 .content-details2 {
   position: absolute;
   text-align: center;
@@ -629,8 +583,6 @@ padding-right: 1em; */
 .card {
   background-color: white !important;
 }
-
-
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

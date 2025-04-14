@@ -74,7 +74,6 @@ const MyShopMain = ({ data }) => {
                       modalRef={modelFunction}
                       key={index + 1}
                     />
-                    ;
                   </div>
                 )
               );

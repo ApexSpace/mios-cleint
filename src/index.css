@@ -510,3 +510,17 @@ code {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.pagination-ellipsis {
+  margin: 0 5px;
+  font-weight: bold;
+}
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+}
+.pagination button {
+  margin: 0 5px;
+}
+.pagination {
+  margin-bottom: 20px;
+}

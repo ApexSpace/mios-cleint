@@ -38,7 +38,11 @@ const MyPaidProfits = () => {
     setLoading(true);
     const { data } = await axios.get(`${host}/api/profitrecords/myPaidProfit`);
     setAllProfits(data);
-    setFilteredRecords(data?.records);
+    const sortedData = data?.records.sort(
+      (a, b) => new Date(b.datePaid) - new Date(a.datePaid)
+    );
+
+    setFilteredRecords(sortedData);
     setLoading(false);
   };
 
@@ -830,9 +834,9 @@ const MyPaidProfits = () => {
             </button>
           </div>
           <div className="container-fluid">
-            <table className="table table-hover table-bordered">
+            <table className="table ">
               <thead>
-                <tr className="table-dark">
+                <tr className="">
                   <th colSpan="1">Sr.</th>
                   <th colSpan="1" className="text-center">
                     Customer Name

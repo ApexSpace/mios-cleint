@@ -6,6 +6,7 @@ const ProductState = (props) => {
   const host = process.env.REACT_APP_API_URL;
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [pgProducts, setPgProducts] = useState([]);
   const [CartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
@@ -40,6 +41,7 @@ const ProductState = (props) => {
 
   // New Api
   const GetAllProducts = async () => {
+    setLoading(true);
     const { data } = await axios.get(`${host}/api/product/allactiveproducts`);
     setAllProducts(data?.products);
     setLoading(false);
@@ -61,7 +63,7 @@ const ProductState = (props) => {
           params: { page, limit },
         }
       );
-      setProducts(data?.products);
+      setPgProducts(data?.products);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -223,6 +225,7 @@ const ProductState = (props) => {
         MyShopItems,
         cartLoading,
         getPaginateProduct,
+        pgProducts,
       }}
     >
       {props.children}

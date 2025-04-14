@@ -10,14 +10,13 @@ import "react-quill/dist/quill.snow.css";
 
 const EditProduct = () => {
   const host = process.env.REACT_APP_API_URL;
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const { getProducts, loading, setLoading } = useContext(ProductContext);
-  let [img, setImg] = useState("");
-  const params = useParams();
-  const { id } = params;
-  let { categories } = useContext(ProductContext);
+  const [img, setImg] = useState("");
+  const { id } = useParams();
+  const { categories } = useContext(ProductContext);
 
-  let [product, setProduct] = useState({
+  const [product, setProduct] = useState({
     category: "",
     skuNumber: "",
     title: "",
@@ -35,13 +34,22 @@ const EditProduct = () => {
   useEffect(() => {
     const getProduct = async () => {
       setLoading(true);
-      const { data } = await axios.get(`${host}/api/product/product/${id}`);
-      setProduct(data);
-      setImg(data.photo.url);
-      setLoading(false);
+      try {
+        // Only fetch essential product details
+        const { data } = await axios.get(`${host}/api/product/product/${id}`);
+        setProduct((prevProduct) => ({
+          ...prevProduct,
+          ...data, // batch setting all data
+        }));
+        setImg(data.photo.url);
+      } catch (error) {
+        Notification("Error", "Failed to fetch product data.", "danger");
+      } finally {
+        setLoading(false);
+      }
     };
     getProduct();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id, host, setLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,9 +62,7 @@ const EditProduct = () => {
       Number(product.wholesalePrice) === 0 ||
       !product.purchasePrice ||
       Number(product.purchasePrice) === 0 ||
-      !product.weight ||
-      !product.photo ||
-      !product.description
+      !product.weight
     ) {
       Notification("Error", "Enter complete details.", "danger");
     } else {
@@ -64,10 +70,9 @@ const EditProduct = () => {
         setLoading(true);
         await axios.put(`${host}/api/product/editProduct/${id}`, product);
         await getProducts();
-        setLoading(false);
         Notification("Success", "Product updated successfully", "success");
         setTimeout(() => {
-          Navigate("/admin/products");
+          navigate("/admin/products");
         }, 2000);
       } catch (e) {
         setLoading(false);
@@ -108,8 +113,7 @@ const EditProduct = () => {
             <div className="col-md-12">
               <h2 className="text-center my-4">Edit Product</h2>
               <form className="form">
-                <br />
-                <label>Title</label>{" "}
+                <label>Title</label>
                 <input
                   type="text"
                   className="form-control"
@@ -127,16 +131,14 @@ const EditProduct = () => {
                   onChange={onChange}
                 >
                   <option value="">Select Category</option>
-                  {categories.map((category) => {
-                    return (
-                      <option key={category._id} value={category._id}>
-                        {category.name}
-                      </option>
-                    );
-                  })}
+                  {categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
                 <br />
-                <label>skuNumber</label>{" "}
+                <label>skuNumber</label>
                 <input
                   type="text"
                   className="form-control"
@@ -146,7 +148,7 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-                <label>Stock</label>{" "}
+                <label>Stock</label>
                 <input
                   type="number"
                   className="form-control"
@@ -156,7 +158,7 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-                <label>Purchase Price</label>{" "}
+                <label>Purchase Price</label>
                 <input
                   type="number"
                   className="form-control"
@@ -166,7 +168,7 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-                <label>Wholesale Price</label>{" "}
+                <label>Wholesale Price</label>
                 <input
                   type="number"
                   className="form-control"
@@ -176,7 +178,7 @@ const EditProduct = () => {
                   onChange={onChange}
                 />
                 <br />
-                <label>Weight</label>{" "}
+                <label>Weight</label>
                 <input
                   type="number"
                   className="form-control"
@@ -193,9 +195,7 @@ const EditProduct = () => {
                   name="featured"
                   className="form-check-input"
                 />
-                &nbsp;
                 <label className="form-check-label">Featured Product</label>
-                &nbsp;&nbsp;&nbsp;
                 <input
                   type="checkbox"
                   onChange={onChange}
@@ -203,9 +203,7 @@ const EditProduct = () => {
                   name="onSale"
                   className="form-check-input"
                 />
-                &nbsp;
                 <label className="form-check-label">On Sale</label>
-                <br />
                 <br />
                 {product.onSale && (
                   <>
@@ -221,7 +219,7 @@ const EditProduct = () => {
                   </>
                 )}
                 <br />
-                <label>Image URL</label>{" "}
+                <label>Image URL</label>
                 <input
                   type="url"
                   className="form-control"
@@ -239,8 +237,9 @@ const EditProduct = () => {
                 <center>
                   <img
                     width="200px"
-                    alt=""
+                    alt="Product"
                     src={product.photo?.url || product.photo}
+                    loading="lazy"
                   />
                   <br />
                   <br />

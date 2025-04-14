@@ -455,7 +455,7 @@
 }
 
 .ribbon {
-  line-height: 0.9em;
+  line-height: 0.1em;
   font-size: 1em;
   text-transform: uppercase;
   text-align: center;
@@ -463,8 +463,8 @@
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
   /* letter-spacing: -1px; */
   display: block;
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 2rem;
   background-color: #029ecb;
   color: white;
   margin: -1.3em -1.3em 0;
@@ -475,10 +475,11 @@
   left: 0px;
   /* -webkit-filter: drop-shadow(0 0.5rem 0.3em rgba(0, 0, 0, 0.5)); */
   transform: translate3d(0, 0, 0);
+  border-radius: 5px;
 }
 
 .ribbon:after {
-  content: "";
+  /* content: "";
   width: 0;
   height: 0;
   border-right: 1.5rem solid transparent;
@@ -486,7 +487,7 @@
   border-top: 0.75rem solid #cccccc;
   position: absolute;
   top: 3rem;
-  left: 0;
+  left: 0; */
 }
 
 .ribbon.ribbon--blue {

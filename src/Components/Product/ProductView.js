@@ -72,7 +72,7 @@ const ProductView = ({ product, modalRef }) => {
           </div>
           {product.featured === true && (
             <div className="feature-overlay">
-              <span className="ribbon ribbon--blue">Feature</span>
+              <span className="ribbon ribbon--blue">Featured</span>
             </div>
           )}
           {product.stock < 1 && (

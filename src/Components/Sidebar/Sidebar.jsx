@@ -215,7 +215,7 @@ export default function Sidebar() {
             anchor="left"
             PaperProps={{
               style: {
-                backgroundColor: "transparent",
+                backgroundColor: "white",
                 backdropFilter: "blur(5px)",
               },
             }}
@@ -242,7 +242,7 @@ export default function Sidebar() {
 
             <div
               style={{
-                backgroundColor: "transparent",
+                backgroundColor: "white",
                 height: "100vh",
                 width: "300px",
               }}
@@ -540,7 +540,7 @@ export default function Sidebar() {
           >
             <div
               style={{
-                backgroundColor: "transparent",
+                backgroundColor: "white",
                 height: "100vh",
                 marginTop: "2vh",
                 width: "200px",

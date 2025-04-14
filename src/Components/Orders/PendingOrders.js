@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import UserContext from "../../context/User/UserContext";
 import Loader from "../../Loader/Loader";
@@ -141,6 +142,7 @@ const PendingOrders = () => {
                 <th>Date</th>
                 <th>Status</th>
                 <th>Actions</th>
+                <th>Detail</th>
               </tr>
             </thead>
             <tbody>
@@ -187,6 +189,13 @@ const PendingOrders = () => {
                         >
                           Delete
                         </span>
+                      </td>
+                      <td>
+                        <Link to={`/user/order/${item._id}`}>
+                          <button className="btn btn-sm btn-info text-light">
+                            Detail
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                   );

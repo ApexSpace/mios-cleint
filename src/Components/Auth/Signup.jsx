@@ -471,7 +471,9 @@ const Signup = ({ setuser }) => {
                   autoFocus
                   onChange={onChange}
                 />
-                <p className="dropshipperApply">Apply for Dropsipper Account</p>
+                <p className="dropshipperApply">
+                  Apply for Dropshipper Account
+                </p>
               </div>
               <input type="submit" value="create account" onClick={signedUp} />
             </form>

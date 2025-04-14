@@ -42,8 +42,17 @@ const PaidPerUser = () => {
       `${host}/api/profitrecords/paidperuser/${id}`
     );
     setAllProfits(data);
-    setFilteredRecords(data?.records);
+    const sortedRecords = await sortRecords(data[0].records);
+    setFilteredRecords(sortedRecords);
+
     setLoading(false);
+  };
+  const sortRecords = async (data) => {
+    const sortedData = data.sort(
+      (a, b) => new Date(b.datePaid) - new Date(a.datePaid)
+    );
+
+    return sortedData;
   };
   const fetchTrackingIds = async (data) => {
     const trackingData = {};
@@ -602,9 +611,9 @@ const PaidPerUser = () => {
             </button>
           </div>
           <div className="container-fluid">
-            <table className="table table-hover table-bordered">
+            <table className="table ">
               <thead>
-                <tr className="table-dark">
+                <tr className="">
                   <th colSpan="1">Sr.</th>
                   <th colSpan="1" className="text-center">
                     Customer Name
@@ -645,7 +654,7 @@ const PaidPerUser = () => {
                         </td>
                         <td colSpan="1" className="text-center">
                           <Link
-                            to={`/admin/singleprofit/${profits?.user?._id}/${item._id}`}
+                            to={`/admin/singleprofit/${id}/${item._id}`}
                             style={{ fontSize: "20px" }}
                           >
                             <button className="btn btn-sm btn-info text-light">

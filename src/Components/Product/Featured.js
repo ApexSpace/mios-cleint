@@ -17,6 +17,7 @@ const FeaturedProducts = () => {
   const [currentPro, setProductState] = useState([]);
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
+  const [fetching, setFetching] = useState(false);
   const userload = useContext(UserContext);
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
@@ -24,8 +25,10 @@ const FeaturedProducts = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const getFeatured = async () => {
+      setFetching(true);
       const { data } = await axios.get(`${host}/api/product/featured`);
       setProductState(data.featuredProducts);
+      setFetching(false);
     };
     getFeatured();
 
@@ -234,10 +237,10 @@ const FeaturedProducts = () => {
               </div>
             </div>
           </div>
+          {!loading && !fetching && currentPro.length <= 0 && (
+            <h1 className="notFound">No Products Found In this category</h1>
+          )}
         </>
-      )}
-      {!loading && !userload.loading && currentPro.length <= 0 && (
-        <h1>No Fearture Products Found</h1>
       )}
     </>
   );

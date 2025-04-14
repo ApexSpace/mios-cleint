@@ -15,34 +15,37 @@ const CategoryProducts = () => {
   const { products, getProducts, getCategories, loading, setLoading } =
     useContext(ProductContext);
   const [currentPro, setProductState] = useState([]);
+  const [fetching, setFetching] = useState(false);
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
   const userloading = useContext(UserContext);
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
   const { addToCart } = context;
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
     const getFeatured = async () => {
+      setFetching(true);
       setLoading(true);
       const { data } = await axios.get(
-        `${host}/api/product/categoryProducts/${id}`
+        `${host}/api/product/categoryProducts/${slug}`
       );
       setProductState(data.products);
       setLoading(false);
+      setFetching(false);
     };
     getFeatured();
 
     // eslint-disable-next-line
-  }, [id]);
+  }, [slug]);
 
   const modalRef = useRef(null);
   const closeRef = useRef(null);
-  useEffect(() => {
-    getProducts();
-    getCategories();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   getProducts();
+  //   getCategories();
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [quantity, setQuantity] = useState(1);
 
   const modelFunction = (id) => {
@@ -233,10 +236,13 @@ const CategoryProducts = () => {
               </div>
             </div>
           </div>
+          {!loading &&
+            !fetching &&
+            !userloading.loading &&
+            currentPro.length <= 0 && (
+              <h1 className="notFound">No Products Found In this category</h1>
+            )}
         </>
-      )}
-      {!loading && !userloading.loading && currentPro.length <= 0 && (
-        <h1 className="notFound">No Products Found In this category</h1>
       )}
     </>
   );

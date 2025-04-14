@@ -9,63 +9,98 @@ const DropshipPending = () => {
   const [allProfits, setAllProfits] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    getAllProfits()
-  }, [])
-
+    getAllProfits();
+  }, []);
 
   const getAllProfits = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const { data } = await axios.get(`${host}/api/profitrecords/paidprofits`);
-      setAllProfits(data);
-      setLoading(false)
+      const sortedData = data.sort(
+        (a, b) => new Date(b.latestDatePaid) - new Date(a.latestDatePaid)
+      );
+
+      setAllProfits(sortedData);
+      setLoading(false);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.log(error);
     }
-  }
-
+  };
 
   return (
     <>
-      <ReactNotifications />{loading ? <Loader /> :
+      <ReactNotifications />
+      {loading ? (
+        <Loader />
+      ) : (
         <div className="main">
           <div className="container-fluid">
-            <table className="table table-hover table-bordered">
+            <table className="table ">
               <thead>
-                <tr className="table-dark">
-                  <th colSpan="1" >Sr.</th>
-                  <th colSpan="1" className="text-center">Customer Name</th>
-                  <th colSpan="1" className="text-center">City</th>
-                  <th colSpan="1" className="text-center">Total Paid Profit</th>
-                  <th colSpan="1" className="text-center">Latest Payment</th>
-                  <th colSpan="1" className="text-center">Profit Detail</th>
+                <tr className="">
+                  <th colSpan="1">Sr.</th>
+                  <th colSpan="1" className="text-center">
+                    Customer Name
+                  </th>
+                  <th colSpan="1" className="text-center">
+                    City
+                  </th>
+                  <th colSpan="1" className="text-center">
+                    Total Paid Profit
+                  </th>
+                  <th colSpan="1" className="text-center">
+                    Latest Payment
+                  </th>
+                  <th colSpan="1" className="text-center">
+                    Profit Detail
+                  </th>
                 </tr>
               </thead>
               <tbody>
-
-                {allProfits && allProfits?.map((item, key) => {
-                  return (<tr key={key}>
-                    <td colSpan="1" className="text-center">{key + 1}</td>
-                    <td colSpan="1" className="text-center">{item?.name}</td>
-                    <td colSpan="1" className="text-center">{item?.city}</td>
-                    <td colSpan="1" className="text-center">{item?.totalProfit}</td>
-                    <td colSpan="1" className="text-center">{new Date(item?.latestDatePaid).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' })}</td>
-                    {/* <td colSpan="1" className="text-center"><button onClick={() => unPayAllProfits(item?._id, item)} className="btn btn-primary">Reverse Payment</button></td> */}
-                    <td colSpan="1" className="text-center"><Link to={`/admin/PaidPerUser/${item?.id}`}><button className="btn btn-primary">Detail</button></Link></td>
-                  </tr>)
-                })}
+                {allProfits &&
+                  allProfits?.map((item, key) => {
+                    return (
+                      <tr key={key}>
+                        <td colSpan="1" className="text-center">
+                          {key + 1}
+                        </td>
+                        <td colSpan="1" className="text-center">
+                          {item?.name}
+                        </td>
+                        <td colSpan="1" className="text-center">
+                          {item?.city}
+                        </td>
+                        <td colSpan="1" className="text-center">
+                          {item?.totalProfit}
+                        </td>
+                        <td colSpan="1" className="text-center">
+                          {new Date(item?.latestDatePaid).toLocaleString(
+                            "en-PK",
+                            { timeZone: "Asia/Karachi" }
+                          )}
+                        </td>
+                        {/* <td colSpan="1" className="text-center"><button onClick={() => unPayAllProfits(item?._id, item)} className="btn btn-primary">Reverse Payment</button></td> */}
+                        <td colSpan="1" className="text-center">
+                          <Link to={`/admin/PaidPerUser/${item?.id}`}>
+                            <button className="btn btn-primary">Detail</button>
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
-            {allProfits?.length <= 0 && <div className='no_data'>
-              <img className='no_data-img' src={image} alt='No Data' ></img>
-            </div>}
+            {allProfits?.length <= 0 && (
+              <div className="no_data">
+                <img className="no_data-img" src={image} alt="No Data"></img>
+              </div>
+            )}
           </div>
         </div>
-      }
+      )}
     </>
   );
-}
+};
 
 export default DropshipPending;
-
