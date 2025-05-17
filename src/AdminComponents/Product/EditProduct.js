@@ -42,14 +42,14 @@ const EditProduct = () => {
           ...data, // batch setting all data
         }));
         setImg(data.photo.url);
-      } catch (error) {
-        Notification("Error", "Failed to fetch product data.", "danger");
-      } finally {
         setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        Notification("Error", "Failed to fetch product data.", "danger");
       }
     };
     getProduct();
-  }, [id, host, setLoading]);
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,11 +69,10 @@ const EditProduct = () => {
       try {
         setLoading(true);
         await axios.put(`${host}/api/product/editProduct/${id}`, product);
-        await getProducts();
+        // await getProducts();
         Notification("Success", "Product updated successfully", "success");
-        setTimeout(() => {
-          navigate("/admin/products");
-        }, 2000);
+        navigate("/admin/products");
+        setLoading(false);
       } catch (e) {
         setLoading(false);
         Notification("Error", "Failed to update product", "danger");

@@ -8,9 +8,11 @@ import { ReactNotifications } from "react-notifications-component";
 import Loader from "../../Loader/Loader";
 import SearchBar from "../SearchBar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 const ProductMain = () => {
+  const host = process.env.REACT_APP_API_URL;
   const {
     products,
     getProducts,
@@ -74,14 +76,10 @@ const ProductMain = () => {
 
   const [quantity, setQuantity] = useState(1);
 
-  const modelFunction = (id) => {
+  const modelFunction = async (id) => {
+    const { data } = await axios.get(`${host}/api/product/product/${id}`);
     modalRef.current.click();
-    products.filter((product) => {
-      if (product._id === id) {
-        setSingleProduct(product);
-      }
-      return null;
-    });
+    setSingleProduct(data);
   };
 
   const handleChange = (e) => {

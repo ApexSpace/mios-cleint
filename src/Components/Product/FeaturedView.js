@@ -19,7 +19,7 @@ const FeaturedView = () => {
   const [currentPro, setProductState] = useState([]);
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const userload = useContext(UserContext);
   const context = useContext(ProductContext);
   const Refresh = context.Cart;
@@ -45,14 +45,11 @@ const FeaturedView = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [quantity, setQuantity] = useState(1);
 
-  const modelFunction = (id) => {
+  const modelFunction = async (id) => {
+    const host = process.env.REACT_APP_API_URL;
+    const { data } = await axios.get(`${host}/api/product/product/${id}`);
     modalRef.current.click();
-    products.filter((product) => {
-      if (product._id === id) {
-        setSingleProduct(product);
-      }
-      return null;
-    });
+    setSingleProduct(data);
   };
   const Navigate = useNavigate();
   const handleChange = (e) => {

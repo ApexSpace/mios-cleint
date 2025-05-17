@@ -9,6 +9,7 @@ import SidebarForLoggedOut from "../Sidebar/SidebarForLoggedOut";
 import ProductView from "./ProductView";
 import "./Product.css";
 import SearchBar from "../SearchBar";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 const ProductWithoutPrices = () => {
@@ -57,15 +58,11 @@ const ProductWithoutPrices = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   const [quantity, setQuantity] = useState(1);
-
-  const modelFunction = (id) => {
+  const host = process.env.REACT_APP_API_URL;
+  const modelFunction = async (id) => {
+    const { data } = await axios.get(`${host}/api/product/product/${id}`);
     modalRef.current.click();
-    products.filter((product) => {
-      if (product._id === id) {
-        setSingleProduct(product);
-      }
-      return null;
-    });
+    setSingleProduct(data);
   };
 
   const handleChange = (e) => {

@@ -10,18 +10,26 @@ import Papa from "papaparse";
 const AdminProducts = () => {
   const host = process.env.REACT_APP_API_URL;
   const { loading, setLoading, GetAllProducts } = useContext(ProductContext);
-  const deleteProduct = async (e) => {
+  const deleteProduct = async (id) => {
     try {
       setLoading(true);
-      await axios.delete(
-        `${host}/api/product/deleteProduct/${e.currentTarget.id}`
+      await axios.delete(`${host}/api/product/deleteProduct/${id}`);
+
+      // Optimistically update state: remove product with matching id
+      setFilter((prevProducts) =>
+        prevProducts.filter((product) => product._id !== id)
       );
-      GetAllProducts();
-      setLoading(false);
+
+      Notification("Success", "Product Deleted Successfully", "success");
     } catch (error) {
-      setLoading(false);
       console.log(error);
-      Notification("Error", error.response.data, "danger");
+      Notification(
+        "Error",
+        error?.response?.data || "Something went wrong",
+        "danger"
+      );
+    } finally {
+      setLoading(false);
     }
   };
   const [searchParams, setSearchParams] = useSearchParams();
@@ -171,17 +179,30 @@ const AdminProducts = () => {
 
     return pageNumbers;
   };
-  const ChangeActivation = async (e) => {
+  const ChangeActivation = async (id) => {
     try {
       setLoading(true);
-      await axios.put(
-        `${host}/api/product/changeActivation/${e.currentTarget.id}`
+
+      const { data: updatedProduct } = await axios.put(
+        `${host}/api/product/changeActivation/${id}`
       );
-      await GetAllProducts();
-      setLoading(false);
+
+      // Update activation status in filtered products
+      setFilter((prev) =>
+        prev.map((product) =>
+          product._id === id ? { ...product, ...updatedProduct } : product
+        )
+      );
+
+      Notification("Success", "Product activation status updated", "success");
     } catch (error) {
+      Notification(
+        "Error",
+        error?.response?.data || "Something went wrong",
+        "danger"
+      );
+    } finally {
       setLoading(false);
-      Notification("Error", error.response.data, "danger");
     }
   };
 

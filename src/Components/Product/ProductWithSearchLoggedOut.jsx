@@ -9,6 +9,7 @@ import SidebarForLoggedOut from "../Sidebar/SidebarForLoggedOut";
 import ProductView from "./ProductView";
 import "./Product.css";
 import SearchBar from "../SearchBar";
+import axios from "axios";
 
 // import { useNavigate } from "react-router-dom";
 
@@ -21,7 +22,7 @@ const ProductWithSearchLoggedOut = () => {
     getPaginateProduct,
   } = useContext(ProductContext);
   const [currentPro, setProductState] = useState(products);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
@@ -34,6 +35,7 @@ const ProductWithSearchLoggedOut = () => {
   const closeRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [fetching, setFetching] = useState(true);
   const { query } = useParams();
   const navigate = useNavigate();
 
@@ -73,14 +75,11 @@ const ProductWithSearchLoggedOut = () => {
 
   const [quantity, setQuantity] = useState(1);
 
-  const modelFunction = (id) => {
+  const modelFunction = async (id) => {
+    const host = process.env.REACT_APP_API_URL;
+    const { data } = await axios.get(`${host}/api/product/product/${id}`);
     modalRef.current.click();
-    products.filter((product) => {
-      if (product._id === id) {
-        setSingleProduct(product);
-      }
-      return null;
-    });
+    setSingleProduct(data);
   };
 
   const handleChange = (e) => {
@@ -141,15 +140,6 @@ const ProductWithSearchLoggedOut = () => {
                     );
                   })}
               </div>
-              {currentPro.length === 0 && !loading ? (
-                <div className="no-results">
-                  <p className="no-results-text">
-                    Oops! No products found. Try searching for something else.
-                  </p>
-                </div>
-              ) : (
-                ""
-              )}
             </div>
           </div>
           <button
@@ -251,6 +241,10 @@ const ProductWithSearchLoggedOut = () => {
               </div>
             </div>
           </div>
+
+          {!loading && !fetching && currentPro.length <= 0 && (
+            <h1 className="notFound">No Products Found</h1>
+          )}
         </>
       )}
     </>

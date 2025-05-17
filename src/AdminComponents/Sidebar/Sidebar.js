@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserContext from "../../context/User/UserContext";
 import ProductContext from "../../context/Product/ProductContext";
+import image from "../assets/images/logo_sml 1.png";
 
 const Sidebar = () => {
   const host = process.env.REACT_APP_API_URL;
@@ -44,15 +45,8 @@ const Sidebar = () => {
     <>
       <header className="header">
         <div className="header__container">
-          <div className="d-flex">
-            {/* <div className="header__search">
-              <input
-                type="search"
-                placeholder="Search"
-                className="header__input"
-              />
-              <i className="bx bx-search header__icon"> </i>
-            </div> */}
+          <div className="d-flex justify-content-center w-100">
+            <img className="logo_mios" src={image} alt="logo" />
           </div>
 
           <div className="header__toggle">
@@ -65,14 +59,13 @@ const Sidebar = () => {
         <nav className="nav__container">
           <div>
             <Link to="/" className="nav__link nav__logo">
-              <i className="bx bxs-disc nav__icon"></i>
-              <span className="nav__logo-name">MIOS</span>
+              {/* <i className="bx bxs-disc nav__icon"></i>
+              <span className="nav__logo-name"></span> */}
+              <img className="logo_mios" src={image} alt="logo" />
             </Link>
 
             <div className="nav__list">
               <div className="nav__items">
-                <h3 className="nav__subtitle">Profile</h3>
-
                 <Link to="/" className="nav__link active">
                   <i className="bx bx-home nav__icon"></i>
                   <span className="nav__name">Home</span>
@@ -217,7 +210,7 @@ const Sidebar = () => {
                   onClick={() => handleMenuClick(4)}
                 >
                   <div className="nav__link">
-                    <i className="bx bx-menu nav__icon"></i>
+                    <i className="bx bx-store nav__icon"></i>
                     <span className="nav__name">DS Profit</span>
                     <i className="bx bx-chevron-down nav__icon nav__dropdown-icon"></i>
                   </div>
@@ -254,7 +247,7 @@ const Sidebar = () => {
                   onClick={() => handleMenuClick(5)}
                 >
                   <div className="nav__link">
-                    <i className="bx bx-menu nav__icon"></i>
+                    <i className="bx bx-file-blank nav__icon"></i>
                     <span className="nav__name">Custom Pages</span>
                     <i className="bx bx-chevron-down nav__icon nav__dropdown-icon"></i>
                   </div>
@@ -276,11 +269,6 @@ const Sidebar = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="nav__items">
-                <h3 className="nav__subtitle">Orders</h3>
-
                 <div
                   div
                   className={
@@ -292,7 +280,36 @@ const Sidebar = () => {
                   onClick={() => handleMenuClick(6)}
                 >
                   <div className="nav__link">
-                    <i className="bx bx-task nav__icon"></i>
+                    <i className="bx bx-cog nav__icon"></i>
+                    <span className="nav__name">Settings</span>
+                    <i className="bx bx-chevron-down nav__icon nav__dropdown-icon"></i>
+                  </div>
+                  <div className="nav__dropdown-collapse">
+                    <div className="nav__dropdown-content">
+                      <Link to="/admin/profile" className="nav__link">
+                        <i className="bx bx-user-circle nav__icon"></i>
+                        <span className="nav__name">Profile</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="nav__items">
+                <h3 className="nav__subtitle">Orders</h3>
+
+                <div
+                  div
+                  className={
+                    subMenuIndex === 7
+                      ? "nav__dropdown dropdown_active"
+                      : "nav__dropdown"
+                  }
+                  ref={(el) => (arrow.current[7] = el)}
+                  onClick={() => handleMenuClick(7)}
+                >
+                  <div className="nav__link">
+                    <i className="bx bx-package nav__icon"></i>
                     <span className="nav__name">Wholesale</span>
                     <i className="bx bx-chevron-down nav__icon nav__dropdown-icon"></i>
                   </div>
@@ -323,15 +340,15 @@ const Sidebar = () => {
                 <div
                   div
                   className={
-                    subMenuIndex === 7
+                    subMenuIndex === 8
                       ? "nav__dropdown dropdown_active"
                       : "nav__dropdown"
                   }
-                  ref={(el) => (arrow.current[7] = el)}
-                  onClick={() => handleMenuClick(7)}
+                  ref={(el) => (arrow.current[8] = el)}
+                  onClick={() => handleMenuClick(8)}
                 >
                   <div className="nav__link">
-                    <i className="bx bx-task nav__icon"></i>
+                    <i className="bx bx-cube nav__icon"></i>
                     <span className="nav__name">Dropship</span>
                     <i className="bx bx-chevron-down nav__icon nav__dropdown-icon"></i>
                   </div>

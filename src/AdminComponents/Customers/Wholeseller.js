@@ -30,6 +30,12 @@ const WholeSeller = () => {
   const [filterUsers, setFilterUsers] = useState([]);
   const [deleted, setDeleted] = useState(0);
 
+  // Add new state variables for reset password
+  const [resetPasswordModal, setResetPasswordModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [resetPasswordError, setResetPasswordError] = useState("");
+
   const handleChange = (e) => {
     setQuery(e.target.value);
     setSearchParams({ query: e.target.value });
@@ -133,6 +139,37 @@ const WholeSeller = () => {
     }
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setResetPasswordError("");
+
+    try {
+      await axios.post(
+        `${host}/api/auth/admin/reset-password/${selectedUser._id}`,
+        {
+          newPassword: newPassword,
+        }
+      );
+
+      setResetPasswordModal(false);
+      setNewPassword("");
+      setSelectedUser(null);
+      Notification("Success", "Password reset successfully!", "success");
+    } catch (error) {
+      setResetPasswordError(
+        error.response?.data?.errors?.[0]?.msg || "Failed to reset password"
+      );
+      Notification("Error", resetPasswordError, "danger");
+    }
+  };
+
+  const openResetPasswordModal = (user) => {
+    setSelectedUser(user);
+    setResetPasswordModal(true);
+    setNewPassword("");
+    setResetPasswordError("");
+  };
+
   return (
     <center>
       <ReactNotifications />
@@ -181,8 +218,9 @@ const WholeSeller = () => {
                     <th>Address</th>
                     <th>Role</th>
                     <th>Status</th>
-                    <th>Delete</th>
                     <th>Edit</th>
+                    <th>Reset Password</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 {filterUsers &&
@@ -198,6 +236,21 @@ const WholeSeller = () => {
                           <td> {item.address && item.address} </td>
                           <td> {item.role} </td>
                           <td> {item.wholesellerStatus ? "True" : "False"} </td>
+                          <td id="Edit">
+                            <Link to={`/admin/customer/edit/${item._id}`}>
+                              <button className="btn btn-info" id={item._id}>
+                                Edit
+                              </button>{" "}
+                            </Link>{" "}
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-warning"
+                              onClick={() => openResetPasswordModal(item)}
+                            >
+                              Reset Password
+                            </button>
+                          </td>
                           <td>
                             <button
                               className="btn btn-danger"
@@ -207,18 +260,72 @@ const WholeSeller = () => {
                               Delete
                             </button>{" "}
                           </td>
-                          <td id="Edit">
-                            <Link to={`/admin/customer/edit/${item._id}`}>
-                              <button className="btn btn-info" id={item._id}>
-                                Edit
-                              </button>{" "}
-                            </Link>{" "}
-                          </td>
                         </tr>
                       </tbody>
                     );
                   })}
               </table>
+
+              {/* Reset Password Modal */}
+              {resetPasswordModal && (
+                <div
+                  className="modal"
+                  style={{
+                    display: "block",
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                  }}
+                >
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title">
+                          Reset Password for {selectedUser?.name}
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          onClick={() => setResetPasswordModal(false)}
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <form onSubmit={handleResetPassword}>
+                          <div className="mb-3">
+                            <label htmlFor="newPassword" className="form-label">
+                              New Password
+                            </label>
+                            <input
+                              type="password"
+                              className="form-control"
+                              id="newPassword"
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              required
+                              minLength={6}
+                            />
+                            {resetPasswordError && (
+                              <div className="text-danger mt-2">
+                                {resetPasswordError}
+                              </div>
+                            )}
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={() => setResetPasswordModal(false)}
+                            >
+                              Cancel
+                            </button>
+                            <button type="submit" className="btn btn-primary">
+                              Reset Password
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <section className="mt-0" style={{ marginTop: "2%" }}>

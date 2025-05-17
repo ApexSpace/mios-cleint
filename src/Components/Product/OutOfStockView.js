@@ -3,7 +3,7 @@ import { ReactNotifications } from "react-notifications-component";
 import Notification from "../../Notifications/Notifications";
 import ProductContext from "../../context/Product/ProductContext";
 import UserContext from "../../context/User/UserContext";
-// import axios from "axios";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import SidebarForLoggedOut from "../Sidebar/SidebarForLoggedOut";
@@ -46,14 +46,11 @@ const OutOfStockView = () => {
   }, []);
   const [quantity, setQuantity] = useState(1);
 
-  const modelFunction = (id) => {
+  const modelFunction = async (id) => {
+    const host = process.env.REACT_APP_API_URL;
+    const { data } = await axios.get(`${host}/api/product/product/${id}`);
     modalRef.current.click();
-    products.filter((product) => {
-      if (product._id === id) {
-        setSingleProduct(product);
-      }
-      return null;
-    });
+    setSingleProduct(data);
   };
 
   const handleChange = (e) => {

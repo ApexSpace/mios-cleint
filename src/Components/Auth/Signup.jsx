@@ -20,6 +20,8 @@ const Signup = ({ setuser }) => {
     phone: "",
     company: "",
   });
+  const [showWarning, setShowWarning] = useState(false);
+  const [accountType, setAccountType] = useState(""); // "wholeseller" or "dropshipper"
 
   const userDetail = useContext(UserContext);
   const { loading, setLoading } = userDetail;
@@ -38,20 +40,31 @@ const Signup = ({ setuser }) => {
   }, [userDetails]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onChange = (e) => {
-    if (e.target.name !== "role") {
+    if (e.target.name === "role") {
+      const newRole = e.target.checked ? "dropshipper" : "wholeseller";
+      setAccountType(newRole);
       setUser((prevValue) => ({
         ...prevValue,
-        [e.target.name]: e.target.value,
+        role: newRole,
       }));
     } else {
       setUser((prevValue) => ({
         ...prevValue,
-        role: e.target.checked
-          ? "dropshipper"
-          : !e.target.checked
-          ? "wholeseller"
-          : "wholeseller",
+        [e.target.name]: e.target.value,
       }));
+    }
+  };
+
+  const handleWholesaleCheck = (e) => {
+    if (e.target.checked) {
+      setShowWarning(true);
+      setAccountType("wholeseller");
+      setUser((prevValue) => ({
+        ...prevValue,
+        role: "wholeseller",
+      }));
+    } else {
+      setShowWarning(false);
     }
   };
 
@@ -65,7 +78,8 @@ const Signup = ({ setuser }) => {
         !password ||
         !address ||
         !phone ||
-        !company
+        !company ||
+        !accountType
       ) {
         Notification(
           "Error",
@@ -73,7 +87,9 @@ const Signup = ({ setuser }) => {
             !city ? " city" : ""
           }${!password ? " password" : ""}${!address ? " address" : ""}${
             !phone ? " phone" : ""
-          }${!company ? " company name" : ""}  `,
+          }${!company ? " company name" : ""}${
+            !accountType ? " account type" : ""
+          }  `,
           "danger"
         );
       } else {
@@ -453,27 +469,81 @@ const Signup = ({ setuser }) => {
                 <option value="Ziarat">Ziarat</option>
               </select>
               <div
-                className=""
+                className="account-type-section"
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  height: "50px",
-                  margin: "0px",
+                  marginTop: "15px",
+                  marginBottom: "15px",
+                  padding: "10px",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "5px",
+                  backgroundColor: "#f8f9fa",
                 }}
               >
-                <input
-                  style={{ margin: "0" }}
-                  type="checkbox"
-                  name="role"
-                  id="role"
-                  autoFocus
-                  onChange={onChange}
-                />
-                <p className="dropshipperApply">
-                  Apply for Dropshipper Account
-                </p>
+                <div
+                  className="alert alert-info mb-3"
+                  role="alert"
+                  style={{ fontSize: "13px", padding: "8px 12px" }}
+                >
+                  <i className="bx bx-info-circle"></i> Please select the type
+                  of account you wish to open:
+                  <ul>
+                    <li>
+                      1. Wholesale Account: No approval is required. You can log
+                      in and start using your account immediately after
+                      registration.
+                    </li>
+                    <li>
+                      2. Dropshipper Account: This account type requires review
+                      and approval by the MIOS team. Once approved, you will be
+                      notified and able to log in to your account.{" "}
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="form-group">
+                  <select
+                    className="form-control"
+                    id="accountType"
+                    name="role"
+                    value={accountType}
+                    onChange={(e) => {
+                      setAccountType(e.target.value);
+                      setUser((prevValue) => ({
+                        ...prevValue,
+                        role: e.target.value,
+                      }));
+                    }}
+                    style={{
+                      height: "35px",
+                      fontSize: "14px",
+                      border: "1px solid #ced4da",
+                      borderRadius: "4px",
+                      backgroundColor: accountType ? "#fff" : "#f8f9fa",
+                    }}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select Account Type
+                    </option>
+                    <option value="wholeseller">Wholesale Account</option>
+                    <option value="dropshipper">Dropshipper Account</option>
+                  </select>
+                  {!accountType && (
+                    <div
+                      style={{
+                        color: "#dc3545",
+                        fontSize: "12px",
+                        marginTop: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                    >
+                      <i className="bx bx-error-circle"></i>
+                      Please select an account type
+                    </div>
+                  )}
+                </div>
               </div>
               <input type="submit" value="create account" onClick={signedUp} />
             </form>

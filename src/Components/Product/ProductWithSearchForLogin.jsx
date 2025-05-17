@@ -8,6 +8,7 @@ import { ReactNotifications } from "react-notifications-component";
 import Loader from "../../Loader/Loader";
 import { useParams, useNavigate } from "react-router-dom";
 import SearchBar from "../SearchBar";
+import axios from "axios";
 
 // import { useNavigate } from "react-router-dom";
 
@@ -22,8 +23,9 @@ const ProductWithSearchForLogin = () => {
   const [currentPro, setProductState] = useState(products);
   const [searchState, setSearchState] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [fetching, setFetching] = useState(true);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [singleProduct, setSingleProduct] = useState({});
   const { user } = useContext(UserContext);
   const userload = useContext(UserContext);
@@ -74,14 +76,11 @@ const ProductWithSearchForLogin = () => {
 
   const [quantity, setQuantity] = useState(1);
 
-  const modelFunction = (id) => {
+  const modelFunction = async (id) => {
+    const host = process.env.REACT_APP_API_URL;
+    const { data } = await axios.get(`${host}/api/product/product/${id}`);
     modalRef.current.click();
-    products.filter((product) => {
-      if (product._id === id) {
-        setSingleProduct(product);
-      }
-      return null;
-    });
+    setSingleProduct(data);
   };
 
   const handleChange = (e) => {
@@ -133,15 +132,6 @@ const ProductWithSearchForLogin = () => {
                     );
                   })}
               </div>
-              {currentPro.length === 0 && !loading ? (
-                <div className="no-results">
-                  <p className="no-results-text">
-                    Oops! No products found. Try searching for something else.
-                  </p>
-                </div>
-              ) : (
-                ""
-              )}
             </div>
           </div>
           <button
@@ -246,6 +236,9 @@ const ProductWithSearchForLogin = () => {
               </div>
             </div>
           </div>
+          {!loading && !fetching && currentPro.length <= 0 && (
+            <h1 className="notFound">No Products Found</h1>
+          )}
         </>
       )}
     </>

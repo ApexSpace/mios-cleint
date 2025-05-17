@@ -101,6 +101,7 @@ import Home from "./Components/Home";
 import HomeSidebar from "./Components/Sidebar/homeSidebar";
 import ProductWithSearchLoggedOut from "./Components/Product/ProductWithSearchLoggedOut";
 import ProductWithSearchForLogin from "./Components/Product/ProductWithSearchForLogin";
+import Profile from "./AdminComponents/Profile/Profile";
 
 axios.defaults.withCredentials = true;
 function App() {
@@ -1056,6 +1057,13 @@ function App() {
                         ) : nouser ? (
                           <Navigate to="/admin/login" />
                         ) : null
+                      }
+                    />
+
+                    <Route
+                      path="/admin/profile"
+                      element={
+                        admin ? <Profile /> : <Navigate to="/admin/login" />
                       }
                     />
 
