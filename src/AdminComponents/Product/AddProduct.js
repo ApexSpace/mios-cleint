@@ -27,7 +27,7 @@ const AddProduct = () => {
     weight: 0,
     featured: false,
     onSale: false,
-    photo: "",
+    photo: { url: "", public_id: "no id" },
     description: "",
   });
 
@@ -66,7 +66,7 @@ const AddProduct = () => {
       !purchasePrice ||
       Number(purchasePrice) <= 0 ||
       !weight ||
-      !photo ||
+      !photo.url ||
       !description
     ) {
       Notification(
@@ -235,12 +235,12 @@ const AddProduct = () => {
                   type="url"
                   className="form-control"
                   name="photo"
-                  value={product.photo}
-                  onChange={onChange}
+                  value={product.photo.url}
+                  onChange={(e) => setProduct(prev => ({ ...prev, photo: { url: e.target.value, public_id: "no id" } }))}
                 />
                 <br />
                 <center>
-                  <img width="200px" alt="" src={product.photo} />
+                  <img width="200px" alt="" src={product.photo.url} />
                   <br />
                 </center>
                 <label>Description</label>

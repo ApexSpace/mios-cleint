@@ -47,7 +47,7 @@ const ImportProducts = () => {
         weight: item[7],
         featured: item[8],
         onSale: item[9],
-        photo: item[10],
+        photo: { url: item[10], public_id: "no id" },
         description: item[11],
       }
       parseData.push(data);

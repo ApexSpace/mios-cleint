@@ -27,7 +27,7 @@ const EditProduct = () => {
     weight: 0,
     featured: false,
     onSale: false,
-    photo: "",
+    photo: { url: "", public_id: "no id" },
     description: "",
   });
 
@@ -40,6 +40,10 @@ const EditProduct = () => {
         setProduct((prevProduct) => ({
           ...prevProduct,
           ...data, // batch setting all data
+          photo: {
+            url: data.photo?.url || data.photo || "",
+            public_id: data.photo?.public_id || "no id"
+          }
         }));
         setImg(data.photo.url);
         setLoading(false);
@@ -224,11 +228,11 @@ const EditProduct = () => {
                   className="form-control"
                   placeholder="Enter Url for Image"
                   name="photo"
-                  value={product.photo?.url || product.photo}
+                  value={product.photo.url}
                   onChange={(e) =>
                     setProduct((prevValue) => ({
                       ...prevValue,
-                      photo: e.target.value,
+                      photo: { url: e.target.value, public_id: "no id" },
                     }))
                   }
                 />
@@ -237,7 +241,7 @@ const EditProduct = () => {
                   <img
                     width="200px"
                     alt="Product"
-                    src={product.photo?.url || product.photo}
+                    src={product.photo.url}
                     loading="lazy"
                   />
                   <br />
